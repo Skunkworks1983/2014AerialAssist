@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+# Project Files
+.metadata*
+.cproject
+.project
+.wrmakefile
+.wrproject
