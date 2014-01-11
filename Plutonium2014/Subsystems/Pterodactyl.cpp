@@ -5,7 +5,7 @@ Pterodactyl::Pterodactyl() : Subsystem("Pterodactyl") {
 	
 }
     
-void DriveBase::InitDefaultCommand() {
+void Pterodactyl::InitDefaultCommand() {
 	// Set the default command for a subsystem here.
 	//SetDefaultCommand(new MySpecialCommand());
 }

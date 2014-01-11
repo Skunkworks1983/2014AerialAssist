@@ -6,10 +6,10 @@ DriveBase::DriveBase() : Subsystem("DriveBase") {
 	motor2 = new Jaguar(2337);
 	motor3 = new Jaguar(3337);
 	motor4 = new Jaguar(4337);
-	encoder1 = new Encoder(1337);
-	encoder2 = new Encoder(2337);
-	encoder3 = new Encoder(3337);
-	encoder4 = new Encoder(4337);
+	encoder1 = new Encoder(1337, 1337);
+	encoder2 = new Encoder(2337, 2337);
+	encoder3 = new Encoder(3337, 3337);
+	encoder4 = new Encoder(4337, 4337);
 }
     
 void DriveBase::InitDefaultCommand() {
@@ -18,13 +18,13 @@ void DriveBase::InitDefaultCommand() {
 }
 
 void DriveBase::setLeft(double speed){
-	motor1->SetRaw(speedLeft);
-	motor2->SetRaw(speedLeft);
+	motor1->SetRaw(speed);
+	motor2->SetRaw(speed);
 }
 
 void DriveBase::setRight(double speed){
-	motor3->SetRaw(speedRight);
-	motor4->SetRaw(speedRight);
+	motor3->SetRaw(speed);
+	motor4->SetRaw(speed);
 }
 
 void DriveBase::straightDrive(double speed){

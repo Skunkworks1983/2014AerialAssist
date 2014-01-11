@@ -2,6 +2,7 @@
 *.slo
 *.lo
 *.o
+*.d
 
 # Compiled Dynamic libraries
 *.so
@@ -18,3 +19,6 @@
 .project
 .wrmakefile
 .wrproject
+Plutonium2014/.gitignore
+Debug/*
+PPC603gnu
