@@ -1,5 +1,5 @@
-#ifndef __FIRE_H
-#define __FIRE_H
+#ifndef __SHOOT_H
+#define __SHOOT_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class Fire: public CommandBase {
+class Shoot: public CommandBase {
 public:
-	Fire();
+	Shoot();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

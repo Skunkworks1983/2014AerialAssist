@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __AUTO_DRIVE_DISTANCE_H
+#define __AUTO_DRIVE_DISTANCE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class AutoDriveDistance: public CommandBase {
 public:
-	ExampleCommand();
+	AutoDriveDistance();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

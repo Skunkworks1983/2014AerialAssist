@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __MOUTH_MOVE_H
+#define __MOUTH_MOVE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class MouthMove: public CommandBase {
 public:
-	ExampleCommand();
+	MouthMove();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

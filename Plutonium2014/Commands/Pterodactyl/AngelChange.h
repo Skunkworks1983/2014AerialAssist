@@ -1,5 +1,5 @@
-#ifndef __FIRE_H
-#define __FIRE_H
+#ifndef __ANGEL_CHANGE_H
+#define __ANGEL_CHANGE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class Fire: public CommandBase {
+class AngelChange: public CommandBase {
 public:
-	Fire();
+	AngelChange();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

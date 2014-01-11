@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __SHIFT_H
+#define __SHIFT_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class Shift: public CommandBase {
 public:
-	ExampleCommand();
+	Shift();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

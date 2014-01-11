@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __ROLLER_ROLL_H
+#define __ROLLER_ROLL_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class RollerRoll: public CommandBase {
 public:
-	ExampleCommand();
+	RollerRoll();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __PREPARE_ZE_DEVICE_H
+#define __PREPARE_ZE_DEVICE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class PrepareZeDevice: public CommandBase {
 public:
-	ExampleCommand();
+	PrepareZeDevice();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

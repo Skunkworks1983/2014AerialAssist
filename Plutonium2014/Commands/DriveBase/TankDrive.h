@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __TANK_DRIVE_H
+#define __TANK_DRIVE_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class TankDrive: public CommandBase {
 public:
-	ExampleCommand();
+	TankDrive();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

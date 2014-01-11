@@ -1,5 +1,5 @@
-#ifndef EXAMPLE_COMMAND_H
-#define EXAMPLE_COMMAND_H
+#ifndef __CATCH_H
+#define __CATCH_H
 
 #include "../CommandBase.h"
 
@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class ExampleCommand: public CommandBase {
+class Catch: public CommandBase {
 public:
-	ExampleCommand();
+	Catch();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
