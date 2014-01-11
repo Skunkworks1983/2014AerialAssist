@@ -18,7 +18,6 @@ private:
 	Encoder *encoder2;
 	Encoder *encoder3;
 	Encoder *encoder4;
-	void drive(double speedLeft, double speedRight);
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 public:
@@ -26,6 +25,8 @@ public:
 	void InitDefaultCommand();
 	void straightDrive(double speed);
 	void turnDegree(double degree);	
+	void setLeft(double speed);
+	void setRight(double speed);
 };
 
 #endif
