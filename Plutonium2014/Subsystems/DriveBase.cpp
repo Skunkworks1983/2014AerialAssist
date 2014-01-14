@@ -1,47 +1,41 @@
 #include "DriveBase.h"
 #include "../Robotmap.h"
 
+#include "WPILib.h"
+#include "../CommandBase.h"
+#include "../Utils/SolenoidPair.h"
+#include "../Commands/DriveBase/TankDrive.h"
+
 DriveBase::DriveBase() : Subsystem("DriveBase") {
-	motor1 = new Jaguar(1337);
-	motor2 = new Jaguar(2337);
-	motor3 = new Jaguar(3337);
-	motor4 = new Jaguar(4337);
-	encoder1 = new Encoder(1337, 1337);
-	encoder2 = new Encoder(2337, 2337);
-	encoder3 = new Encoder(3337, 3337);
-	encoder4 = new Encoder(4337, 4337);
+	motorLeftFront = new Jaguar(1);
+	motorRightFront = new Jaguar(2);
+	motorLeftBack = new Jaguar(3);
+	motorRightBack = new Jaguar(4);
+	encoderLeftFront = new Encoder(1, 1);
+	encoderRightFront = new Encoder(2, 2);
+	encoderLeftBack = new Encoder(3, 3);
+	encoderRightBack = new Encoder(4, 4);
+	shifter = new SolenoidPair(1, 2);
 }
-    
+
 void DriveBase::InitDefaultCommand() {
-	// Set the default command for a subsystem here.
-	//SetDefaultCommand(new MySpecialCommand());
+	SetDefaultCommand(new TankDrive);
 }
 
-void DriveBase::setLeft(double speed){
-	motor1->SetRaw(speed);
-	motor2->SetRaw(speed);
+void DriveBase::setSpeed(double speedLeft, double speedRight){
+	motorLeftFront->Set(speedLeft);
+	motorRightFront->Set(speedRight);
+	motorLeftBack->Set(speedLeft);
+	motorRightBack->Set(speedRight);
 }
 
-void DriveBase::setRight(double speed){
-	motor3->SetRaw(speed);
-	motor4->SetRaw(speed);
+void DriveBase::setDriveGear(DriveGear gear){
+	shifter->Set(gear==kHigh);
 }
 
-void DriveBase::straightDrive(double speed){
-	motor1->SetRaw(speed);
-	motor2->SetRaw(speed);
-	motor3->SetRaw(speed);
-	motor4->SetRaw(speed);
+DriveBase::DriveGear DriveBase::getDriveGear() {
+	return shifter->Get()?kHigh:kLow;
 }
-
-void DriveBase::turnDegree(double degree){
-	motor1->SetRaw(degree*0+1);
-	motor2->SetRaw(degree*0+1);
-	motor3->SetRaw(degree*0-1);
-	motor4->SetRaw(degree*0-1);
-	//#yolo
-}
-
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.

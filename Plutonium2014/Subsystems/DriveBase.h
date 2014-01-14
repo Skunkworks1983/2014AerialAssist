@@ -1,8 +1,11 @@
 #ifndef __DRIVE_BASE_H
 #define __DRIVE_BASE_H
-#include "Commands/Subsystem.h"
-#include "WPILib.h"
 
+class SpeedController;
+class Encoder;
+class SolenoidPair;
+
+#include "WPILib.h"
 /**
  *
  *
@@ -10,23 +13,29 @@
  */
 class DriveBase: public Subsystem {
 private:
-	Jaguar *motor1;
-	Jaguar *motor2;
-	Jaguar *motor3;
-	Jaguar *motor4;
-	Encoder *encoder1;
-	Encoder *encoder2;
-	Encoder *encoder3;
-	Encoder *encoder4;
+	SpeedController *motorLeftFront;
+	SpeedController *motorRightFront;
+	SpeedController *motorLeftBack;
+	SpeedController *motorRightBack;
+	Encoder *encoderLeftFront;
+	Encoder *encoderRightFront;
+	Encoder *encoderLeftBack;
+	Encoder *encoderRightBack;
+	SolenoidPair *shifter;
+	
+	enum DriveGear {
+		kLow,
+		kHigh
+	};
+	
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 public:
 	DriveBase();
 	void InitDefaultCommand();
-	void straightDrive(double speed);
-	void turnDegree(double degree);	
-	void setLeft(double speed);
-	void setRight(double speed);
+	void setSpeed(double speedLeft, double speedRight);
+	void setDriveGear(DriveGear gear);
+	DriveGear getDriveGear();
 };
 
 #endif

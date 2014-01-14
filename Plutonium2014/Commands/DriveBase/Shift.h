@@ -9,8 +9,15 @@
  * @author ExampleAuthor
  */
 class Shift: public CommandBase {
+	ShiftStyle style;
+	
+	enum ShiftStyle {
+		kLow,
+		kHigh,
+		kToggle
+	};
 public:
-	Shift();
+	Shift(ShiftStyle style = kToggle);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
