@@ -3,6 +3,7 @@
 #include "Subsystems/DriveBase.h"
 #include "Subsystems/Pterodactyl.h"
 #include "Subsystems/Shootah.h"
+#include "Subsystems/Pneumatics.h"
 #include "Commands/Scheduler.h"
 
 CommandBase::CommandBase(const char *name) : Command(name) {
@@ -12,10 +13,11 @@ CommandBase::CommandBase() : Command() {
 }
 
 // Initialize a single static instance of all of your subsystems to NULL
-Collector* collector = NULL;
-DriveBase* driveBase = NULL;
-Pterodactyl* pterodactyl = NULL;
-Shootah* shootah = NULL;
+Collector* CommandBase::collector = NULL;
+DriveBase* CommandBase::driveBase = NULL;
+Pterodactyl* CommandBase::pterodactyl = NULL;
+Shootah* CommandBase::shootah = NULL;
+Pneumatics* CommandBase::pneumatics = NULL;
 OI* CommandBase::oi = NULL;
 
 void CommandBase::init() {
@@ -25,5 +27,6 @@ void CommandBase::init() {
 	driveBase = new DriveBase();
 	pterodactyl = new Pterodactyl();
 	shootah = new Shootah();
+	pneumatics = new Pneumatics();
 	oi = new OI();
 }

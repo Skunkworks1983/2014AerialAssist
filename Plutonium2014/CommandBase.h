@@ -6,6 +6,7 @@
 #include "Subsystems/DriveBase.h"
 #include "Subsystems/Pterodactyl.h"
 #include "Subsystems/Shootah.h"
+#include "Subsystems/Pneumatics.h"
 #include "OI.h"
 
 
@@ -22,8 +23,9 @@ public:
 	// Create a single static instance of all of your subsystems
 	static Collector *collector;
 	static DriveBase *driveBase;
-	static Pterodactyl *petrodactyl;
+	static Pterodactyl *pterodactyl;
 	static Shootah *shootah;
+	static Pneumatics *pneumatics;
 	static OI *oi;
 };
 
