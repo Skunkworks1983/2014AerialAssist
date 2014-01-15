@@ -1,7 +1,7 @@
 #ifndef __ANGEL_CHANGE_H
 #define __ANGEL_CHANGE_H
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 /**
  *

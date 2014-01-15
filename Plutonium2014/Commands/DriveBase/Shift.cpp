@@ -1,6 +1,6 @@
 #include "Shift.h"
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 Shift::Shift(ShiftStyle style) {
 	this->style = style;

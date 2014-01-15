@@ -1,7 +1,7 @@
 #ifndef __SHIFT_H
 #define __SHIFT_H
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 /**
  *
@@ -9,13 +9,13 @@
  * @author ExampleAuthor
  */
 class Shift: public CommandBase {
-	ShiftStyle style;
-	
 	enum ShiftStyle {
 		kLow,
 		kHigh,
 		kToggle
 	};
+	ShiftStyle style;
+	
 public:
 	Shift(ShiftStyle style = kToggle);
 	virtual void Initialize();

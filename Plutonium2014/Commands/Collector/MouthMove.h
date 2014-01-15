@@ -1,7 +1,7 @@
 #ifndef __MOUTH_MOVE_H
 #define __MOUTH_MOVE_H
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 /**
  *

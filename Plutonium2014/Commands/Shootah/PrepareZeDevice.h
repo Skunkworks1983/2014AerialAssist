@@ -1,7 +1,7 @@
 #ifndef __PREPARE_ZE_DEVICE_H
 #define __PREPARE_ZE_DEVICE_H
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 /**
  *

@@ -1,7 +1,7 @@
 #ifndef __AUTO_DRIVE_DISTANCE_H
 #define __AUTO_DRIVE_DISTANCE_H
 
-#include "../CommandBase.h"
+#include "../../CommandBase.h"
 
 /**
  *
