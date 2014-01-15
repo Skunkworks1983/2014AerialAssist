@@ -39,4 +39,3 @@ DriveBase::DriveGear DriveBase::getDriveGear() {
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
-
