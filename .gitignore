@@ -58,3 +58,14 @@ RemoteSystemsTempFiles/*
 # Doxygen #
 ###########
 docs
+
+# Subfolder Gitignore #
+#######################
+*/.gitignore
+
+# Project Files #
+#################
+.project
+.wrproject
+.cproject
+.wrmakefile
