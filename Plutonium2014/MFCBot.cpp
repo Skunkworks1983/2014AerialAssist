@@ -3,6 +3,14 @@
 #include "MFCBot.h"
 #include "CommandBase.h"
 
+MFCBot::MFCBot() {
+	lw = NULL;
+}
+
+MFCBot::~MFCBot() {
+
+}
+
 void MFCBot::RobotInit() {
 	CommandBase::init();
 	lw = LiveWindow::GetInstance();
@@ -27,5 +35,6 @@ void MFCBot::TestPeriodic() {
 	lw->Run();
 }
 
-START_ROBOT_CLASS(MFCBot);
+START_ROBOT_CLASS(MFCBot)
+;
 
