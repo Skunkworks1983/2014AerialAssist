@@ -9,11 +9,13 @@
  * @author ExampleAuthor
  */
 class Shift: public CommandBase {
+public:
 	enum ShiftStyle {
 		kLow,
 		kHigh,
 		kToggle
 	};
+private:
 	ShiftStyle style;
 	
 public:

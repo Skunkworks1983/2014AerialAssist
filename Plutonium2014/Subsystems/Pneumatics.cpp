@@ -5,8 +5,8 @@
 
 Pneumatics::Pneumatics() :
 	Subsystem("Pneumatics") {
-	pressureSwitch = new DigitalInput(1);
-	relay = new Relay(1, Relay::kBothDirections);
+	pressureSwitch = new DigitalInput(COMPRESSOR_PRESSURE_SENSOR);
+	relay = new Relay(COMPRESSOR_RELAY, Relay::kForwardOnly);
 }
 
 void Pneumatics::InitDefaultCommand() {
@@ -14,7 +14,7 @@ void Pneumatics::InitDefaultCommand() {
 }
 
 void Pneumatics::setState(bool state) {
-	relay->Set(state ? Relay::kOn : Relay::kOff);
+	relay->Set(state ? Relay::kForward : Relay::kOff);
 }
 
 bool Pneumatics::isBelowPressure() {

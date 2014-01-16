@@ -17,8 +17,8 @@ private:
 	SpeedController *motorRightFront;
 	SpeedController *motorLeftBack;
 	SpeedController *motorRightBack;
-	Encoder *encoderLeftFront;
-	Encoder *encoderRightFront;
+	Encoder *encoderLeft;
+	Encoder *encoderRight;
 	Encoder *encoderLeftBack;
 	Encoder *encoderRightBack;
 	SolenoidPair *shifter;

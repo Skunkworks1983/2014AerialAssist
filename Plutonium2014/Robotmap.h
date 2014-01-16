@@ -1,22 +1,23 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
+// ================
+// == Pneumatics ==
+// ================
+#define COMPRESSOR_RELAY (1)
+#define COMPRESSOR_PRESSURE_SENSOR (5)
 
-/**
- * The RobotMap is a mapping from the ports sensors and actuators are wired into
- * to a variable name. This provides flexibility changing wiring, makes checking
- * the wiring easier and significantly reduces the number of magic numbers
- * floating around.
- */
- 
-// For example to map the left and right motors, you could define the
-// following variables to use with your drivetrain subsystem.
-// #define LEFTMOTOR 1
-// #define RIGHTMOTOR 2
-
-// If you are using multiple modules, make sure to define both the port
-// number and the module. For example you with a rangefinder:
-// #define RANGE_FINDER_PORT 1
-// #define RANGE_FINDER_MODULE 1
+// ===============
+// == DriveBase ==
+// ===============
+#define DRIVE_MOTOR_TYPE Talon
+#define DRIVE_MOTOR_FRONT_LEFT 1
+#define DRIVE_MOTOR_FRONT_RIGHT 2
+#define DRIVE_MOTOR_BACK_LEFT 3
+#define DRIVE_MOTOR_BACK_RIGHT 4
+#define DRIVE_ENCODER_RIGHT 8,9
+#define DRIVE_ENCODER_LEFT 6,7
+#define DRIVE_SHIFT_HIGH 3
+#define DRIVE_SHIFT_LOW 4
 
 #endif

@@ -1,7 +1,7 @@
 #include "UpdateCompressor.h"
 
 UpdateCompressor::UpdateCompressor() {
-
+	Requires(pneumatics);
 }
 
 void UpdateCompressor::Initialize() {

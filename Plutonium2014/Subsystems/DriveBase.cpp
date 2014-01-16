@@ -7,15 +7,13 @@
 #include "../Commands/DriveBase/TankDrive.h"
 
 DriveBase::DriveBase() : Subsystem("DriveBase") {
-	motorLeftFront = new Jaguar(1);
-	motorRightFront = new Jaguar(2);
-	motorLeftBack = new Jaguar(3);
-	motorRightBack = new Jaguar(4);
-	encoderLeftFront = new Encoder(1, 1);
-	encoderRightFront = new Encoder(2, 2);
-	encoderLeftBack = new Encoder(3, 3);
-	encoderRightBack = new Encoder(4, 4);
-	shifter = new SolenoidPair(1, 2);
+	motorLeftFront = new DRIVE_MOTOR_TYPE(1);
+	motorRightFront = new DRIVE_MOTOR_TYPE(2);
+	motorLeftBack = new DRIVE_MOTOR_TYPE(3);
+	motorRightBack = new DRIVE_MOTOR_TYPE(4);
+	encoderLeft = new Encoder(DRIVE_ENCODER_LEFT, false, Encoder::k4X);
+	encoderRight = new Encoder(DRIVE_ENCODER_RIGHT, true, Encoder::k4X);
+	shifter = new SolenoidPair(DRIVE_SHIFT_HIGH, DRIVE_SHIFT_LOW);
 }
 
 void DriveBase::InitDefaultCommand() {
@@ -23,9 +21,9 @@ void DriveBase::InitDefaultCommand() {
 }
 
 void DriveBase::setSpeed(double speedLeft, double speedRight){
-	motorLeftFront->Set(speedLeft);
+	motorLeftFront->Set(-speedLeft);
 	motorRightFront->Set(speedRight);
-	motorLeftBack->Set(speedLeft);
+	motorLeftBack->Set(-speedLeft);
 	motorRightBack->Set(speedRight);
 }
 

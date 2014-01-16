@@ -14,6 +14,7 @@ MFCBot::~MFCBot() {
 void MFCBot::RobotInit() {
 	CommandBase::init();
 	lw = LiveWindow::GetInstance();
+	CommandBase::oi->registerButtonListeners();
 }
 
 void MFCBot::AutonomousInit() {
