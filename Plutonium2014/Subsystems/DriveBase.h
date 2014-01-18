@@ -22,9 +22,9 @@ private:
 	Encoder *encoderLeftBack;
 	Encoder *encoderRightBack;
 	SolenoidPair *shifter;
-	
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
+
 public:
 	enum DriveGear {
 		kLow,
@@ -34,8 +34,11 @@ public:
 	DriveBase();
 	void InitDefaultCommand();
 	void setSpeed(double speedLeft, double speedRight);
+	void driveDistance(double distance);
+	void encoderReset();
 	void setDriveGear(DriveGear gear);
 	DriveGear getDriveGear();
+	float getMotorSpeed;
 };
 
 #endif

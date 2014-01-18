@@ -20,11 +20,21 @@ void DriveBase::InitDefaultCommand() {
 	SetDefaultCommand(new TankDrive);
 }
 
+
 void DriveBase::setSpeed(double speedLeft, double speedRight){
 	motorLeftFront->Set(-speedLeft);
 	motorRightFront->Set(speedRight);
 	motorLeftBack->Set(-speedLeft);
 	motorRightBack->Set(speedRight);
+}
+
+void DriveBase::encoderReset() {
+	encoderLeft->Reset();
+	encoderRight->Reset();
+}
+
+void DriveBase::driveDistance(double distance){
+	encoderReset();
 }
 
 void DriveBase::setDriveGear(DriveGear gear){

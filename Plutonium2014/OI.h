@@ -9,12 +9,15 @@ private:
 	Joystick *joystickRight;
 	
 	JoystickButton *shiftButton;
-
+	
+	float scale;
+	
 public:
 	OI();
 	Joystick *getJoystickLeft();
 	Joystick *getJoystickRight();
 	void registerButtonListeners();
+	float getScale();
 };
 
 #endif
