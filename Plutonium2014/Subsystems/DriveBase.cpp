@@ -44,6 +44,3 @@ void DriveBase::setDriveGear(DriveGear gear){
 DriveBase::DriveGear DriveBase::getDriveGear() {
 	return shifter->Get()?kHigh:kLow;
 }
-
-// Put methods for controlling this subsystem
-// here. Call these from Commands.

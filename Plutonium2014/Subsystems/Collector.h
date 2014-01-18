@@ -1,8 +1,10 @@
 #ifndef __COLLECTOR_H
 #define __COLLECTOR_H
 #include "Commands/Subsystem.h"
-#include "WPILib.h"
 
+class PIDController;
+class SpeedController;
+class Encoder;
 /**
  *
  *
@@ -10,11 +12,27 @@
  */
 class Collector: public Subsystem {
 private:
-	// It's desirable that everything possible under private except
-	// for methods that implement subsystem capabilities
+	PIDController *bangBangLeft;
+	PIDController *bangBangRight;
+	SpeedController *rollerMotorLeft;
+	SpeedController *rollerMotorRight;
+	SpeedController *mouthMotorLeft;
+	SpeedController *mouthMotorRight;
+	Encoder *mouthEncoderLeft;
+	Encoder *mouthEncoderRight;
+	//Position *defaultPos;
 public:
 	Collector();
 	void InitDefaultCommand();
+	//void setArmPosition(Position defaultPos = Collector::kHigh);
+	void setRollerSpeed(float speed);
+	void setMouthSpeed(float speed);
+	
+	double getMouthPositionLeft();
+	double getMouthPositionRight();
+	double getMouthEncoderLeft();
+	double getMouthEncoderRight();
+	
 };
 
 #endif

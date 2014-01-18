@@ -8,6 +8,7 @@
 class MFCBot: public IterativeRobot {
 public:
 	MFCBot();
+	
 	~MFCBot();
 	virtual void RobotInit();
 	virtual void AutonomousInit();

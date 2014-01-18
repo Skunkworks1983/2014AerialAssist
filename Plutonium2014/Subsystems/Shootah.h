@@ -2,6 +2,7 @@
 #define __SHOOTAH_H
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
+#include "../Utils/SolenoidPair.h"
 
 /**
  *
@@ -9,12 +10,20 @@
  * @author David
  */
 class Shootah: public Subsystem {
+public:
+	enum ShooterPosition{
+		kShoot,
+		kReload
+	};
 private:
-	// It's desirable that everything possible under private except
-	// for methods that implement subsystem capabilities
+	SolenoidPair *shooterPneumatics;
+	ShooterPosition *cachedPosition;
 public:
 	Shootah();
 	void InitDefaultCommand();
+	void shooterSet(ShooterPosition position);
+	ShooterPosition getPosition();
+	
 };
 
 #endif

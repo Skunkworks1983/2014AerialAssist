@@ -8,9 +8,9 @@
  *
  * @author ExampleAuthor
  */
-class Fire: public CommandBase {
+class FireZeMissle: public CommandBase {
 public:
-	Fire();
+	FireZeMissle();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
