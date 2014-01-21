@@ -17,14 +17,19 @@ void TankDrive::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void TankDrive::Execute() {
-	double n = 1.0;
-	double a = (oi->getJoystickRight()->GetAxis(Joystick::kYAxis) + oi->getJoystickLeft()->GetAxis(Joystick::kYAxis));
-	double b = (oi->getJoystickRight()->GetAxis(Joystick::kYAxis) - oi->getJoystickLeft()->GetAxis(Joystick::kYAxis));
+	double left = oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
+	double right = oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
+	double n = 2.0;
+	double sum = (right + left);
+	double error = (right - left);
+	left = left + (error * scale);
+	right = right - (error * scale);
+	favgSpeed = fabs(sum / 2);
+	scale = pow(favgSpeed, n);
 	
-	double scale = (pow(a,n)/2*b/2);
-	
-	driveBase->setSpeed(oi->getJoystickLeft()->GetAxis(Joystick::kYAxis) + oi->getJoystickRight()->GetAxis(Joystick::kYAxis)*scale
-			, oi->getJoystickRight()->GetAxis(Joystick::kYAxis) - oi->getJoystickRight()->GetAxis(Joystick::kYAxis)*scale);
+	double scale = (pow(sum, n) / 2 * error / 2);
+
+	driveBase->setSpeed(left + right * scale, right - left * scale);
 }
 
 // Make this return true when this Command no longer needs to run execute()
