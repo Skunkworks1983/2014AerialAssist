@@ -20,4 +20,14 @@
 #define DRIVE_SHIFT_HIGH 1
 #define DRIVE_SHIFT_LOW 2
 
+// =============
+// == Shootah ==
+// =============
+// Actual values not here yet, 
+#define SHOOTAH_MOTOR_WINCH 1
+#define SHOOTAH_ENCODER_WINCH 1,2
+#define SHOOTAH_PNEUMATIC_COFFEE_TABLE 1
+#define SHOOTAH_PNEUMATIC_WANKER 2
+#define SHOOTAH_LIMITSWITCH_PULLBACK_CHECK 1
+
 #endif

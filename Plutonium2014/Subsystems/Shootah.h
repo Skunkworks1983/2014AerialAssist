@@ -1,29 +1,54 @@
 #ifndef __SHOOTAH_H
 #define __SHOOTAH_H
 #include "Commands/Subsystem.h"
-#include "WPILib.h"
-#include "../Utils/SolenoidPair.h"
 
 /**
  *
  *
  * @author David
  */
+class SpeedController;
+class Encoder;
+class Solenoid;
+class DigitalInput;
+class PIDController;
+
 class Shootah: public Subsystem {
 public:
-	enum ShooterPosition{
-		kShoot,
-		kReload
-	};
+	enum ShooterPosition {
+		kPrepped,
+		kAdjusting,
+		kUnaligned
+	}; 
 private:
-	SolenoidPair *shooterPneumatics;
-	ShooterPosition *cachedPosition;
+	SpeedController *winchMotor;
+	Encoder *winchEncoder;
+	
+	PIDController *winchPID;
+	
+	Solenoid *pneumaticCoffeeTable;
+	Solenoid *pneumaticWanker;
+	
+	DigitalInput *pullbackSwitch;
+	
+	ShooterPosition cachedPosition;
+	
 public:
 	Shootah();
 	void InitDefaultCommand();
-	void shooterSet(ShooterPosition position);
-	ShooterPosition getPosition();
 	
+	void setWinchMotorSpeed(float speed);
+	double getEncoder();
+	
+	float getWinchPID(); 
+	void setWinchPID(); // TODO: Make this and all other weird PID functions
+	
+	void setCoffeTable(bool state);
+	bool getCoffeTable();
+	void setWanker(bool state);
+	bool getWanker();
+	
+	bool pullbackDone();
 };
 
 #endif
