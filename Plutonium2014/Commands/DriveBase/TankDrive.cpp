@@ -20,16 +20,17 @@ void TankDrive::Execute() {
 	double left = oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
 	double right = oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
 	double n = 2.0;
-	double sum = (right + left);
-	double error = (right - left);
-	left = left + (error * scale);
-	right = right - (error * scale);
-	favgSpeed = fabs(sum / 2);
-	scale = pow(favgSpeed, n);
 	
-	double scale = (pow(sum, n) / 2 * error / 2);
+	double sum = (left + right);
+	double error = (left - right);
+	
+	double favgSpeed = fabs(sum / 2);
+	double scale = pow(favgSpeed, n) / 2;
 
-	driveBase->setSpeed(left + right * scale, right - left * scale);
+	left = left - (error * scale);
+	right = right + (error * scale);
+	
+	driveBase->setSpeed(left, right);
 }
 
 // Make this return true when this Command no longer needs to run execute()
