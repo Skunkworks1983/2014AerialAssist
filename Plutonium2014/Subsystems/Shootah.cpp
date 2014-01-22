@@ -10,7 +10,7 @@ Shootah::Shootah() :
 	winchPID = new PIDController(1, 1, 1, winchEncoder, winchMotor, 0.0f);
 	
 	pneumaticCoffeeTable = new Solenoid(SHOOTAH_PNEUMATIC_COFFEE_TABLE);
-	pneumaticWanker = new Solenoid(SHOOTAH_PNEUMATIC_WANKER);
+	pneumaticBloodyBogan = new Solenoid(SHOOTAH_PNEUMATIC_WANKER);
 	
 	pullbackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
 	
@@ -39,24 +39,27 @@ void Shootah::setWinchPID(bool enable) {
 }
 
 void Shootah::setCoffeTable(bool state) {
-	pneumaticCoffeeTable->Set(state);
+	pneumaticCoffeeTable->Set(state); // TODO: Check if it is in a position that makes sense 
 }
 
 bool Shootah::getCoffeTable() { 
 	return pneumaticCoffeeTable->Get();
 }
 
-void Shootah::setWanker(bool state) {
-	pneumaticWanker->Set(state);
+void Shootah::setBloodyBogan(bool state) {
+	if (pneumaticCoffeeTable->Get()) { // Saftey???
+		pneumaticBloodyBogan->Set(state);
+	}
 }
 
-bool Shootah::getWanker() {
-	return pneumaticWanker->Get();
+bool Shootah::getBloodyBogan() {
+	return pneumaticBloodyBogan->Get();
 }
 
 bool Shootah::pullbackDone() {
-	if () {
+	if (cachedPosition != Shootah::kUnaligned || pullbackSwitch->Get()) {
 		return pullbackSwitch->Get();
 	}
-	return !pullbackSwitch->Get();
+	
+	return false;
 }

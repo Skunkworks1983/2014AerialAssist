@@ -27,7 +27,7 @@ private:
 	PIDController *winchPID;
 	
 	Solenoid *pneumaticCoffeeTable;
-	Solenoid *pneumaticWanker;
+	Solenoid *pneumaticBloodyBogan;
 	
 	DigitalInput *pullbackSwitch;
 	
@@ -41,12 +41,12 @@ public:
 	double getEncoder();
 	
 	float getWinchPID(); 
-	void setWinchPID(); // TODO: Make this and all other weird PID functions
+	void setWinchPID(bool enable); // TODO: Make this and all other weird PID functions
 	
 	void setCoffeTable(bool state);
 	bool getCoffeTable();
-	void setWanker(bool state);
-	bool getWanker();
+	void setBloodyBogan(bool state);
+	bool getBloodyBogan();
 	
 	bool pullbackDone();
 };

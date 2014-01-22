@@ -1,8 +1,8 @@
 #include "PrepareZeDevice.h"
+#include "../../Subsystems/Shootah.h"
 
 PrepareZeDevice::PrepareZeDevice() {
-	// Use Requires() here to declare subsystem dependencies
-	// eg. Requires(chassis);
+	Requires(shootah);
 }
 
 // Called just before this Command runs the first time
