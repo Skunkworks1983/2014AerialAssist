@@ -2,6 +2,7 @@
 #define __COLLECTOR_H
 #include "Commands/Subsystem.h"
 
+class DigitalInput;
 class PIDController;
 class SpeedController;
 class Encoder;
@@ -31,7 +32,7 @@ public:
 	void setMouthSpeed(float speed);
 	
 	double getMouthPositionLeft();
-	double getMouthPositionRight();
+	double getRollerClaw();
 	double getMouthEncoderLeft();
 	double getMouthEncoderRight();
 	

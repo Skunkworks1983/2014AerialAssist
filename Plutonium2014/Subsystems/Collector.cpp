@@ -35,11 +35,7 @@ double Collector::getMouthPositionLeft() { //Will not work (probably?) but just 
 	return bangBangLeft->Get();
 }
 
-double Collector::getMouthPositionRight() { //Will not work (probably?) but just placeholder
+double Collector::getRollerClaw() { //Will not work (probably?) but just placeholder
 	return rollerClawController->Get();
-}
-
-double Collector::getRollerClawEncoder() {
-	return rollerClawEncoder->Get();
 }
 
