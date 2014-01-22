@@ -2,6 +2,7 @@
 #define __COLLECTOR_H
 #include "Commands/Subsystem.h"
 
+class DigitalInput;
 class PIDController;
 class SpeedController;
 class Encoder;
@@ -13,13 +14,15 @@ class Encoder;
 class Collector: public Subsystem {
 private:
 	PIDController *bangBangLeft;
-	PIDController *bangBangRight;
+	PIDController *rollerClawController;
 	SpeedController *rollerMotorLeft;
-	SpeedController *rollerMotorRight;
+	SpeedController *rollerClawMotor;
 	SpeedController *mouthMotorLeft;
 	SpeedController *mouthMotorRight;
 	Encoder *mouthEncoderLeft;
-	Encoder *mouthEncoderRight;
+	Encoder *rollerClawEncoder;
+	DigitalInput *ballSensor;
+	
 	//Position *defaultPos;
 public:
 	Collector();
@@ -29,7 +32,7 @@ public:
 	void setMouthSpeed(float speed);
 	
 	double getMouthPositionLeft();
-	double getMouthPositionRight();
+	double getRollerClaw();
 	double getMouthEncoderLeft();
 	double getMouthEncoderRight();
 	
