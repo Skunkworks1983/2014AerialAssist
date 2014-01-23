@@ -1,8 +1,8 @@
 #include "FireZeMissle.h"
 
 FireZeMissle::FireZeMissle() {
-	// Use Requires() here to declare subsystem dependencies
-	// eg. Requires(chassis);
+	Requires(shootah);
+	// Requires collector?
 }
 
 // Called just before this Command runs the first time
