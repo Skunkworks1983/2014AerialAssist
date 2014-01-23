@@ -9,7 +9,7 @@ Collector::Collector() :
 	rollerClawMotor = new Talon(COLLECTOR_ROLLER_MOTOR);
 	rollerClawEncoder = new Encoder(COLLECTOR_CLAW_ENCODER_CHANNEL_A, COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
 	
-	rollerPIDController = new PIDController(0,0,0, rollerClawEncoder, rollerClawMotor, 0.1f);
+	rollerPIDController = new PIDController(1,0,0, rollerClawEncoder, rollerClawMotor, 0.05f);
 	
 	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
 	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A, COLLECTOR_JAW_SOLENOID_B);

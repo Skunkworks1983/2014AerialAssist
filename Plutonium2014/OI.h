@@ -9,7 +9,8 @@ private:
 	Joystick *joystickRight;
 	
 	JoystickButton *shiftButton;
-	
+	JoystickButton *rollerOn;
+	JoystickButton *rollerOff;
 	float scale;
 	
 public:
