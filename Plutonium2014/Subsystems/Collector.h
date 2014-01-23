@@ -6,6 +6,7 @@ class DigitalInput;
 class PIDController;
 class SpeedController;
 class Encoder;
+class SolenoidPair;
 /**
  *
  *
@@ -13,29 +14,21 @@ class Encoder;
  */
 class Collector: public Subsystem {
 private:
-	PIDController *bangBangLeft;
-	PIDController *rollerClawController;
-	SpeedController *rollerMotorLeft;
-	SpeedController *rollerClawMotor;
-	SpeedController *mouthMotorLeft;
-	SpeedController *mouthMotorRight;
-	Encoder *mouthEncoderLeft;
-	Encoder *rollerClawEncoder;
+	SolenoidPair *jawController;
+	DigitalInput *jawState;
 	DigitalInput *ballSensor;
+	PIDController *rollerPIDController;
+	Encoder *rollerClawEncoder;
+	SpeedController *rollerClawMotor;
 	
-	//Position *defaultPos;
 public:
 	Collector();
 	void InitDefaultCommand();
 	//void setArmPosition(Position defaultPos = Collector::kHigh);
+	void setMouthState(bool on);
 	void setRollerSpeed(float speed);
-	void setMouthSpeed(float speed);
-	
-	double getMouthPositionLeft();
-	double getRollerClaw();
-	double getMouthEncoderLeft();
-	double getMouthEncoderRight();
-	
+	double getRollerSpeed();
+	bool isBallDetected();
 };
 
 #endif

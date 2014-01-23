@@ -1,41 +1,44 @@
 #include "Collector.h"
 #include "../Robotmap.h"
+#include "../Utils/SolenoidPair.h"
 #include "WPILib.h"
 
 Collector::Collector() :
 	Subsystem("Collector") {
-	bangBangLeft = new PIDController(0,0,0, mouthEncoderLeft, mouthMotorLeft, 0.1f);
-	rollerClawController = new PIDController(0,0,0, rollerClawEncoder, mouthMotorRight, 0.1f);
-	rollerClawMotor = new Talon(9);
-	mouthMotorLeft = new Talon(10);
-	mouthMotorRight = new Talon(11);
-	mouthEncoderLeft = new Encoder(1, 2, false, Encoder::k4X);
-	rollerClawEncoder = new Encoder(1, 2, true, Encoder::k4X);
-}
-
-void Collector::setMouthSpeed(float speed){
-	mouthMotorLeft->Set(speed);
-	mouthMotorRight->Set(speed);
+	
+	rollerClawMotor = new Talon(COLLECTOR_ROLLER_MOTOR);
+	rollerClawEncoder = new Encoder(COLLECTOR_CLAW_ENCODER_CHANNEL_A, COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
+	
+	rollerPIDController = new PIDController(0,0,0, rollerClawEncoder, rollerClawMotor, 0.1f);
+	
+	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
+	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A, COLLECTOR_JAW_SOLENOID_B);
+	jawState = new DigitalInput(COLLECTOR_JAW_STATE);
 }
 
 void Collector::InitDefaultCommand() {
 	// Nothing here...
 }
 
-/*void Collector::setArmPosition(Position defaultPos) {
+void Collector::setMouthState(bool on){
+	jawController->Set(on);
+}
 
- }*/
-
-void Collector::setRollerSpeed(float speed) {
-	rollerClawMotor->Set(speed);
+void Collector::setRollerSpeed(float speed){
+	rollerPIDController->SetSetpoint(speed);
 	
+	if(speed != 0 && !rollerPIDController->IsEnabled()){
+		rollerPIDController->Enable();
+	}else if(speed == 0 && rollerPIDController->IsEnabled()){
+		rollerPIDController->Disable();
+	}
 }
 
-double Collector::getMouthPositionLeft() { //Will not work (probably?) but just placeholder
-	return bangBangLeft->Get();
+double Collector::getRollerSpeed(){
+	return rollerClawEncoder->Get();
 }
 
-double Collector::getRollerClaw() { //Will not work (probably?) but just placeholder
-	return rollerClawController->Get();
+bool Collector::isBallDetected(){
+	return ballSensor->Get();
 }
 
