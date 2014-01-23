@@ -1,16 +1,18 @@
-#ifndef __MOUTH_MOVE_H
-#define __MOUTH_MOVE_H
+#ifndef __JAW_MOVE_H
+#define __JAW_MOVE_H
 
 #include "../../CommandBase.h"
 
 /**
  *
  *
- * @author ExampleAuthor
+ * @author Ross Bajocich
  */
-class MouthMove: public CommandBase {
+class JawMove: public CommandBase {
+private:
+	bool isUp;
 public:
-	MouthMove();
+	JawMove(bool isUp);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

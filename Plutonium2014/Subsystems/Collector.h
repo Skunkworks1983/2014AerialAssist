@@ -10,7 +10,7 @@ class SolenoidPair;
 /**
  *
  *
- * @author David
+ * @author Ross Bajocich
  */
 class Collector: public Subsystem {
 private:
@@ -24,10 +24,12 @@ private:
 public:
 	Collector();
 	void InitDefaultCommand();
-	//void setArmPosition(Position defaultPos = Collector::kHigh);
-	void setMouthState(bool on);
+	bool getJawState();
+	void setJawState(bool on);
+	
 	void setRollerSpeed(float speed);
 	double getRollerSpeed();
+	
 	bool isBallDetected();
 };
 

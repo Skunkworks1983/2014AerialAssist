@@ -6,11 +6,13 @@
 /**
  *
  *
- * @author ExampleAuthor
+ * @author Ross Bajocich
  */
 class RollerRoll: public CommandBase {
+private:
+	float speed;
 public:
-	RollerRoll();
+	RollerRoll(float speed);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

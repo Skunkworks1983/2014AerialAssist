@@ -20,8 +20,12 @@ void Collector::InitDefaultCommand() {
 	// Nothing here...
 }
 
-void Collector::setMouthState(bool on){
+void Collector::setJawState(bool on){
 	jawController->Set(on);
+}
+
+bool Collector::getJawState(){
+	return jawState->Get();
 }
 
 void Collector::setRollerSpeed(float speed){

@@ -1,31 +1,25 @@
 #include "RollerRoll.h"
 
-RollerRoll::RollerRoll() {
-	// Use Requires() here to declare subsystem dependencies
-	// eg. Requires(chassis);
+RollerRoll::RollerRoll(float speed) {
+	Requires(collector);
 }
 
-// Called just before this Command runs the first time
 void RollerRoll::Initialize() {
 	
 }
 
-// Called repeatedly when this Command is scheduled to run
 void RollerRoll::Execute() {
-	
+	collector->setRollerSpeed(speed);
 }
 
-// Make this return true when this Command no longer needs to run execute()
 bool RollerRoll::IsFinished() {
 	return false;
 }
 
-// Called once after isFinished returns true
 void RollerRoll::End() {
-	
+	collector->setRollerSpeed(0);
 }
 
-// Called when another command which requires one or more of the same
-// subsystems is scheduled to run
 void RollerRoll::Interrupted() {
+	collector->setRollerSpeed(0);
 }
