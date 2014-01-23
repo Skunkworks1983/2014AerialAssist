@@ -16,10 +16,12 @@ class PIDController;
 class Shootah: public Subsystem {
 public:
 	enum ShooterPosition {
-		kPrepped,
+		kBack,
 		kAdjusting,
+		kAdjusted,
 		kUnaligned
 	}; 
+	
 private:
 	SpeedController *winchMotor;
 	Encoder *winchEncoder;
@@ -31,24 +33,27 @@ private:
 	
 	DigitalInput *pullbackSwitch;
 	
-	ShooterPosition cachedPosition;
+	//ShooterPosition cachedPosition;
 	
 public:
 	Shootah();
 	void InitDefaultCommand();
 	
-	void setWinchMotorSpeed(float speed);
+	void setWinchPID(float setpoint);
+	float getWinchPID(); 
+	bool isWinchPIDSetpoint();
+	void setWinchPIDState(bool state);
+	
 	double getEncoder();
 	
-	float getWinchPID(); 
-	void setWinchPID(bool enable); // TODO: Make this and all other weird PID functions
-	
-	void setCoffeTable(bool state);
-	bool getCoffeTable();
+	void setCoffeeTable(bool state);
+	bool getCoffeeTable();
 	void setBloodyBogan(bool state);
 	bool getBloodyBogan();
 	
 	bool pullbackDone();
+	
+	ShooterPosition getShootahPosition();
 };
 
 #endif

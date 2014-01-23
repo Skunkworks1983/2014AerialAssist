@@ -3,14 +3,18 @@
 
 #include "../../CommandBase.h"
 
+
 /**
  *
  *
  * @author ExampleAuthor
  */
 class PrepareZeDevice: public CommandBase {
+private:
+	float setpoint;
+	
 public:
-	PrepareZeDevice();
+	PrepareZeDevice(float setpoint);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
