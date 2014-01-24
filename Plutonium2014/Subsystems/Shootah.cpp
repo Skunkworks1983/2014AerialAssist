@@ -1,5 +1,6 @@
 #include "Shootah.h"
 #include "../Robotmap.h"
+#include "../Utils/SolenoidPair.h"
 #include "WPILib.h"
 
 Shootah::Shootah() :
@@ -9,8 +10,8 @@ Shootah::Shootah() :
 
 	winchPID = new PIDController(1, 1, 1, winchEncoder, winchMotor, 0.0f);
 
-	pneumaticCoffeeTable = new Solenoid(SHOOTAH_PNEUMATIC_COFFEE_TABLE);
-	pneumaticBloodyBogan = new Solenoid(SHOOTAH_PNEUMATIC_WANKER);
+	pneumaticCoffeeTable = new SolenoidPair(SHOOTAH_PNEUMATIC_COFFEE_TABLE);
+	pneumaticBloodyBogan = new SolenoidPair(SHOOTAH_PNEUMATIC_WANKER);
 
 	pullbackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
 
@@ -48,22 +49,18 @@ bool Shootah::getCoffeeTable() {
 	return pneumaticCoffeeTable->Get();
 }
 
-void Shootah::setBloodyBogan(bool state) {
+void Shootah::setBloodyBogan(Shootah::ShifterPosition state) {
 	if (pneumaticCoffeeTable->Get()) { // Saftey???
-		pneumaticBloodyBogan->Set(state);
+		pneumaticBloodyBogan->Set(state == Shootah::kActive ? true : false);
 	}
 }
 
-bool Shootah::getBloodyBogan() {
-	return pneumaticBloodyBogan->Get();
+Shootah::ShifterPosition Shootah::getBloodyBogan() {
+	return pneumaticBloodyBogan->Get() ? Shootah::kActive : Shootah::kInactive;
 }
 
 bool Shootah::pullbackDone() {
-	//if (/*cachedPosition != Shootah::kUnaligned || */pullbackSwitch->Get()) { For in the future if more broad definitions of what pullback is makes sense
 	return pullbackSwitch->Get();
-	//}
-
-	return false;
 }
 
 void Shootah::setWinchPIDState(bool state) {

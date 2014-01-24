@@ -9,7 +9,7 @@
  */
 class SpeedController;
 class Encoder;
-class Solenoid;
+class SolenoidPair;
 class DigitalInput;
 class PIDController;
 
@@ -22,14 +22,19 @@ public:
 		kUnaligned
 	}; 
 	
+	enum ShifterPosition {
+		kActive,
+		kInactive
+	};
+	
 private:
 	SpeedController *winchMotor;
 	Encoder *winchEncoder;
 	
 	PIDController *winchPID;
 	
-	Solenoid *pneumaticCoffeeTable;
-	Solenoid *pneumaticBloodyBogan;
+	SolenoidPair *pneumaticCoffeeTable;
+	SolenoidPair *pneumaticBloodyBogan;
 	
 	DigitalInput *pullbackSwitch;
 	
@@ -48,8 +53,8 @@ public:
 	
 	void setCoffeeTable(bool state);
 	bool getCoffeeTable();
-	void setBloodyBogan(bool state);
-	bool getBloodyBogan();
+	void setBloodyBogan(ShifterPosition state);
+	ShifterPosition getBloodyBogan();
 	
 	bool pullbackDone();
 	
