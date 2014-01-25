@@ -30,3 +30,15 @@ void CommandBase::init() {
 	pneumatics = new Pneumatics();
 	oi = new OI();
 }
+
+char *CommandBase::createNameFromFloat(char *base, float target) {
+        char *buf = new char[32];
+        snprintf(buf, 32, "%s_%f", base, target);
+        return buf;
+}
+
+char *CommandBase::createNameFromString(char *base, const char *arg) {
+        char *buf = new char[32];
+        snprintf(buf, 32, "%s_%s", base, arg);
+        return buf;
+}

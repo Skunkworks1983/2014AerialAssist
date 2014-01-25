@@ -22,6 +22,7 @@ private:
 	Encoder *encoderLeftBack;
 	Encoder *encoderRightBack;
 	SolenoidPair *shifter;
+	Gyro *gyro;
 	// It's desirable that everything possible under private except
 	// for methods that implement subsystem capabilities
 
@@ -34,11 +35,13 @@ public:
 	DriveBase();
 	void InitDefaultCommand();
 	void setSpeed(double speedLeft, double speedRight);
-	void driveDistance(double distance);
+	Encoder *getLeftEncoder();
+	Encoder *getRightEncoder();
 	void encoderReset();
 	void setDriveGear(DriveGear gear);
 	DriveGear getDriveGear();
 	float getMotorSpeed;
+	Gyro *getGyro();
 };
 
 #endif

@@ -33,8 +33,12 @@ void DriveBase::encoderReset() {
 	encoderRight->Reset();
 }
 
-void DriveBase::driveDistance(double distance){
-	encoderReset();
+Encoder *DriveBase::getLeftEncoder(){
+	return encoderLeft;
+}
+
+Encoder *DriveBase::getRightEncoder(){
+	return encoderRight;
 }
 
 void DriveBase::setDriveGear(DriveGear gear){
@@ -43,4 +47,8 @@ void DriveBase::setDriveGear(DriveGear gear){
 
 DriveBase::DriveGear DriveBase::getDriveGear() {
 	return shifter->Get()?kHigh:kLow;
+}
+
+Gyro *DriveBase::getGyro(){
+	return gyro;
 }

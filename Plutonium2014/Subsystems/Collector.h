@@ -27,6 +27,9 @@ public:
 	bool getJawState();
 	void setJawState(bool on);
 	
+	void setRollerPIDSpeed(float speed);
+	double getRollerPIDSpeed();
+	
 	void setRollerSpeed(float speed);
 	double getRollerSpeed();
 	

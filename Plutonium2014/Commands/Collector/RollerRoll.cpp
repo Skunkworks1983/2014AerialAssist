@@ -2,6 +2,7 @@
 
 RollerRoll::RollerRoll(float speed) {
 	Requires(collector);
+	this->speed = speed;
 }
 
 void RollerRoll::Initialize() {
@@ -9,7 +10,8 @@ void RollerRoll::Initialize() {
 }
 
 void RollerRoll::Execute() {
-	collector->setRollerSpeed(speed);
+	collector->setRollerPIDSpeed(speed);
+	printf("%f\n", speed);
 }
 
 bool RollerRoll::IsFinished() {
@@ -17,9 +19,9 @@ bool RollerRoll::IsFinished() {
 }
 
 void RollerRoll::End() {
-	collector->setRollerSpeed(0);
+	collector->setRollerPIDSpeed(0);
 }
 
 void RollerRoll::Interrupted() {
-	collector->setRollerSpeed(0);
+	collector->setRollerPIDSpeed(0);
 }

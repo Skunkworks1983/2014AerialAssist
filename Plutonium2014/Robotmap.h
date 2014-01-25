@@ -41,4 +41,13 @@
 #define COLLECTOR_JAW_SOLENOID_A (1)
 #define COLLECTOR_JAW_SOLENOID_B (2)
 
+// ===============
+// == Automatic ==
+// ===============
+#define AUTO_DRIVE_DIST_STABILITY (1)	//all values are arbitrary, need actual values
+#define AUTO_DRIVE_DIST_THRESHOLD (1)
+#define AUTO_DRIVE_DIST_SPEED_MIN (.1)
+#define AUTO_DRIVE_DIST_SPEED_MAX (.75)
+#define AUTO_DRIVE_DIST_SLOW_DOWN (.5)
+
 #endif

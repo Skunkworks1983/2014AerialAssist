@@ -27,6 +27,9 @@ public:
 	static Shootah *shootah;
 	static Pneumatics *pneumatics;
 	static OI *oi;
+	
+	char *CommandBase::createNameFromString(char *base, const char *arg);
+	char *CommandBase::createNameFromFloat(char *base, float target);
 };
 
 #endif
