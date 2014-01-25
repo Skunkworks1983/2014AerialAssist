@@ -16,16 +16,13 @@ private:
 	Encoder *encoderRight;
 	PIDController *pid;
 	AnalogChannel *pot;
-	void updatePIDOutput();
 
 public:
 	Pterodactyl();
 	void InitDefaultCommand();
-	double PIDGet();
-	void setPIDState(bool bee);
-	bool isPIDDone();
-	void setPitch(float direction);
-	float getPitch();
+	double getAngle();
+	void setAngleMotorSpeed(float speed);
+	void setAngle(float target);
 };
 
 #endif
