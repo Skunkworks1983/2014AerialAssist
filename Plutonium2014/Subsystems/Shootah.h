@@ -15,12 +15,12 @@ class PIDController;
 
 class Shootah: public Subsystem {
 public:
-	enum ShooterPosition {
+	/*enum ShooterPosition {
 		kBack,
 		kAdjusting,
 		kAdjusted,
 		kUnaligned
-	}; 
+	}; */
 	
 	enum ShifterPosition {
 		kActive,
@@ -49,7 +49,9 @@ public:
 	bool isWinchPIDSetpoint();
 	void setWinchPIDState(bool state);
 	
-	double getEncoder();
+	double getWinchEncoder();
+	void setWinchEncoderState(bool on);
+	void winchEncoderReset();
 	
 	void setCoffeeTable(bool state);
 	bool getCoffeeTable();
@@ -58,7 +60,7 @@ public:
 	
 	bool pullbackDone();
 	
-	ShooterPosition getShootahPosition();
+	//ShooterPosition getShootahPosition();
 };
 
 #endif
