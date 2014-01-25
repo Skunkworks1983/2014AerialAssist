@@ -6,11 +6,13 @@
 /**
  *
  *
- * @author ExampleAuthor
+ * @author David ;)
  */
 class AngelChange: public CommandBase {
+private:
+	float target;
 public:
-	AngelChange();
+	AngelChange(float target);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

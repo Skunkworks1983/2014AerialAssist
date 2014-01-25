@@ -53,4 +53,14 @@
 #define AUTO_DRIVE_DIST_SPEED_MAX (.75)
 #define AUTO_DRIVE_DIST_SLOW_DOWN (.5)
 
+// =================
+// == Pterodactyl ==
+// =================
+#define PTERODACTYL_POT 5
+#define PTERODACTYL_MAX_ANGLE 90
+#define PTERODACTYL_MIN_ANGLE 0
+#define THRESHOLD_LOWER 10
+#define THRESHOLD_UPPER 10
+#define LIL_BIT 0.5
+
 #endif

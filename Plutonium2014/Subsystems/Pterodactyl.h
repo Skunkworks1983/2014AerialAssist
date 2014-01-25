@@ -16,6 +16,8 @@ private:
 	Encoder *encoderRight;
 	PIDController *pid;
 	AnalogChannel *pot;
+	DigitalInput *limNeg;
+	DigitalInput *limPos;
 
 public:
 	Pterodactyl();
@@ -23,6 +25,8 @@ public:
 	double getAngle();
 	void setAngleMotorSpeed(float speed);
 	void setAngle(float target);
+	bool getLimNeg();
+	bool getLimPos();
 };
 
 #endif
