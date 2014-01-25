@@ -7,7 +7,8 @@
 /**
  *
  *
- * @author ExampleAuthor
+ * @author These are all david so I guess this is as well
+ * DAVEED
  */
 class PrepareZeDevice: public CommandBase {
 private:

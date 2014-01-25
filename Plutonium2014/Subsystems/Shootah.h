@@ -9,18 +9,23 @@
  */
 class SpeedController;
 class Encoder;
-class Solenoid;
+class SolenoidPair;
 class DigitalInput;
 class PIDController;
 
 class Shootah: public Subsystem {
 public:
-	enum ShooterPosition {
+	/*enum ShooterPosition {
 		kBack,
 		kAdjusting,
 		kAdjusted,
 		kUnaligned
-	}; 
+	}; */
+	
+	enum ShifterPosition {
+		kActive,
+		kInactive
+	};
 	
 private:
 	SpeedController *winchMotor;
@@ -28,8 +33,8 @@ private:
 	
 	PIDController *winchPID;
 	
-	Solenoid *pneumaticCoffeeTable;
-	Solenoid *pneumaticBloodyBogan;
+	SolenoidPair *pneumaticCoffeeTable;
+	SolenoidPair *pneumaticBloodyBogan;
 	
 	DigitalInput *pullbackSwitch;
 	
@@ -44,16 +49,18 @@ public:
 	bool isWinchPIDSetpoint();
 	void setWinchPIDState(bool state);
 	
-	double getEncoder();
+	double getWinchEncoder();
+	void setWinchEncoderState(bool on);
+	void winchEncoderReset();
 	
 	void setCoffeeTable(bool state);
 	bool getCoffeeTable();
-	void setBloodyBogan(bool state);
-	bool getBloodyBogan();
+	void setBloodyBogan(ShifterPosition state);
+	ShifterPosition getBloodyBogan();
 	
 	bool pullbackDone();
 	
-	ShooterPosition getShootahPosition();
+	//ShooterPosition getShootahPosition();
 };
 
 #endif

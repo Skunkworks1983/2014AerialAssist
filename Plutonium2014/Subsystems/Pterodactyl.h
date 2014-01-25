@@ -6,15 +6,26 @@
 /**
  *
  *
- * @author David
+ * @author Dayveed
  */
 class Pterodactyl: public Subsystem {
 private:
-	// It's desirable that everything possible under private except
-	// for methods that implement subsystem capabilities
+	SpeedController *motorLeft;
+	SpeedController *motorRight;
+	Encoder *encoderLeft;
+	Encoder *encoderRight;
+	PIDController *pid;
+	AnalogChannel *pot;
+	void updatePIDOutput();
+
 public:
 	Pterodactyl();
 	void InitDefaultCommand();
+	double PIDGet();
+	void setPIDState(bool bee);
+	bool isPIDDone();
+	void setPitch(float direction);
+	float getPitch();
 };
 
 #endif

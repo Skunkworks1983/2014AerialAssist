@@ -1,6 +1,6 @@
 #include "TankDrive.h"
 #include "WPILib.h"
-#include "JoyStick.h"
+#include "Joystick.h"
 #include <cmath>
 #include "../../CommandBase.h"
 
