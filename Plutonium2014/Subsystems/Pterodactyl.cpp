@@ -2,13 +2,11 @@
 #include "../Robotmap.h"
 
 Pterodactyl::Pterodactyl() : Subsystem("Pterodactyl") {
-	motorLeft = new Talon(1);
-	motorRight = new Talon(2);
-	encoderLeft = new Encoder(DRIVE_ENCODER_LEFT, false, Encoder::k4X);
-	encoderRight = new Encoder(DRIVE_ENCODER_RIGHT, true, Encoder::k4X); //Copied from drivebase. I don't even know
+	motorLeft = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_LEFT);
+	motorRight = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_RIGHT);
 	pot = new AnalogChannel(PTERODACTYL_POT);
-	limNeg = new DigitalInput(13);
-	limPos = new DigitalInput(14);
+	limNeg = new DigitalInput(PTERODACTYL_LIM_NEG);
+	limPos = new DigitalInput(PTERODACTYL_LIM_POS);
 }
     
 void Pterodactyl::InitDefaultCommand() {
@@ -16,7 +14,7 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle(){
-	return ((90*pot->GetAverageVoltage())-50);
+	return ((90*pot->GetAverageVoltage())-17);
 }
 
 void Pterodactyl::setAngleMotorSpeed(float speed){
@@ -31,27 +29,9 @@ void Pterodactyl::setAngleMotorSpeed(float speed){
 }
 
 bool Pterodactyl::getLimNeg(){
-	return limNeg->Get() == 0 ? false : true;
+	return limNeg->Get() != 0;
 }
 
 bool Pterodactyl::getLimPos(){
-	return limPos->Get() == 0 ? false : true;
+	return limPos->Get() != 0;
 }
-
-/*void Pterodactyl::setAngle(float target){
-	if(getAngle() < (target+LIL_BIT)){ //within half a degree so the pterodactyl doesn't swing indefinately
-		setAngleMotorSpeed(.25);
-	}
-	else if(getAngle() > (target-LIL_BIT)){
-		setAngleMotorSpeed(-.25);
-	}
-	if(getAngle()<(target+THRESHOLD_LOWER) && (target-LIL_BIT) < getAngle()){ //if the current angle is past the lower threshold and going down
-		setAngleMotorSpeed(-0.125);
-	}
-	else if(getAngle()>(target-THRESHOLD_UPPER) && (target+LIL_BIT) > getAngle()){
-		setAngleMotorSpeed(0.125);
-	}
-	if(getAngle() < (target+LIL_BIT) && getAngle() > (target-LIL_BIT)){ //checks if current angle is near target and stops
-		setAngleMotorSpeed(0);
-	}
-}*/
