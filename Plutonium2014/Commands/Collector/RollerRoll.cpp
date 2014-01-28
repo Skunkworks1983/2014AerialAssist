@@ -6,12 +6,25 @@ RollerRoll::RollerRoll(float speed) {
 }
 
 void RollerRoll::Initialize() {
-	
 }
 
+int magic = 0;
 void RollerRoll::Execute() {
-	collector->setRollerPIDSpeed(speed);
-	printf("%f\n", speed);
+	/*
+	 if(dif < 0 - THRESH){
+	 collector->setRollerPIDSpeed(speed + dif);
+	 }else if(dif > 0 + THRESH){
+	 collector->setRollerPIDSpeed(speed + dif);
+	 }
+	 */
+	//collector->setRollerSpeed(speed + dif);
+	collector->setRollerSpeed(speed);
+	/*if (magic++ > 10){
+		magic = 0;
+		printf("DesiredSpeed: %f\tSpeed: %f\tDistance: %f\n", speed,
+				collector->getRollerSpeed(), collector->getRollerDistance());
+		SmartDashboard::PutNumber("RollerSpeed", collector->getRollerSpeed());
+	}*/
 }
 
 bool RollerRoll::IsFinished() {
@@ -19,9 +32,9 @@ bool RollerRoll::IsFinished() {
 }
 
 void RollerRoll::End() {
-	collector->setRollerPIDSpeed(0);
+	collector->setRollerSpeed(0.0);
 }
 
 void RollerRoll::Interrupted() {
-	collector->setRollerPIDSpeed(0);
+	collector->setRollerSpeed(0.0);
 }

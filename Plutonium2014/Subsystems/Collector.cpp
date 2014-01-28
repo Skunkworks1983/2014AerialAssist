@@ -6,10 +6,15 @@
 Collector::Collector() :
 	Subsystem("Collector") {
 	
-	rollerClawMotor = new Victor(COLLECTOR_ROLLER_MOTOR);
+	rollerMotor = new Victor(COLLECTOR_ROLLER_MOTOR);
 	rollerClawEncoder = new Encoder(COLLECTOR_CLAW_ENCODER_CHANNEL_A, COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
-	
-	rollerPIDController = new PIDController(1,.5,.001, rollerClawEncoder, rollerClawMotor, 0.05f);
+	rollerClawEncoder->SetPIDSourceParameter(Encoder::kRate);
+	rollerClawEncoder->SetDistancePerPulse(COLLECTOR_ROLLER_300_ROTATIONS_PER_TICK);
+	rollerClawEncoder->Start();
+	rollerPIDController = new PIDController(.01,.01,.01, rollerClawEncoder, rollerMotor, 0.05f);
+	rollerPIDController->SetInputRange(-2.0,2.0);
+	rollerPIDController->SetOutputRange(-1.0,1.0);
+	//SmartDashboard::PutData("Roller PID", rollerPIDController);
 	/*
 	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
 	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A, COLLECTOR_JAW_SOLENOID_B);
@@ -28,7 +33,7 @@ bool Collector::getJawState(){
 	return jawState->Get();
 }
 
-void Collector::setRollerPIDSpeed(float speed){
+void Collector::setRollerSpeed(float speed){
 	rollerPIDController->SetSetpoint(speed);
 	
 	if(speed != 0 && !rollerPIDController->IsEnabled()){
@@ -38,17 +43,12 @@ void Collector::setRollerPIDSpeed(float speed){
 	}
 }
 
-double Collector::getRollerPIDSpeed(){
-	return rollerClawEncoder->Get();
+double Collector::getRollerSpeed(){
+	return rollerClawEncoder->GetRate();
 }
 
-
-void Collector::setRollerSpeed(float speed) {
-	rollerClawMotor->Set(speed);
-}
-
-double Collector::getRollerSpeed() {
-	return rollerClawMotor->Get();
+double Collector::getRollerDistance(){
+	return rollerClawEncoder->GetDistance();
 }
 
 bool Collector::isBallDetected(){

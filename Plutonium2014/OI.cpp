@@ -12,8 +12,8 @@ OI::OI() {
 }
 void OI::registerButtonListeners() {
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shiftButton, new Shift(Shift::kToggle)));
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new RollerRoll(1)));
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new RollerRoll(0)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new RollerRoll(0.25)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new RollerRoll(0.0)));
 }
 Joystick *OI::getJoystickLeft() {
 	return joystickLeft;

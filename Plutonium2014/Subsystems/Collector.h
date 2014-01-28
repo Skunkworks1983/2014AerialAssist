@@ -19,7 +19,7 @@ private:
 	DigitalInput *ballSensor;
 	PIDController *rollerPIDController;
 	Encoder *rollerClawEncoder;
-	SpeedController *rollerClawMotor;
+	SpeedController *rollerMotor;
 	
 public:
 	Collector();
@@ -27,11 +27,9 @@ public:
 	bool getJawState();
 	void setJawState(bool on);
 	
-	void setRollerPIDSpeed(float speed);
-	double getRollerPIDSpeed();
-	
 	void setRollerSpeed(float speed);
 	double getRollerSpeed();
+	double getRollerDistance();
 	
 	bool isBallDetected();
 };
