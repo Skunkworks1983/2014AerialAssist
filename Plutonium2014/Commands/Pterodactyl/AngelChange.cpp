@@ -28,6 +28,7 @@ void AngelChange::Execute() {
 	else if(pterodactyl->getAngle()>(target-THRESHOLD_UPPER) && (target+LIL_BIT) > pterodactyl->getAngle()){
 		pterodactyl->setAngleMotorSpeed(PTERODACTYL_UP_NEAR);
 	}
+	printf("%f\n", pterodactyl->getAngle());
 }
 
 // Make this return true when this Command no longer needs to run execute()

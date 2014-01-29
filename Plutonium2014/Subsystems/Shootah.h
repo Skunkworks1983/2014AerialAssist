@@ -39,7 +39,6 @@ private:
 	DigitalInput *pullbackSwitch;
 	
 	//ShooterPosition cachedPosition;
-	
 public:
 	Shootah();
 	void InitDefaultCommand();

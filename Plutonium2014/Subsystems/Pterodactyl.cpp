@@ -14,17 +14,17 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle(){
-	return ((90*pot->GetAverageVoltage())-17);
+	return (90*pot->GetAverageVoltage()*45) + 17.5;
 }
 
 void Pterodactyl::setAngleMotorSpeed(float speed){
-	if((speed>0 && getAngle()<PTERODACTYL_MAX_ANGLE) || (speed<0 && getAngle()>PTERODACTYL_MIN_ANGLE)){
+	if(((speed>0 && getAngle()<PTERODACTYL_MAX_ANGLE) || (speed<0 && getAngle()>PTERODACTYL_MIN_ANGLE)) && !getLimNeg() && !getLimPos()){
 		motorLeft->Set(speed);
-		motorRight->Set(-speed);
+		//motorRight->Set(-speed);
 	}
 	else{
 		motorLeft->Set(0);
-		motorRight->Set(0);
+		//motorRight->Set(0);
 	}
 }
 

@@ -16,6 +16,7 @@ Shootah::Shootah() :
 	pullbackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
 
 	//cachedPosition = Shootah::kUnaligned;
+	LiveWindow::GetInstance()->AddActuator("Shootah", "Winch PID", winchPID);
 }
 
 void Shootah::InitDefaultCommand() {
