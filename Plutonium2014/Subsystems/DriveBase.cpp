@@ -28,6 +28,13 @@ void DriveBase::setSpeed(double speedLeft, double speedRight){
 	motorRightBack->Set(speedRight);
 }
 
+float DriveBase::getMotorSpeed(){
+	return (motorLeftFront->Get() +
+			motorRightFront->Get()+
+			motorLeftBack->Get() + 
+			motorRightBack->Get()) / 4;
+}
+
 void DriveBase::encoderReset() {
 	encoderLeft->Reset();
 	encoderRight->Reset();
@@ -52,3 +59,4 @@ DriveBase::DriveGear DriveBase::getDriveGear() {
 Gyro *DriveBase::getGyro(){
 	return gyro;
 }
+
