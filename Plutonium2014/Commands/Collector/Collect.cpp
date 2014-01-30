@@ -1,10 +1,11 @@
 #include "Collect.h"
-#include "WPILib.h"
+//#include "RobotMap.h"
 
-Collect::Collect(){
-	
+Collect::Collect() {
+	CommandGroup("Collect");
+	//AddSequential(new );
+	//AddSequential(new );
 }
 
-Collect::~Collect(){
-	
-}
+//Reload::~Reload() {
+//}

@@ -54,4 +54,3 @@ double Collector::getRollerDistance(){
 bool Collector::isBallDetected(){
 	return ballSensor->Get();
 }
-

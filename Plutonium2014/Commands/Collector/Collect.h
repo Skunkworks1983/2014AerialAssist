@@ -1,12 +1,18 @@
 #ifndef __COLLECT_H
 #define __COLLECT_H
 
-class Collect : public CommandGroup {
-private:
-	
+#include "../../CommandBase.h"
+
+/**
+ *
+ *
+ * @author David
+ */
+class Collect: public CommandGroup {
 public:
 	Collect();
-	~Collect();
-}
+	//~Collect();
+};
 
 #endif
+
