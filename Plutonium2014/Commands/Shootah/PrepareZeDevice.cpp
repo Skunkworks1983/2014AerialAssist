@@ -7,13 +7,13 @@ PrepareZeDevice::PrepareZeDevice(float setpoint) {
 }
 
 void PrepareZeDevice::Initialize() {
-	if (shootah->pullbackDone()) {
+	/*if (shootah->pullbackDone()) {
 		if (shootah->getLatch()) {
 			shootah->setLatch(false);
 		}
 		
 		shootah->setWenchMotor(setpoint);
-	}
+	}*/
 }
 
 void PrepareZeDevice::Execute() {
@@ -21,14 +21,14 @@ void PrepareZeDevice::Execute() {
 }
 
 bool PrepareZeDevice::IsFinished() {
-	if (!shootah->isWenchPIDSetpoint()) {
+	/*if (!shootah->isWenchPIDSetpoint()) {
 		return false;
-	}
+	}*/
 	return true;
 }
 
 void PrepareZeDevice::End() {
-	shootah->setWenchPIDState(false);
+	//shootah->setWenchPIDState(false);
 	shootah->setLatch(true); //nothing would have set it so we can assume it's off
 }
 

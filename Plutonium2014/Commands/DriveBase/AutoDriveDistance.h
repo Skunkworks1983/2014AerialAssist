@@ -41,7 +41,7 @@ public:
 			float tStable = AUTO_DRIVE_DIST_STABILITY,
 			float tThreshold = AUTO_DRIVE_DIST_THRESHOLD);
 	AutoDriveDistance *setResetEncoder(bool reset);
-	AutoDriveDistance *AutoDriveDistance::setOutputRange(float min, float max);
+	AutoDriveDistance *setOutputRange(float min, float max);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

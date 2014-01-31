@@ -12,6 +12,7 @@ class Encoder;
 class SolenoidPair;
 class DigitalInput;
 class PIDController;
+class AnalogChannel;
 
 class Shootah: public Subsystem {
 public:

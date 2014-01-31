@@ -28,8 +28,8 @@ public:
 	static Pneumatics *pneumatics;
 	static OI *oi;
 	
-	char *CommandBase::createNameFromString(char *base, const char *arg);
-	char *CommandBase::createNameFromFloat(char *base, float target);
+	static char *createNameFromString(char *base, const char *arg);
+	static char *createNameFromFloat(char *base, float target);
 };
 
 #endif

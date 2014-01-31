@@ -39,7 +39,7 @@ float Shootah::getWenchPot(){
 	
 }
 
-void Shootah::engageGearbox(isEngaged) {
+void Shootah::engageGearbox(bool isEngaged) {
 	
 }
 
