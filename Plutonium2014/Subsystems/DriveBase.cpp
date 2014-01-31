@@ -13,6 +13,8 @@ DriveBase::DriveBase() : Subsystem("DriveBase") {
 	motorRightBack = new DRIVE_MOTOR_TYPE(4);
 	encoderLeft = new Encoder(DRIVE_ENCODER_LEFT, false, Encoder::k4X);
 	encoderRight = new Encoder(DRIVE_ENCODER_RIGHT, true, Encoder::k4X);
+	encoderLeft->Start();
+	encoderRight->Start();
 	shifter = new SolenoidPair(DRIVE_SHIFT_HIGH, DRIVE_SHIFT_LOW);
 }
 
