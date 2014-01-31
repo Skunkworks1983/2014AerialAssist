@@ -28,38 +28,25 @@ public:
 	};
 	
 private:
-	SpeedController *winchMotor;
-	Encoder *winchEncoder;
+	SpeedController *wenchMotor;
+	AnalogChannel *wenchPot;
 	
-	PIDController *winchPID;
-	
-	SolenoidPair *pneumaticCoffeeTable;
-	SolenoidPair *pneumaticBloodyBogan;
+	SolenoidPair *latch;
+	SolenoidPair *gearbox;
 	
 	DigitalInput *pullbackSwitch;
+	DigitalInput *latchSensor;
 	
-	//ShooterPosition cachedPosition;
 public:
 	Shootah();
 	void InitDefaultCommand();
-	
-	void setWinchPID(float setpoint);
-	float getWinchPID(); 
-	bool isWinchPIDSetpoint();
-	void setWinchPIDState(bool state);
-	
-	double getWinchEncoder();
-	void setWinchEncoderState(bool on);
-	void winchEncoderReset();
-	
-	void setCoffeeTable(bool state);
-	bool getCoffeeTable();
-	void setBloodyBogan(ShifterPosition state);
-	ShifterPosition getBloodyBogan();
-	
-	bool pullbackDone();
-	
-	//ShooterPosition getShootahPosition();
+	void setWenchMotor(float setpoint);	
+	void setLatch(bool state);
+	bool getLatch();
+	bool isDrawnBack();
+	float getWenchPot();
+	void engageGearbox(bool isEngaged);
+	bool isGearboxEngaged();
 };
 
 #endif

@@ -13,7 +13,6 @@
 class PrepareZeDevice: public CommandBase {
 private:
 	float setpoint;
-	
 public:
 	PrepareZeDevice(float setpoint);
 	virtual void Initialize();

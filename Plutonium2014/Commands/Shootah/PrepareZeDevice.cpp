@@ -8,11 +8,11 @@ PrepareZeDevice::PrepareZeDevice(float setpoint) {
 
 void PrepareZeDevice::Initialize() {
 	if (shootah->pullbackDone()) {
-		if (shootah->getCoffeeTable()) {
-			shootah->setCoffeeTable(false);
+		if (shootah->getLatch()) {
+			shootah->setLatch(false);
 		}
 		
-		shootah->setWinchPID(setpoint);
+		shootah->setWenchMotor(setpoint);
 	}
 }
 
@@ -21,18 +21,17 @@ void PrepareZeDevice::Execute() {
 }
 
 bool PrepareZeDevice::IsFinished() {
-	if (!shootah->isWinchPIDSetpoint()) {
+	if (!shootah->isWenchPIDSetpoint()) {
 		return false;
 	}
 	return true;
 }
 
 void PrepareZeDevice::End() {
-	shootah->setWinchPIDState(false);
-	shootah->setCoffeeTable(true); //nothing would have set it so we can assume it's off
+	shootah->setWenchPIDState(false);
+	shootah->setLatch(true); //nothing would have set it so we can assume it's off
 }
 
 void PrepareZeDevice::Interrupted() {
-	shootah->setWinchPIDState(false);
-	shootah->setCoffeeTable(true);
+	shootah->setLatch(true);
 }

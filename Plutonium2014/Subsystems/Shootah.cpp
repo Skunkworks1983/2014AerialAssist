@@ -5,97 +5,44 @@
 
 Shootah::Shootah() :
 	Subsystem("Shootah") {
-	winchMotor = new Victor(SHOOTAH_MOTOR_WINCH);
-	winchEncoder = new Encoder(SHOOTAH_ENCODER_WINCH, true, Encoder::k4X);
+	wenchMotor = new Victor(SHOOTAH_MOTOR_WINCH);
+	wenchPot = new AnalogChannel(SHOOTAH_WENCH_POT);
 
-	winchPID = new PIDController(1, 0.5, 0.001, winchEncoder, winchMotor, 0.0f);
-
-	pneumaticCoffeeTable = new SolenoidPair(SHOOTAH_PNEUMATIC_COFFEE_TABLE);
-	pneumaticBloodyBogan = new SolenoidPair(SHOOTAH_PNEUMATIC_BLOODY_BOGAN);
+	latch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH);
+	gearbox = new SolenoidPair(SHOOTAH_PNEUMATIC_GEARBOX);
 
 	pullbackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
-
-	//cachedPosition = Shootah::kUnaligned;
-	LiveWindow::GetInstance()->AddActuator("Shootah", "Winch PID", winchPID);
+	latchSensor = new DigitalInput(SHOOTAH_LATCH_SENSOR);
 }
 
 void Shootah::InitDefaultCommand() {
 
 }
 
-void Shootah::setWinchPID(float setpoint) {
-	winchPID->Reset();
-	winchPID->SetSetpoint(setpoint);
-	if (setpoint != 0 && !winchPID->IsEnabled()) {
-		winchPID->Enable();
-	}
-}
-
-bool Shootah::isWinchPIDSetpoint() {
-	return winchPID->Get() == winchPID->GetSetpoint();
-}
-
-double Shootah::getWinchEncoder() {
-	if (winchEncoder->GetStopped()) {
-		winchEncoder->Start();
-		return winchEncoder->GetRaw();
-	}
-}
-
-void Shootah::setWinchEncoderState(bool on) {
-	if (winchEncoder->GetStopped() && on) {
-		winchEncoder->Start();
-	}
+void Shootah::setWenchMotor(float setpoint) {
 	
-	else if (!winchEncoder->GetStopped() && !on) {
-		winchEncoder->Stop();
-	} 	
 }
 
-void Shootah::winchEncoderReset() {
-	winchEncoder->Reset();
+void Shootah::setLatch(bool state) {
+	latch->Set(state);
 }
 
-float Shootah::getWinchPID() {
-	return winchPID->Get();
+bool Shootah::getLatch() {
+	return latch->Get();
 }
 
-void Shootah::setCoffeeTable(bool state) {
-	pneumaticCoffeeTable->Set(state); // TODO: Check if it is in a position that makes sense 
+bool Shootah::isDrawnBack(){
+	
 }
 
-bool Shootah::getCoffeeTable() {
-	return pneumaticCoffeeTable->Get();
+float Shootah::getWenchPot(){
+	
 }
 
-void Shootah::setBloodyBogan(Shootah::ShifterPosition state) {
-	if (pneumaticCoffeeTable->Get()) { // Saftey???
-		pneumaticBloodyBogan->Set(state == Shootah::kActive ? true : false);
-	}
+void Shootah::engageGearbox(isEngaged) {
+	
 }
 
-Shootah::ShifterPosition Shootah::getBloodyBogan() {
-	return pneumaticBloodyBogan->Get() ? Shootah::kActive : Shootah::kInactive;
+bool Shootah::isGearboxEngaged(){
+	
 }
-
-bool Shootah::pullbackDone() {
-	return pullbackSwitch->Get();
-}
-
-void Shootah::setWinchPIDState(bool state) {
-	state ? winchPID->Enable() : winchPID->Disable();
-}
-
-/*Shootah::ShooterPosition Shootah::getShootahPosition() { // TODO: BAD
-	if (pullbackSwitch->Get()) {
-		return Shootah::kBack;
-	}
-
-	else if (!pullbackSwitch->Get() && pneumaticCoffeeTable->Get()) {
-		return Shootah::kAdjusted;
-	}
-
-	else {
-		return Shootah::kUnaligned;
-	}
-}*/

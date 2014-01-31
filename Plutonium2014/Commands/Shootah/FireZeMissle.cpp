@@ -5,12 +5,12 @@ FireZeMissle::FireZeMissle() {
 }
 
 void FireZeMissle::Initialize() {
-	if (!shootah->getCoffeeTable()) {
-		shootah->setCoffeeTable(true);
+	if (!shootah->getLatch()) {
+		shootah->setLatch(true);
 	}
 	
-	shootah->setBloodyBogan(Shootah::kInactive);
-	shootah->setCoffeeTable(false);
+	shootah->engageGearbox(Shootah::kInactive);
+	shootah->setLatch(false);
 }
 
 void FireZeMissle::Execute() {

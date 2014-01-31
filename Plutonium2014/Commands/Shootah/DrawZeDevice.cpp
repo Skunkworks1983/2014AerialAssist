@@ -6,11 +6,11 @@ DrawZeDevice::DrawZeDevice() {
 }
 
 void DrawZeDevice::Initialize() {
-	if (shootah->getCoffeeTable()) {
-		shootah->setCoffeeTable(false);
+	if (shootah->getLatch()) {
+		shootah->setLatch(false);
 	}
 	
-	shootah->setWinchPID(SHOOTAH_DRAW_POSITION_FULL);
+	shootah->setWenchMotor(SHOOTAH_DRAW_POSITION_FULL);
 }
 
 void DrawZeDevice::Execute() {
@@ -28,13 +28,13 @@ bool DrawZeDevice::IsFinished() { // Just starting this, umm, yeah
 }
 
 void DrawZeDevice::End() {
-	shootah->setWinchPIDState(false);
-	shootah->setWinchPID(0);
-	shootah->setCoffeeTable(true);
+	shootah->setWenchPIDState(false);
+	shootah->setWenchMotor(0);
+	shootah->setLatch(true);
 }
 
 void DrawZeDevice::Interrupted() {
-	shootah->setWinchPIDState(false);
+	shootah->setWenchPIDState(false);
 	//shootah->setWinchPID(0);
-	shootah->setCoffeeTable(true);
+	shootah->setLatch(true);
 }
