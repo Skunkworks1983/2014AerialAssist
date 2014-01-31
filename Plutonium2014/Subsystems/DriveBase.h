@@ -40,7 +40,7 @@ public:
 	void encoderReset();
 	void setDriveGear(DriveGear gear);
 	DriveGear getDriveGear();
-	float getMotorSpeed;
+	float getMotorSpeed();
 	Gyro *getGyro();
 };
 

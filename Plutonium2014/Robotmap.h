@@ -19,6 +19,8 @@
 #define DRIVE_ENCODER_LEFT 6,7
 #define DRIVE_SHIFT_HIGH 1
 #define DRIVE_SHIFT_LOW 2
+#define MOTOR_MAX 0.95
+#define TOO_DAMN_SLOW 1000 //Half what the encoder should be at full speed (was 6000 on blocks at full speed)
 
 // =============
 // == Shootah ==
@@ -72,5 +74,7 @@
 #define PTERODACTYL_UP_NEAR .125
 #define PTERODACTYL_DOWN_NEAR -.125
 #define PTERODACTYL_MOTOR_TYPE Talon
+#define PTERODACTYL_BRAKE_ACTIVE 111 // TODO: duh it doesn't work
+#define PTERODACTYL_BRAKE_DEACTIVE 112
 
 #endif
