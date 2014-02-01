@@ -8,20 +8,12 @@
  * @author David
  */
 class SpeedController;
-class Encoder;
 class SolenoidPair;
 class DigitalInput;
 class AnalogChannel;
 
 class Shootah: public Subsystem {
 public:
-	/*enum ShooterPosition {
-		kBack,
-		kAdjusting,
-		kAdjusted,
-		kUnaligned
-	}; */
-	
 	enum ShifterPosition {
 		kActive,
 		kInactive
@@ -29,8 +21,7 @@ public:
 	
 private:
 	SpeedController *wenchMotor;
-	AnalogChannel *catPot;
-	Encoder *wenchEncoder;
+	AnalogChannel *wenchPot;
 	
 	SolenoidPair *latch;
 	SolenoidPair *gearbox;
@@ -49,6 +40,7 @@ public:
 	void engageGearbox(bool isEngaged);
 	bool isGearboxEngaged();
 	double getWenchEncoder();
+	bool isDistance(float setpoint);
 };
 
 #endif
