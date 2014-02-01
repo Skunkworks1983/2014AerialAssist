@@ -11,7 +11,6 @@ class SpeedController;
 class Encoder;
 class SolenoidPair;
 class DigitalInput;
-class PIDController;
 class AnalogChannel;
 
 class Shootah: public Subsystem {
@@ -30,24 +29,26 @@ public:
 	
 private:
 	SpeedController *wenchMotor;
-	AnalogChannel *wenchPot;
+	AnalogChannel *catPot;
+	Encoder *wenchEncoder;
 	
 	SolenoidPair *latch;
 	SolenoidPair *gearbox;
 	
-	DigitalInput *pullbackSwitch;
+	DigitalInput *pullBackSwitch;
 	DigitalInput *latchSensor;
 	
 public:
 	Shootah();
 	void InitDefaultCommand();
-	void setWenchMotor(float setpoint);	
+	void setWenchMotor(float speed);	
 	void setLatch(bool state);
 	bool getLatch();
 	bool isDrawnBack();
 	float getWenchPot();
 	void engageGearbox(bool isEngaged);
 	bool isGearboxEngaged();
+	double getWenchEncoder();
 };
 
 #endif
