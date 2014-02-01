@@ -6,8 +6,7 @@
 Shootah::Shootah() :
 	Subsystem("Shootah") {
 	wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
-	catPot = new AnalogChannel(SHOOTAH_CAT_POT);
-	wenchEncoder = new Encoder(SHOOTAH_WENCH_ENCODER, false, Encoder::k4X);
+	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
 	
 	latch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH); 
 	brake = new SolenoidPair(SHOOTAH_PNEUMATIC_GEARBOX);
@@ -39,7 +38,7 @@ bool Shootah::isDrawnBack(){
 }
 
 float Shootah::getWenchPot(){
-	return catPot->GetAverageValue();
+	return wenchPot->GetAverageValue();
 }
 
 void Shootah::engageGearbox(bool isEngaged) {
@@ -56,4 +55,8 @@ double Shootah::getWenchEncoder(){
 
 bool Shootah::isReallyPuledBack(){
 	return (getLatch() && isDrawnBack && (getWenchPot <= SHOOTAH_WENCH_POT_BACK));
+}
+
+bool Shootah::isDistance(float setpoint){
+	return setpoint == wenchPot->GetAverageValue();;
 }
