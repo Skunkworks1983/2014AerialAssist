@@ -33,7 +33,7 @@ private:
 	Encoder *wenchEncoder;
 	
 	SolenoidPair *latch;
-	SolenoidPair *gearbox;
+	SolenoidPair *brake;
 	
 	DigitalInput *pullBackSwitch;
 	DigitalInput *latchSensor;
@@ -49,6 +49,7 @@ public:
 	void engageGearbox(bool isEngaged);
 	bool isGearboxEngaged();
 	double getWenchEncoder();
+	bool isReallyDrawnBack();
 };
 
 #endif
