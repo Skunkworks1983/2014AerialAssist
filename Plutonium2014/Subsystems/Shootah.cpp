@@ -49,12 +49,8 @@ bool Shootah::isGearboxEngaged(){
 	return brake->Get();
 }
 
-double Shootah::getWenchEncoder(){
-	return wenchEncoder->GetDistance();
-}
-
-bool Shootah::isReallyPuledBack(){
-	return (getLatch() && isDrawnBack && (getWenchPot <= SHOOTAH_WENCH_POT_BACK));
+bool Shootah::isReallyDrawnBack(){
+	return (getLatch() && isDrawnBack() && (getWenchPot() <= SHOOTAH_WENCH_POT_BACK));
 }
 
 bool Shootah::isDistance(float setpoint){
