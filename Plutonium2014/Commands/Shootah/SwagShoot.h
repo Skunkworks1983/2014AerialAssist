@@ -1,5 +1,5 @@
-#ifndef __RELOAD_H
-#define __RELOAD_H
+#ifndef __SWAG_SHOOT_H
+#define __SWAG_SHOOT_H
 
 #include "../../CommandBase.h"
 
@@ -10,7 +10,7 @@
  */
 class SwagShoot: CommandGroup {
 public:
-	SwagShoot(float setpoint);
+	SwagShoot();
 	~SwagShoot();
 };
 

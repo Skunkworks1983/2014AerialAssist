@@ -38,6 +38,7 @@
 #define SHOOTAH_DRAW_POSITION_FULL 12345
 #define SHOOTAH_WENCH_FULL_BACK 420 //blaze it
 #define SHOOTAH_WENCH_POT_BACK 10
+#define SHOOTAH_PREPARE_SET_POINT 2
 
 // ===============
 // == Collector ==
