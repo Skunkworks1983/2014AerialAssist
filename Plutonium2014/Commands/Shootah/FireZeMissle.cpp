@@ -8,8 +8,7 @@ void FireZeMissle::Initialize() {
 	if (!shootah->getLatch()) {
 		shootah->setLatch(true);
 	}
-	
-	shootah->engageGearbox(Shootah::kInactive);
+	shootah->brake(false);
 	shootah->setLatch(false);
 }
 
