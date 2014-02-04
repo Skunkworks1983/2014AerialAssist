@@ -6,7 +6,7 @@
 /**
  *
  *
- * @author David
+ * @author David (for really tho)
  */
 class FireZeMissle: public CommandBase {
 public:

@@ -37,6 +37,9 @@
 #define SHOOTAH_PREPARE_SPEED 0.5
 
 #define SHOOTAH_DRAW_POSITION_FULL 12345
+#define SHOOTAH_WENCH_FULL_BACK 420 //blaze it
+#define SHOOTAH_WENCH_POT_BACK 10
+#define SHOOTAH_PREPARE_SET_POINT 2
 
 // ===============
 // == Collector ==
@@ -58,6 +61,11 @@
 #define AUTO_DRIVE_DIST_SPEED_MIN (.1)
 #define AUTO_DRIVE_DIST_SPEED_MAX (.75)
 #define AUTO_DRIVE_DIST_SLOW_DOWN (.5)
+#define AUTO_TURN_SPEED_MAX (.5)
+#define AUTO_TURN_SPEED_MIN (.2)
+#define AUTO_TURN_SPEED_RANGE (AUTO_TURN_SPEED_MAX - AUTO_TURN_SPEED_MIN)
+#define AUTO_TURN_SLOW_DOWN (12)
+#define AUTO_TURN_GYRO_THRESHOLD (.25)
 
 // =================
 // == Pterodactyl ==

@@ -45,9 +45,12 @@ bool Shootah::isDistance(float setpoint){
 
 void Shootah::getBrake() {
 	return brake->Get();
+}	
+
+bool Shootah::isReallyDrawnBack(){
+	return (getLatch() && isDrawnBack() && (getWenchPot() <= SHOOTAH_WENCH_POT_BACK));
 }
 
-void Shootah::setBrake(bool state) {
-	brake->Set(state);
-}   
-	
+bool Shootah::isDistance(float setpoint){
+	return setpoint == wenchPot->GetAverageValue();;
+}
