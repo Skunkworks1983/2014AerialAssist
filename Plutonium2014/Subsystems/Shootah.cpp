@@ -9,12 +9,10 @@ Shootah::Shootah() :
 	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
 	
 	latch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH); 
-	brake = new SolenoidPair(SHOOTAH_PNEUMATIC_GEARBOX);
+	brake = new SolenoidPair(SHOOTAH_PNEUMATIC_BRAKE);
 
 	pullBackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
 	latchSensor = new DigitalInput(SHOOTAH_LATCH_SENSOR);
-	
-	
 }
 
 void Shootah::InitDefaultCommand() {
@@ -30,10 +28,10 @@ void Shootah::setLatch(bool state) {
 }
 
 bool Shootah::getLatch() {
-	return latch->Get();
+	return latchSensor->Get();
 }
 
-bool Shootah::isDrawnBack(){
+bool Shootah::isDrawnBack() {
 	return pullBackSwitch->Get();
 }
 
@@ -41,22 +39,15 @@ float Shootah::getWenchPot(){
 	return wenchPot->GetAverageValue();
 }
 
-void Shootah::engageGearbox(bool isEngaged) {
-	brake->Set(isEngaged);
+bool Shootah::isDistance(float setpoint){
+	return setpoint == wenchPot->GetAverageValue();
 }
 
-bool Shootah::isGearboxEngaged(){
+void Shootah::getBrake() {
 	return brake->Get();
 }
 
-double Shootah::getWenchEncoder(){
-	return wenchEncoder->GetDistance();
-}
-
-bool Shootah::isReallyPuledBack(){
-	return (getLatch() && isDrawnBack && (getWenchPot <= SHOOTAH_WENCH_POT_BACK));
-}
-
-bool Shootah::isDistance(float setpoint){
-	return setpoint == wenchPot->GetAverageValue();;
-}
+void Shootah::setBrake(bool state) {
+	brake->Set(state);
+}   
+	

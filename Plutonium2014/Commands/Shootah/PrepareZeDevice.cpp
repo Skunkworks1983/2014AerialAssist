@@ -1,5 +1,6 @@
 #include "PrepareZeDevice.h"
 #include "../../Subsystems/Shootah.h"
+#include "../../Robotmap.h"
 
 PrepareZeDevice::PrepareZeDevice(float setpoint) {
 	Requires(shootah);
@@ -7,13 +8,17 @@ PrepareZeDevice::PrepareZeDevice(float setpoint) {
 }
 
 void PrepareZeDevice::Initialize() {
-	/*if (shootah->pullbackDone()) {
-		if (shootah->getLatch()) {
-			shootah->setLatch(false);
+	if (shootah->pullbackDone()) {
+		if (!shootah->getLatch()) {
+			shootah->setLatch(true);
 		}
 		
-		shootah->setWenchMotor(setpoint);
-	}*/
+		if (shootah->getBrake()) {
+			shootah->setBrake(false);
+		}
+		
+		shootah->setWenchMotor(SHOOTAH_PREPARE_SPEED);
+	}
 }
 
 void PrepareZeDevice::Execute() {
@@ -21,17 +26,18 @@ void PrepareZeDevice::Execute() {
 }
 
 bool PrepareZeDevice::IsFinished() {
-	/*if (!shootah->isWenchPIDSetpoint()) {
+	if (!shootah->isDistance(setpoint)) {
 		return false;
-	}*/
+	}
 	return true;
 }
 
 void PrepareZeDevice::End() {
-	//shootah->setWenchPIDState(false);
-	shootah->setLatch(true); //nothing would have set it so we can assume it's off
+	shootah->setBrake(true);
+	shootah->setWenchMotor(0);
 }
 
 void PrepareZeDevice::Interrupted() {
-	shootah->setLatch(true);
+	shootah->setBrake(true);
+	shootah->setWenchMotor(0);
 }
