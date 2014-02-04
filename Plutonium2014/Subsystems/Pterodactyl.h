@@ -40,8 +40,8 @@ public:
 	void setAngleMotorSpeed(float speed);
 	void setAngle(float target);
 	
-	bool getLimNeg();
-	bool getLimPos();
+	int getLimNeg();
+	int getLimPos();
 	
 	BrakeState getBrake();
 	void setBrakeState(BrakeState state);
