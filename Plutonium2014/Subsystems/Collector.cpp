@@ -38,7 +38,7 @@ bool Collector::getJawState(){
 void Collector::setRollerSpeed(float speed){
 	rollerPIDController->SetSetpoint(speed);
 	
-	if(speed != 0 && !rollerPIDController->IsEnabled(0)){
+	if(speed != 0 && !rollerPIDController->IsEnabled()){
 		rollerPIDController->Enable();
 	}else if(speed == 0 && rollerPIDController->IsEnabled()){
 		rollerPIDController->Disable();

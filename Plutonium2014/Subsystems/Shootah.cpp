@@ -39,11 +39,7 @@ float Shootah::getWenchPot(){
 	return wenchPot->GetAverageValue();
 }
 
-bool Shootah::isDistance(float setpoint){
-	return setpoint == wenchPot->GetAverageValue();
-}
-
-void Shootah::getBrake() {
+bool Shootah::getBrake() {
 	return brake->Get();
 }	
 

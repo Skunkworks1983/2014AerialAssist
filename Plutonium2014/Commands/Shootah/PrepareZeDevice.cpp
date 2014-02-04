@@ -8,7 +8,7 @@ PrepareZeDevice::PrepareZeDevice(float setpoint) {
 }
 
 void PrepareZeDevice::Initialize() {
-	if (shootah->pullbackDone()) {
+	if (shootah->isDrawnBack()) {
 		if (!shootah->getLatch()) {
 			shootah->setLatch(true);
 		}
