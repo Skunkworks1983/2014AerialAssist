@@ -37,11 +37,10 @@ public:
 	bool getLatch();
 	bool isDrawnBack();
 	float getWenchPot();
-	void engageGearbox(bool isEngaged);
-	bool isGearboxEngaged();
-	double getWenchEncoder();
 	bool isReallyDrawnBack();
 	bool isDistance(float setpoint);
+	void setBrake(bool state);
+	bool getBrake();
 };
 
 #endif

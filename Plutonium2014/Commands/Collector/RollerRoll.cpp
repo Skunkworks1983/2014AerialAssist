@@ -6,28 +6,31 @@ RollerRoll::RollerRoll(float speed) {
 }
 
 void RollerRoll::Initialize() {
+	collector->setRollerSpeed(speed);
 }
 
 int magic = 0;
 void RollerRoll::Execute() {
-	/*
-	 if(dif < 0 - THRESH){
-	 collector->setRollerPIDSpeed(speed + dif);
-	 }else if(dif > 0 + THRESH){
-	 collector->setRollerPIDSpeed(speed + dif);
-	 }
-	 */
-	//collector->setRollerSpeed(speed + dif);
-	collector->setRollerSpeed(speed);
-	/*if (magic++ > 10){
+	/*if(collector->getcollector->getDiff()f() < 0 - THRESH){
+		collector->setRollerPIDSpeed(speed + collector->getDiff());
+	} else if(collector->getDiff() > 0 + THRESH){
+		collector->setRollerPIDSpeed(speed + collector->getDiff());
+	}*/
+	 
+	//collector->setRollerSpeed(speed + collector->getDiff());
+	//collector->setRollerSpeed(speed);
+	if (magic++ > 10){
 		magic = 0;
 		printf("DesiredSpeed: %f\tSpeed: %f\tDistance: %f\n", speed,
 				collector->getRollerSpeed(), collector->getRollerDistance());
 		SmartDashboard::PutNumber("RollerSpeed", collector->getRollerSpeed());
-	}*/
+	}
 }
 
 bool RollerRoll::IsFinished() {
+	if (collector->isBallDetected()) {
+		return true;
+	}
 	return false;
 }
 
