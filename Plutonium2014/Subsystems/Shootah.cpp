@@ -43,6 +43,10 @@ bool Shootah::getBrake() {
 	return brake->Get();
 }	
 
+void Shootah::setBrake(bool state) {
+	brake->Set(state);
+}
+
 bool Shootah::isReallyDrawnBack(){
 	return (getLatch() && isDrawnBack() && (getWenchPot() <= SHOOTAH_WENCH_POT_BACK));
 }

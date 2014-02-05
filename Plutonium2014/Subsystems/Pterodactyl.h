@@ -38,6 +38,7 @@ public:
 	
 	double getAngle();
 	void setAngleMotorSpeed(float speed);
+	float getAngleMotorSpeed();
 	void setAngle(float target);
 	
 	int getLimNeg();

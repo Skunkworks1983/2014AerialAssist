@@ -7,7 +7,8 @@ OI::OI() {
 	joystickLeft = new Joystick(1);
 	joystickRight = new Joystick(2);
 	// Process operator interface input here.
-	shiftButton = new JoystickButton(joystickLeft, 1);
+	shiftButton = new JoystickButton(joystickRight, 1);
+	armOStop = new JoystickButton(joystickLeft, 1);
 	rollerOn = new JoystickButton(joystickRight, 3);
 	rollerOff = new JoystickButton(joystickRight, 2);
 	armODeathForward = new JoystickButton(joystickLeft, 3);
@@ -17,6 +18,10 @@ void OI::registerButtonListeners() {
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shiftButton, new Shift(Shift::kToggle)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new RollerRoll(0.25)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new RollerRoll(0.0)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathForward, new AngelChange(0.16)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathBackward, new AngelChange(-0.16)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armOStop, new AngelChange(0)));
+
 }
 Joystick *OI::getJoystickLeft() {
 	return joystickLeft;

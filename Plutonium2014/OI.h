@@ -13,6 +13,7 @@ private:
 	JoystickButton *rollerOff;
 	JoystickButton *armODeathForward;
 	JoystickButton *armODeathBackward;
+	JoystickButton *armOStop;
 	float scale;
 	
 public:

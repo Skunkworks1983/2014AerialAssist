@@ -12,11 +12,11 @@ void PrepareZeDevice::Initialize() {
 		if (!shootah->getLatch()) {
 			shootah->setLatch(true);
 		}
-		
+
 		if (shootah->getBrake()) {
 			shootah->setBrake(false);
 		}
-		
+
 		shootah->setWenchMotor(SHOOTAH_PREPARE_SPEED);
 	}
 }

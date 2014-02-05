@@ -12,7 +12,7 @@ void DrawZeDevice::Initialize() {
 void DrawZeDevice::Execute() {
 	if(!shootah->isReallyDrawnBack()){
 		shootah->setWenchMotor(SHOOTAH_WENCH_FULL_BACK);
-	}else{
+	} else{
 		shootah->setWenchMotor(0);
 	}
 }

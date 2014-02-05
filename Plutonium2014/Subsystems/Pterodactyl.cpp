@@ -18,13 +18,11 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle() {
-	/*return (PTERODACTYL_POT_ADJUST_SLOPE * (pot->GetAverageVoltage())
-			- PTERODACTYL_POT_ADJUST_ZERO);*/
-	return pot->GetAverageVoltage();
+	return (pot->GetAverageVoltage() * 2) * 360;
 }
 
 void Pterodactyl::setAngleMotorSpeed(float speed) {
-	if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
+	/*if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
 			&& getAngle() > PTERODACTYL_MIN_ANGLE)) && !getLimNeg()
 			&& !getLimPos()) {
 		motorLeft->Set(speed);
@@ -32,11 +30,16 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 	} else {
 		motorLeft->Set(0);
 		//motorRight->Set(0);
-	}
+	}*/
+	motorLeft->Set(-speed); //take me out
+}
+
+float Pterodactyl::getAngleMotorSpeed() {
+	return motorLeft->Get();
 }
 
 int Pterodactyl::getLimNeg() {
-	return limNeg->Get()	;
+	return limNeg->Get();
 }
 
 int Pterodactyl::getLimPos() {
@@ -50,3 +53,4 @@ Pterodactyl::BrakeState Pterodactyl::getBrake() {
 void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 	brake->Set(state == Pterodactyl::kActive);
 }
+
