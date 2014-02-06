@@ -12,14 +12,16 @@
 #endif
 
 #include <string>
-#include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+#include <stdlib.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
 
 #include "VisionUtil.h"
 #include "ThreadedCapture.h"
+#include <sys/time.h>
 
 #include <vector>
 
@@ -36,6 +38,12 @@ typedef struct {
 	double areaError;
 	double rectangularMatchLevel;
 } MatchedShape;
+
+int milliTime() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+}
 
 void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 	cv::Mat dst;
@@ -118,7 +126,7 @@ int main(int argc, char** argv) {
 	std::vector<MatchedShape> results;
 	size_t i;
 	cv::Mat temporaryMaterial;
-	ThreadedCapture threadedCapture(-1);
+	ThreadedCapture threadedCapture(-1, atoi(argv[1]), atoi(argv[2]));
 
 #if NETWORK
 	SocketServer *network = new SocketServer(NULL, NULL);
@@ -126,6 +134,8 @@ int main(int argc, char** argv) {
 	int bufferHead = 0;
 #endif
 
+	int lastFrame = milliTime();
+	int frames = 0;
 #if !(HEADLESS)
 	while (cv::waitKey(30) < 27) {
 #else
@@ -157,9 +167,20 @@ int main(int argc, char** argv) {
 				network->SendData(buffer);
 				bufferHead = 0;
 #endif
+				int ctime = milliTime();
+				frames++;
+				if (ctime > lastFrame + 5000) {
+					// Seconds passed
+					printf("FPS: %f\n",
+							(float) frames * 1000.0
+									/ (float) (ctime - lastFrame));
+					lastFrame = ctime;
+					frames = 0;
+				}
 			}
+		} else {
+			usleep(1000);
 		}
-		usleep(10000);
 	}
 #if !(HEADLESS)
 	cv::destroyAllWindows();

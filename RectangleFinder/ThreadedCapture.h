@@ -14,8 +14,9 @@ private:
 	cv::VideoCapture *cap;
 	bool runTheThread;
 	bool capturedOne;
+	int width, height;
 public:
-	ThreadedCapture(int device = -1);
+	ThreadedCapture(int device = -1, int width = 960, int height = 540);
 	~ThreadedCapture();
 	void getCaptured(cv::Mat *dest);
 	inline bool hasCaptured() {
