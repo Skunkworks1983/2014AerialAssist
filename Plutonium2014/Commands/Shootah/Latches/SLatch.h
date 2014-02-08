@@ -1,7 +1,7 @@
 #ifndef __S_LATCH_H
 #define __S_LATCH_H
 
-#include "../../CommandBase.h"
+#include "../../../CommandBase.h"
 
 /**
  *

@@ -1,6 +1,6 @@
 #include "WLatch.h"
-#include "../../Utils/Time.h"
-#include "../../Robotmap.h"
+#include "../../../Utils/Time.h"
+#include "../../../Robotmap.h"
 
 WLatch::WLatch(bool state) {
 	Requires(shootah);

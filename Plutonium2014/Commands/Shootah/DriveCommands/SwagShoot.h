@@ -1,7 +1,7 @@
 #ifndef __SWAG_SHOOT_H
 #define __SWAG_SHOOT_H
 
-#include "../../CommandBase.h"
+#include "../../../CommandBase.h"
 
 /**
  *

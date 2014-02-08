@@ -1,6 +1,6 @@
 #include "SLatch.h"
-#include "../../Utils/Time.h"
-#include "../../Robotmap.h"
+#include "../../../Utils/Time.h"
+#include "../../../Robotmap.h"
 
 SLatch::SLatch(bool state) {
 	Requires(shootah);

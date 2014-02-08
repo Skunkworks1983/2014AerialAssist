@@ -1,8 +1,8 @@
 #include "SwagShoot.h"
 //#include "DrawZeDevice.h"
 //#include "PrepareZeDevice.h"
-#include "FireZeMissle.h"
-#include "../../Commands/DriveBase/TurnDegree.h"
+#include "../FireZeMissle.h"
+#include "../../../Commands/DriveBase/TurnDegree.h"
 
 SwagShoot::SwagShoot() {
 	CommandGroup("NoScope");

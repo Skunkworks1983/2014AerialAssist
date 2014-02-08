@@ -29,8 +29,6 @@ private:
 	
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
-	DigitalInput *inductiveSwitchLeft;
-	DigitalInput *inductiveSwitchRight;
 	DigitalInput *wLatchSensor;
 	DigitalInput *sLatchSensor;
 	
@@ -52,7 +50,6 @@ public:
 	void setBrake(bool state);
 	bool getBrake();
 	
-	bool getInductiveSwitch();
 	double getPotVoltage();
 };
 
