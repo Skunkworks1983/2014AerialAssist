@@ -23,24 +23,37 @@ private:
 	SpeedController *wenchMotor;
 	AnalogChannel *wenchPot;
 	
-	SolenoidPair *latch;
+	SolenoidPair *wLatch;
+	SolenoidPair *sLatch;
 	SolenoidPair *brake;
 	
-	DigitalInput *pullBackSwitch;
-	DigitalInput *latchSensor;
+	DigitalInput *pullBackSwitchLeft;
+	DigitalInput *pullBackSwitchRight;
+	DigitalInput *inductiveSwitchLeft;
+	DigitalInput *inductiveSwitchRight;
+	DigitalInput *wLatchSensor;
+	DigitalInput *sLatchSensor;
 	
 public:
 	Shootah();
 	void InitDefaultCommand();
 	void setWenchMotor(float speed);	
-	void setLatch(bool state);
-	bool getLatch();
-	bool isDrawnBack();
-	float getWenchPot();
+	
+	void setWLatch(bool state);
+	bool getWLatch();
+	void setSLatch(bool state);
+	bool getSLatch();
+	
+	double getTurns();
 	bool isReallyDrawnBack();
-	bool isDistance(float setpoint);
+	bool isAngle(float setpoint);
+	bool getPullBackSwitch();
+	
 	void setBrake(bool state);
 	bool getBrake();
+	
+	bool getInductiveSwitch();
+	double getPotVoltage();
 };
 
 #endif

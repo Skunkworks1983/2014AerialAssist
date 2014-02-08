@@ -1,5 +1,5 @@
-#ifndef __PREPARE_ZE_DEVICE_H
-#define __PREPARE_ZE_DEVICE_H
+#ifndef __RELEASE_TENSION_H
+#define __RELEASE_TENSION_H
 
 #include "../../CommandBase.h"
 
@@ -10,12 +10,12 @@
  * @author These are all david so I guess this is as well
  * DAVEED
  */
-class PrepareZeDevice: public CommandGroup {
+class ReleaseTension: public CommandBase {
 private:
-	bool isDone;
-	
+	float setTurns;
+
 public:
-	PrepareZeDevice(float setpoint);
+	ReleaseTension(float setpoint);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

@@ -5,11 +5,11 @@ FireZeMissle::FireZeMissle() {
 }
 
 void FireZeMissle::Initialize() {
-	if (!shootah->getLatch()) {
+	/*if (!shootah->getLatch()) {
 		shootah->setLatch(true);
 	}
 	shootah->setBrake(false);
-	shootah->setLatch(false);
+	shootah->setLatch(false);*/
 }
 
 void FireZeMissle::Execute() {

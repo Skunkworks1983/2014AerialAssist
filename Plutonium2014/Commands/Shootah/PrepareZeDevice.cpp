@@ -2,42 +2,44 @@
 #include "../../Subsystems/Shootah.h"
 #include "../../Robotmap.h"
 
-PrepareZeDevice::PrepareZeDevice(float setpoint) {
+PrepareZeDevice::PrepareZeDevice(float setTurns) {
 	Requires(shootah);
-	this->setpoint = setpoint;
+	this->setTurns = setTurns;
+	isDone = false;
 }
 
 void PrepareZeDevice::Initialize() {
-	if (shootah->isDrawnBack()) {
-		if (!shootah->getLatch()) {
+	if (shootah->isReallyDrawnBack()) {
+		/*if (!shootah->getLatch()) {
 			shootah->setLatch(true);
 		}
-
 		if (shootah->getBrake()) {
 			shootah->setBrake(false);
 		}
-
-		shootah->setWenchMotor(SHOOTAH_PREPARE_SPEED);
+		shootah->setWenchMotor(SHOOTAH_PREPARE_SPEED);*/
+		isDone = false;
+	}
+	else{
+		isDone = true;
 	}
 }
 
 void PrepareZeDevice::Execute() {
-	// Don't need this even, I'm probably doing it wrong...
+	shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_FORWARD);
+	printf("Turns: %f, PullBackSwitch: %d, Buttons: %d, Voltage: %f, isDrawnBack: %d, isDone: %d \n",
+			shootah->getTurns(), shootah->getPullBackSwitch(), shootah->getInductiveSwitch(), shootah->getPotVoltage(), shootah->isReallyDrawnBack(), isDone);
 }
 
 bool PrepareZeDevice::IsFinished() {
-	if (!shootah->isDistance(setpoint)) {
-		return false;
-	}
-	return true;
+	return (shootah->getTurns() >= setTurns) || isDone;
 }
 
 void PrepareZeDevice::End() {
-	shootah->setBrake(true);
+	//shootah->setBrake(true);
 	shootah->setWenchMotor(0);
 }
 
 void PrepareZeDevice::Interrupted() {
-	shootah->setBrake(true);
+	//shootah->setBrake(true);
 	shootah->setWenchMotor(0);
 }

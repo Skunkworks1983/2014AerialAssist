@@ -28,6 +28,7 @@ public:
 	void setJawState(bool on);
 	
 	void setRollerSpeed(float speed);
+	void setPIDEnabled(bool state); 
 	double getDiff();
 	
 	double getRollerSpeed();

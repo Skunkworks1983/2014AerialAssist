@@ -8,36 +8,62 @@ Shootah::Shootah() :
 	wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
 	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
 	
-	latch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH); 
-	brake = new SolenoidPair(SHOOTAH_PNEUMATIC_BRAKE);
+	//wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH); 
+	//sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_LATCH); 
+	
+	//brake = new SolenoidPair(SHOOTAH_PNEUMATIC_BRAKE);
 
-	pullBackSwitch = new DigitalInput(SHOOTAH_LIMITSWITCH_PULLBACK_CHECK);
-	latchSensor = new DigitalInput(SHOOTAH_LATCH_SENSOR);
+	pullBackSwitchLeft = new DigitalInput(SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
+	pullBackSwitchRight = new DigitalInput(SHOOTAH_LIMITSWITCH_RIGHT_PULLBACK_CHECK);
+	inductiveSwitchLeft = new DigitalInput(SHOOTAH_INDUCTIVE_LEFT_PULLBACK_CHECK);
+	inductiveSwitchRight = new DigitalInput(SHOOTAH_INDUCTIVE_RIGHT_PULLBACK_CHECK);
+	
+	//wLatchSensor = new DigitalInput(SHOOTAH_LATCH_SENSOR);
+	//sLatchSensor = new DigitalInput(SHOOTAH_LATCH_SENSOR);
 }
 
 void Shootah::InitDefaultCommand() {
 
 }
 
+bool Shootah::getPullBackSwitch() {
+	return pullBackSwitchLeft->Get() || pullBackSwitchRight->Get();
+}
+
+bool Shootah::getInductiveSwitch() {
+	return !inductiveSwitchLeft->Get() || !inductiveSwitchRight->Get();
+}
+
+double Shootah::getTurns() {
+	return SHOOTAH_SLOOP * wenchPot->GetAverageVoltage() + SHOOTAH_YCEPT;
+}
+
+double Shootah::getPotVoltage(){
+	return wenchPot->GetAverageVoltage();
+}
+
 void Shootah::setWenchMotor(float speed) {
 	wenchMotor->Set(speed);
 }
 
-void Shootah::setLatch(bool state) {
-	latch->Set(state);
+void Shootah::setSLatch(bool state) {
+	sLatch->Set(state);
 }
 
-bool Shootah::getLatch() {
-	return latchSensor->Get();
+void Shootah::setWLatch(bool state) {
+	wLatch->Set(state);
 }
 
-bool Shootah::isDrawnBack() {
-	return pullBackSwitch->Get();
+bool Shootah::getSLatch() {
+	//return sLatchSensor->Get();
+	return false;
 }
 
-float Shootah::getWenchPot(){
-	return wenchPot->GetAverageValue();
+bool Shootah::getWLatch() {
+	//return wLatchSensor->Get();
+	return false;
 }
+
 
 bool Shootah::getBrake() {
 	return brake->Get();
@@ -48,9 +74,9 @@ void Shootah::setBrake(bool state) {
 }
 
 bool Shootah::isReallyDrawnBack(){
-	return (getLatch() && isDrawnBack() && (getWenchPot() <= SHOOTAH_WENCH_POT_BACK));
+	return (getPullBackSwitch() || getInductiveSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK));
 }
 
-bool Shootah::isDistance(float setpoint){
-	return setpoint == wenchPot->GetAverageValue();;
+bool Shootah::isAngle(float setpoint){
+	return setpoint == getTurns();
 }

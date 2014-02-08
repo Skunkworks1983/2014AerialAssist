@@ -1,5 +1,5 @@
-#ifndef __FIRE_ZE_MISSLE_H
-#define __FIRE_ZE_MISSLE_H
+#ifndef __W_LATCH_H
+#define __W_LATCH_H
 
 #include "../../CommandBase.h"
 
@@ -8,9 +8,16 @@
  *
  * @author David (for really tho)
  */
-class FireZeMissle: public CommandBase {
+class Time;
+
+class WLatch: public CommandBase {
+private:
+	bool state;
+	double time;
+	double bTime;
+	
 public:
-	FireZeMissle();
+	WLatch(bool state);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

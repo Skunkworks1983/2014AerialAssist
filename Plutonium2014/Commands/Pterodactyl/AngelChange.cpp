@@ -3,19 +3,15 @@
 #include <math.h>
 
 AngelChange::AngelChange(float target) {
-	// Use Requires() here to declare subsystem dependencies
-	// eg. Requires(chassis);
 	Requires(pterodactyl);
 	this->target = target;
 }
 
-// Called just before this Command runs the first time
 void AngelChange::Initialize() {
 }
 
-// Called repeatedly when this Command is scheduled to run
 void AngelChange::Execute() {
-	/*if(pterodactyl->getAngle() < (target+LIL_BIT)){ //within half a degree so the pterodactyl doesn't swing indefinately
+	if(pterodactyl->getAngle() < (target+LIL_BIT)){ //within half a degree so the pterodactyl doesn't swing indefinately
 	 pterodactyl->setAngleMotorSpeed(PTERODACTYL_UP);
 	 }
 	 else if(pterodactyl->getAngle() > (target-LIL_BIT)){
@@ -26,28 +22,21 @@ void AngelChange::Execute() {
 	 }
 	 else if(pterodactyl->getAngle()>(target-THRESHOLD_UPPER) && (target+LIL_BIT) > pterodactyl->getAngle()){
 	 pterodactyl->setAngleMotorSpeed(PTERODACTYL_UP_NEAR);
-	 }*/
-	pterodactyl->setAngleMotorSpeed(target);
-	printf("%f, %i, %i\n", pterodactyl->getAngle(), pterodactyl->getLimNeg(),
-			pterodactyl->getLimPos());
+	 }
+	//printf("%f, %i, %i\n", pterodactyl->getAngle(), pterodactyl->getLimNeg(),
+	//		pterodactyl->getLimPos());
 }
 
-// Make this return true when this Command no longer needs to run execute()
 bool AngelChange::IsFinished() {
-	/*return fabs(pterodactyl->getAngle()-target) < LIL_BIT 
+	return fabs(pterodactyl->getAngle()-target) < LIL_BIT 
 	 || (pterodactyl->getLimNeg() && target<pterodactyl->getAngle())
-	 || (pterodactyl->getLimPos() && target>pterodactyl->getAngle()); //checks if current angle is near target and stops*/
-	return (pterodactyl->getLimNeg() && (target < 0))
-			|| (pterodactyl->getLimPos() && (target > 0));
+	 || (pterodactyl->getLimPos() && target>pterodactyl->getAngle()); //checks if current angle is near target and stops
 }
 
-// Called once after isFinished returns true
 void AngelChange::End() {
 	pterodactyl->setAngleMotorSpeed(0);
 }
 
-// Called when another command which requires one or more of the same
-// subsystems is scheduled to run
 void AngelChange::Interrupted() {
 	pterodactyl->setAngleMotorSpeed(0);
 }

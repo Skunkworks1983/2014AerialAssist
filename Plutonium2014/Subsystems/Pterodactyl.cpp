@@ -5,7 +5,7 @@
 Pterodactyl::Pterodactyl() :
 	Subsystem("Pterodactyl") {
 	motorLeft = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_LEFT);
-	//motorRight = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_RIGHT);
+	motorRight = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_RIGHT);
 	pot = new AnalogChannel(PTERODACTYL_POT);
 	limNeg = new DigitalInput(PTERODACTYL_LIM_NEG);
 	limPos = new DigitalInput(PTERODACTYL_LIM_POS);
@@ -18,20 +18,19 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle() {
-	return (pot->GetAverageVoltage() * 2) * 360;
+	return pot->GetAverageVoltage() * PTERODACTYL_VOLTAGE_TO_ANGLE;
 }
 
 void Pterodactyl::setAngleMotorSpeed(float speed) {
-	/*if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
+	if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
 			&& getAngle() > PTERODACTYL_MIN_ANGLE)) && !getLimNeg()
 			&& !getLimPos()) {
 		motorLeft->Set(speed);
-		//motorRight->Set(-speed);
+		motorRight->Set(-speed);
 	} else {
 		motorLeft->Set(0);
-		//motorRight->Set(0);
-	}*/
-	motorLeft->Set(-speed); //take me out
+		motorRight->Set(0);
+	}
 }
 
 float Pterodactyl::getAngleMotorSpeed() {
