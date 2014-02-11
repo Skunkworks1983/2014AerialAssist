@@ -18,12 +18,14 @@ void WLatch::Execute() {
 }
 
 bool WLatch::IsFinished() {
+	printf("Latch: %d\n", shootah->getWLatch());
 	if(shootah->getWLatch() == state) {
 		return true;
 	}
 		
 	else if (time >= SHOOTAH_WLATCH_WAIT){
-		// error stuff
+		printf("error stuff\n");
+		// error stuff aka dankSuperdawg
 		return true;
 	}
 

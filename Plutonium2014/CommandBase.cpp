@@ -27,8 +27,8 @@ void CommandBase::init() {
 	collector = new Collector();
 	//driveBase = new DriveBase();
 	//pterodactyl = new Pterodactyl();
-	shootah = new Shootah();
-	//pneumatics = new Pneumatics();
+	//shootah = new Shootah();
+	pneumatics = new Pneumatics();
 	oi = new OI();
 }
 

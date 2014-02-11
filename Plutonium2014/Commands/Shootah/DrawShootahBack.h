@@ -1,18 +1,16 @@
-#ifndef __JAW_MOVE_H
-#define __JAW_MOVE_H
+#ifndef __DRAW_SHOOTAH_BACK_H
+#define __DRAW_SHOOTAH_BACK_H
 
 #include "../../CommandBase.h"
 
 /**
  *
  *
- * @author Ross Bajocich
+ * @author David
  */
-class JawMove: public CommandBase {
-private:
-	bool state;
+class DrawShootahBack: public CommandBase {
 public:
-	JawMove(bool state);
+	DrawShootahBack();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

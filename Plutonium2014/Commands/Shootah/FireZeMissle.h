@@ -6,16 +6,15 @@
 /**
  *
  *
- * @author David (for really tho)
+ * @author These are all david so I guess this is as well
+ * DAVEED
  */
-class FireZeMissle: public CommandBase {
+
+class FireZeMissle: public CommandGroup {
 public:
 	FireZeMissle();
 	virtual void Initialize();
-	virtual void Execute();
-	virtual bool IsFinished();
 	virtual void End();
-	virtual void Interrupted();
 };
 
 #endif

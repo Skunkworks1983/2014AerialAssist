@@ -1,28 +1,18 @@
 #include "FireZeMissle.h"
+#include "../../Subsystems/Shootah.h"
+#include "../../Robotmap.h"
 
-FireZeMissle::FireZeMissle() {
-	Requires(shootah);
+#include "Latches/SLatch.h"
+
+FireZeMissle::FireZeMissle() :
+	CommandGroup("FireZeMissle") {
+	AddSequential(new SLatch(false));
 }
 
 void FireZeMissle::Initialize() {
-	/*if (!shootah->getLatch()) {
-		shootah->setLatch(true);
-	}
-	shootah->setBrake(false);
-	shootah->setLatch(false);*/
-}
-
-void FireZeMissle::Execute() {
-	
-}
-
-bool FireZeMissle::IsFinished() {
-	return true;
 }
 
 void FireZeMissle::End() {
-	
+	//CommandBase::shootah->setPrepared(false);
 }
 
-void FireZeMissle::Interrupted() {
-}

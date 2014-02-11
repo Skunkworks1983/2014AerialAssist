@@ -32,6 +32,8 @@ private:
 	DigitalInput *wLatchSensor;
 	DigitalInput *sLatchSensor;
 	
+	//bool preparedness;
+	
 public:
 	Shootah();
 	void InitDefaultCommand();
@@ -47,10 +49,10 @@ public:
 	bool isAngle(float setpoint);
 	bool getPullBackSwitch();
 	
-	void setBrake(bool state);
-	bool getBrake();
-	
 	double getPotVoltage();
+
+	/*void setPrepared(bool state);
+	bool isPrepared();*/
 };
 
 #endif

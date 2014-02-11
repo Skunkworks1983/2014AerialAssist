@@ -11,8 +11,6 @@ Shootah::Shootah() :
 	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
 	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
 
-	//brake = new SolenoidPair(SHOOTAH_PNEUMATIC_BRAKE);
-
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
 	pullBackSwitchRight = new DigitalInput(
@@ -20,6 +18,7 @@ Shootah::Shootah() :
 
 	wLatchSensor = new DigitalInput(SHOOTAH_W_LATCH_SENSOR);
 	sLatchSensor = new DigitalInput(SHOOTAH_S_LATCH_SENSOR);
+	//preparedness = false;
 }
 
 void Shootah::InitDefaultCommand() {
@@ -58,18 +57,18 @@ bool Shootah::getWLatch() {
 	return wLatchSensor->Get();
 }
 
-bool Shootah::getBrake() {
-	return brake->Get();
-}
-
-void Shootah::setBrake(bool state) {
-	brake->Set(state);
-}
-
 bool Shootah::isReallyDrawnBack() {
-	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK));
+	return ((getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK)) && sLatch->Get());
 }
 
 bool Shootah::isAngle(float setpoint) {
 	return setpoint == getTurns();
 }
+
+/*void Shootah::setPrepared(bool state){
+	preparedness = state;
+}
+
+bool Shootah::isPrepared(){
+	return preparedness;
+}*/

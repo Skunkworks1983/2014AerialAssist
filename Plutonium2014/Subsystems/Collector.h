@@ -12,7 +12,7 @@ class SolenoidPair;
  *
  * @author Ross Bajocich
  */
-class Collector: public Subsystem { // TODO: Make the Jaw state enum make sense
+class Collector: public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
 private:
 	SolenoidPair *jawController;
 	DigitalInput *jawState;

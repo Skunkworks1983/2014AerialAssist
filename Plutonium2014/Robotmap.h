@@ -47,8 +47,8 @@
 #define SHOOTAH_SLOOP -2
 #define SHOOTAH_YCEPT 9.992
 
-#define SHOOTAH_SLATCH_WAIT 0.5
-#define SHOOTAH_WLATCH_WAIT 0.5
+#define SHOOTAH_SLATCH_WAIT 500
+#define SHOOTAH_WLATCH_WAIT 500
 
 // ===============
 // == Collector ==
@@ -61,6 +61,7 @@
 #define COLLECTOR_JAW_SOLENOID_A (1)
 #define COLLECTOR_JAW_SOLENOID_B (2)
 #define COLLECTOR_ROLLER_300_ROTATIONS_PER_TICK (1.0/300.0/254.0)
+#define COLLECTOR_ROLLER_INTAKE_SET_POINT CRISP
 
 // ===============
 // == Automatic ==
@@ -78,6 +79,7 @@
 
 // =================
 // == Pterodactyl ==
+#define CRISP (.16)
 // =================
 #define PTERODACTYL_POT 2
 #define PTERODACTYL_MAX_ANGLE 90

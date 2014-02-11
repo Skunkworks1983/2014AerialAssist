@@ -1,8 +1,8 @@
 #include "JawMove.h"
 
-JawMove::JawMove(bool isUp) {
+JawMove::JawMove(bool state) {
 	Requires(collector);
-	this->isUp = isUp;
+	this->state = state;
 }
 
 void JawMove::Initialize() {
@@ -10,7 +10,7 @@ void JawMove::Initialize() {
 }
 
 void JawMove::Execute() {
-	collector->setJawState(isUp);
+	collector->setJawState(state);
 }
 
 bool JawMove::IsFinished() {

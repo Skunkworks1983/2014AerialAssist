@@ -6,16 +6,15 @@
 /**
  *
  *
- * @author David
+ * @author These are all david so I guess this is as well
+ * DAVEED
  */
-class DrawZeDevice: public CommandBase {
+
+class DrawZeDevice: public CommandGroup {
 public:
 	DrawZeDevice();
 	virtual void Initialize();
-	virtual void Execute();
-	virtual bool IsFinished();
 	virtual void End();
-	virtual void Interrupted();
 };
 
 #endif

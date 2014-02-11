@@ -13,9 +13,10 @@
 class ReleaseTension: public CommandBase {
 private:
 	float setTurns;
+	bool isDone;
 
 public:
-	ReleaseTension(float setpoint);
+	ReleaseTension(float setTurns);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

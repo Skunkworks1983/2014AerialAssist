@@ -10,12 +10,12 @@
  */
 class SLatch: public CommandBase {
 private:
-	bool state;
+	bool isLocked;
 	double time;
 	double bTime;
 	
 public:
-	SLatch(bool state);
+	SLatch(bool isLocked);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

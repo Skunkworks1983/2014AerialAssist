@@ -15,6 +15,7 @@ private:
 	JoystickButton *armODeathBackward;
 	JoystickButton *drawBack;
 	JoystickButton *prepare;
+	JoystickButton *shootGlatGlat;
 	float scale;
 	
 public:

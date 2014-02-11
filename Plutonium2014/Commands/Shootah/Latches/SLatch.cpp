@@ -2,15 +2,25 @@
 #include "../../../Utils/Time.h"
 #include "../../../Robotmap.h"
 
-SLatch::SLatch(bool state) {
+SLatch::SLatch(bool isLocked) {
 	Requires(shootah);
-	this->state = state;
+	this->isLocked = isLocked;
 	time = 0;
 	bTime = getCurrentMillis();
 }
 
 void SLatch::Initialize() {
-	shootah->setSLatch(state);
+	if (!isLocked && !shootah->isReallyDrawnBack()) {
+		shootah->setSLatch(isLocked);
+	}
+	
+	else if (!isLocked && shootah->isReallyDrawnBack()) {
+		shootah->setSLatch(!isLocked);
+	}
+	
+	else {
+		shootah->setSLatch(isLocked);
+	}
 }
 
 void SLatch::Execute() {
@@ -18,7 +28,7 @@ void SLatch::Execute() {
 }
 
 bool SLatch::IsFinished() {
-	if(shootah->getSLatch() == state) {
+	if(shootah->getSLatch() == isLocked) {
 		return true;
 	}
 		

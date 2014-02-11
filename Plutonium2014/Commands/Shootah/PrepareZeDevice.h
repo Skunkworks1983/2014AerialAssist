@@ -12,12 +12,9 @@
 
 class PrepareZeDevice: public CommandGroup {
 public:
-	PrepareZeDevice(float setpoint);
+	PrepareZeDevice(float setTurns);
 	virtual void Initialize();
-	virtual void Execute();
-	virtual bool IsFinished();
 	virtual void End();
-	virtual void Interrupted();
 };
 
 #endif

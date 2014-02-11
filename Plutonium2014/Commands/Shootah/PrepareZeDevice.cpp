@@ -5,15 +5,18 @@
 #include "Latches/WLatch.h"
 #include "ReleaseTension.h"
 
-PrepareZeDevice::PrepareZeDevice(float setTurns) : CommandGroup("AutoCollect"){
-	if (CommandBase::shootah->isReallyDrawnBack()) {
-		AddSequential(new WLatch(true));
-		AddSequential(new ReleaseTension(setTurns));
-		AddSequential(new WLatch(false));
-	}
+PrepareZeDevice::PrepareZeDevice(float setTurns) :
+	CommandGroup("PrepareZeDevice") {
+	AddSequential(new WLatch(true));
+	AddSequential(new ReleaseTension(setTurns));
+	AddSequential(new WLatch(false));
+}
+
+void PrepareZeDevice::Initialize() {
+	SetInterruptible(false);
 }
 
 void PrepareZeDevice::End() {
-	
+	//CommandBase::shootah->setPrepared(true);
 }
 
