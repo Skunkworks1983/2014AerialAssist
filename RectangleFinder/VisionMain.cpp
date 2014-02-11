@@ -26,6 +26,7 @@
 #include <vector>
 
 const char windowName[] = "Rectangles";
+const char windowName2[] = "Rectanglez";
 
 static double matchAcceptanceLevel = 0.5;
 static double areaAcceptanceLevel = 0.074074074;
@@ -47,11 +48,27 @@ int milliTime() {
 
 void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 	cv::Mat dst;
-	src.copyTo(dst);
+	cv::Mat tmp;
+	src.copyTo(tmp);
 
-	cv::cvtColor(dst, dst, cv::COLOR_RGB2GRAY);
-	cv::adaptiveThreshold(dst, dst, 255, CV_ADAPTIVE_THRESH_MEAN_C,
-			CV_THRESH_BINARY_INV, 75, 10);
+	// 147,232,182 = Search color
+	cv::subtract(src, cv::Scalar(147 - 127, 232 - 127, 182 - 127), src);
+	// 60,60,60 -> 200,200,200 = Search range
+	cv::Scalar meanMask = cv::mean(src);
+	double avgMask = (meanMask.val[0] + meanMask.val[1] + meanMask.val[2])
+			/ 3.0;
+	cv::inRange(src, cv::Scalar(avgMask - 50, avgMask - 50, avgMask - 50),
+			cv::Scalar(avgMask + 150, avgMask + 150, avgMask + 150), src);
+
+	// Masked
+	tmp.copyTo(src, src);
+
+	cv::Scalar meanMasked = cv::mean(src);
+	double avgMasked = (meanMasked.val[0] + meanMasked.val[1]
+			+ meanMasked.val[2]) / 3.0;
+	cv::inRange(src, cv::Scalar(0, 175, 0), cv::Scalar(200, 255, 200), tmp);
+	tmp.copyTo(dst);
+
 	std::vector<std::vector<cv::Point> > contours;
 	std::vector<std::vector<cv::Point> > cleanContours;
 	std::vector<std::vector<cv::Point> > dirtyContours;
@@ -112,21 +129,26 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 #endif
 
 #if !(HEADLESS)
-	cv::drawContours(src, dirtyContours, -1, cv::Scalar(255, 0, 0));
-	cv::drawContours(src, cleanContours, -1, cv::Scalar(0, 0, 255));
+	cv::drawContours(src, dirtyContours, -1, cv::Scalar(255, 0, 0), 5);
+	cv::drawContours(src, cleanContours, -1, cv::Scalar(0, 0, 255), 5);
+	cv::cvtColor(tmp, tmp, cv::COLOR_GRAY2RGB);
+	cv::drawContours(tmp, dirtyContours, -1, cv::Scalar(255, 0, 0), 5);
+	cv::drawContours(tmp, cleanContours, -1, cv::Scalar(0, 0, 255), 5);
 	cv::imshow(windowName, src);
+	cv::imshow(windowName2, tmp);
 #endif
 }
 
 int main(int argc, char** argv) {
 #if !(HEADLESS)
 	cv::namedWindow(windowName);
+	cv::namedWindow(windowName2);
 #endif
 
 	std::vector<MatchedShape> results;
 	size_t i;
 	cv::Mat temporaryMaterial;
-	ThreadedCapture threadedCapture(-1, atoi(argv[1]), atoi(argv[2]));
+	ThreadedCapture threadedCapture(3);	//, atoi(argv[1]), atoi(argv[2]));
 
 #if NETWORK
 	SocketServer *network = new SocketServer(NULL, NULL);

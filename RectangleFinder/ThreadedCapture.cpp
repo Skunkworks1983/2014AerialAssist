@@ -18,8 +18,9 @@ ThreadedCapture::ThreadedCapture(int device, int width, int height) {
 	this->height = height;
 	cap = new cv::VideoCapture(device);
 	printf("FRAME WIDTH TO %dx%d\n", width, height);
-	cap->set(CV_CAP_PROP_FRAME_WIDTH, 960);
-	cap->set(CV_CAP_PROP_FRAME_HEIGHT, 540);
+	cap->set(CV_CAP_PROP_FRAME_WIDTH, 640);
+	cap->set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+	cap->set(CV_CAP_PROP_AUTO_EXPOSURE, 0);
 	if (!cap->isOpened()) {
 		printf("Failed to connect to the camera.\n");
 		return;
@@ -48,7 +49,7 @@ void ThreadedCapture::captureInternal() {
 		*(cap) >> src;
 		capturedOne = !src.empty();
 		pthread_mutex_unlock(&imageMutex);
-		//usleep(5000);
+		usleep(5000);
 	}
 	return;
 }
