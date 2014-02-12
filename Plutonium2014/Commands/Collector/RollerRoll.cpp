@@ -6,7 +6,8 @@ RollerRoll::RollerRoll(float speed) {
 }
 
 void RollerRoll::Initialize() {
-	collector->setRollerSpeed(speed);
+	collector->setRollerSpeedLeft(speed);
+	collector->setRollerSpeedRight(-speed);
 }
 
 void RollerRoll::Execute() {
@@ -20,9 +21,11 @@ bool RollerRoll::IsFinished() {
 }
 
 void RollerRoll::End() {
-	collector->setRollerSpeed(0.0);
+	collector->setRollerSpeedLeft(0.0);
+	collector->setRollerSpeedRight(0.0);
 }
 
 void RollerRoll::Interrupted() {
-	collector->setRollerSpeed(0.0);
+	collector->setRollerSpeedLeft(0.0);
+	collector->setRollerSpeedRight(0.0);
 }

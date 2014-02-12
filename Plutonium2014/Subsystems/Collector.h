@@ -17,9 +17,13 @@ private:
 	SolenoidPair *jawController;
 	DigitalInput *jawState;
 	DigitalInput *ballSensor;
-	PIDController *rollerPIDController;
-	Encoder *rollerClawEncoder;
-	SpeedController *rollerMotor;
+	PIDController *rollerPIDControllerLeft;
+	PIDController *rollerPIDControllerRight;
+	Encoder *rollerClawEncoderLeft;
+	Encoder *rollerClawEncoderRight;
+	SpeedController *rollerMotorLeft;
+	SpeedController *rollerMotorRight;
+
 	
 public:
 	Collector();
@@ -27,12 +31,19 @@ public:
 	bool getJawState();
 	void setJawState(bool on);
 	
-	void setRollerSpeed(float speed);
-	void setPIDEnabled(bool state); 
-	double getDiff();
+	void setRollerSpeedLeft(float speed);
+	void setPIDEnabledLeft(bool state); 
+	double getDiffLeft();
 	
-	double getRollerSpeed();
-	double getRollerDistance();
+	double getRollerSpeedLeft();
+	double getRollerDistanceLeft();
+	
+	void setRollerSpeedRight(float speed);
+	void setPIDEnabledRight(bool state);
+	double getDiffRight();
+
+	double getRollerSpeedRight();
+	double getRollerDistanceRight();
 	
 	bool isBallDetected();
 };
