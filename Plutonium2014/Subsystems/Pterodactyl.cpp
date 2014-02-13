@@ -5,10 +5,16 @@
 Pterodactyl::Pterodactyl() :
 	Subsystem("Pterodactyl") {
 	motorLeft = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_LEFT);
+	// TODO LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Motor", motorLeft);
 	motorRight = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_RIGHT);
+	// TODO LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Motor", motorRight);
+	
 	pot = new AnalogChannel(PTERODACTYL_POT);
+	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
+	
 	brake = new SolenoidPair(PTERODACTYL_BRAKE_ACTIVE,
 			PTERODACTYL_BRAKE_DEACTIVE);
+	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);
 }
 
 void Pterodactyl::InitDefaultCommand() {

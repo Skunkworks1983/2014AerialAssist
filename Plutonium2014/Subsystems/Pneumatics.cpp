@@ -6,7 +6,9 @@
 Pneumatics::Pneumatics() :
 	Subsystem("Pneumatics") {
 	pressureSwitch = new DigitalInput(COMPRESSOR_PRESSURE_SENSOR);
+	LiveWindow::GetInstance()->AddSensor("Pneumatics", "Pressure Switch", pressureSwitch);
 	relay = new Relay(COMPRESSOR_RELAY, Relay::kForwardOnly);
+	LiveWindow::GetInstance()->AddActuator("Pneumatics", "Relay", relay);
 }
 
 void Pneumatics::InitDefaultCommand() {
