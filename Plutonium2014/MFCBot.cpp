@@ -4,6 +4,7 @@
 #include "CommandBase.h"
 #include "Utils/SolenoidPair.h"
 #include "Robotmap.h"
+#include "Utils/StallableMotor.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -46,6 +47,7 @@ void MFCBot::TeleopInit() {
 void MFCBot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	//WatchDog();
+	StallableMotor::updateControllers();
 }
 
 void MFCBot::TestPeriodic() {
