@@ -44,6 +44,8 @@ PPC603gnu
 PPC603diab
 PPC32gnu
 PPC32diab
+Debug
+Release
 *.out
 
 # ucpp + sublime #
