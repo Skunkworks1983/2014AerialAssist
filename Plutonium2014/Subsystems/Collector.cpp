@@ -2,13 +2,16 @@
 #include "../Robotmap.h"
 #include "../Utils/SolenoidPair.h"
 #include "WPILib.h"
+#include "../Utils/StallableMotor.h"
 
-Collector::Collector() : Subsystem("Collector") {
-	rollerMotorLeft = new Talon(COLLECTOR_ROLLER_MOTOR_LEFT);
-	rollerMotorRight = new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT);
+Collector::Collector() :
+	Subsystem("Collector") {
 
 	rollerClawEncoder = new Encoder( COLLECTOR_CLAW_ENCODER_CHANNEL_A ,
 	COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
+
+	rollerMotorLeft = new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT), rollerClawEncoder);
+	rollerMotorRight = new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT), rollerClawEncoder);
 
 	rollerClawEncoder->SetPIDSourceParameter(Encoder::kRate);
 	rollerClawEncoder->SetDistancePerPulse(1.0/COLLECTOR_ROLLER_TICKS_PER_ROTATION*60.0/COLLECTOR_ROLLER_MAX_RPM);
@@ -18,7 +21,8 @@ Collector::Collector() : Subsystem("Collector") {
 			this, 0.05f);
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);
-
+	SmartDashboard::PutData("collectorPID",rollerPIDController);
+	
 	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
 	//	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
 	//			COLLECTOR_JAW_SOLENOID_B);
@@ -54,7 +58,6 @@ void Collector::setRollerSpeed(float speed) {
 void Collector::PIDWrite(float speed) {
 	rollerMotorLeft->Set(speed);
 	rollerMotorRight->Set(-speed);
-	SmartDashboard::PutNumber("encoder", rollerClawEncoder->GetRate());
 }
 
 double Collector::getDiff() {
@@ -62,6 +65,7 @@ double Collector::getDiff() {
 }
 
 double Collector::getRollerSpeed() {
+	SmartDashboard::PutBoolean("RollerStalled", rollerClawEncoder->GetStopped());
 	return rollerClawEncoder->GetRate();
 }
 
