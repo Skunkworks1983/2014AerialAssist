@@ -11,8 +11,8 @@ private:
 	JoystickButton *shiftButton;
 	JoystickButton *rollerOn;
 	JoystickButton *rollerOff;
-	JoystickButton *armODeathForward;
-	JoystickButton *armODeathBackward;
+	JoystickButton *RollerRollOn;
+	JoystickButton *RollerRollOff;
 	JoystickButton *drawBack;
 	JoystickButton *prepare;
 	JoystickButton *shootGlatGlat;

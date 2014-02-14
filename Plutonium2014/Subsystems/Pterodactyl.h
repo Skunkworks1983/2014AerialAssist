@@ -27,9 +27,6 @@ private:
 	PIDController *pid;
 	AnalogChannel *pot;
 	
-	DigitalInput *limNeg;
-	DigitalInput *limPos;
-	
 	SolenoidPair *brake;
 
 public:

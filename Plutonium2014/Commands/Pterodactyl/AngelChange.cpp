@@ -23,14 +23,12 @@ void AngelChange::Execute() {
 	 else if(pterodactyl->getAngle()>(target-THRESHOLD_UPPER) && (target+LIL_BIT) > pterodactyl->getAngle()){
 	 pterodactyl->setAngleMotorSpeed(PTERODACTYL_UP_NEAR);
 	 }
-	//printf("%f, %i, %i\n", pterodactyl->getAngle(), pterodactyl->getLimNeg(),
-	//		pterodactyl->getLimPos());
 }
 
 bool AngelChange::IsFinished() {
-	return fabs(pterodactyl->getAngle()-target) < LIL_BIT 
-	 || (pterodactyl->getLimNeg() && target<pterodactyl->getAngle())
-	 || (pterodactyl->getLimPos() && target>pterodactyl->getAngle()); //checks if current angle is near target and stops
+	return fabs((pterodactyl->getAngle()-target) < LIL_BIT 
+	 ||  target<pterodactyl->getAngle()
+	 ||  target>pterodactyl->getAngle()); //checks if current angle is near target and stops
 }
 
 void AngelChange::End() {

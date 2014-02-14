@@ -51,6 +51,7 @@ public:
 	
 	double getPotVoltage();
 
+	float getWenchMotorSpeed();
 	/*void setPrepared(bool state);
 	bool isPrepared();*/
 };

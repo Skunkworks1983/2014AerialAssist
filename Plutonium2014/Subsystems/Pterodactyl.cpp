@@ -7,8 +7,6 @@ Pterodactyl::Pterodactyl() :
 	motorLeft = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_LEFT);
 	motorRight = new PTERODACTYL_MOTOR_TYPE(PTERODACTYL_MOTOR_RIGHT);
 	pot = new AnalogChannel(PTERODACTYL_POT);
-	limNeg = new DigitalInput(PTERODACTYL_LIM_NEG);
-	limPos = new DigitalInput(PTERODACTYL_LIM_POS);
 	brake = new SolenoidPair(PTERODACTYL_BRAKE_ACTIVE,
 			PTERODACTYL_BRAKE_DEACTIVE);
 }
@@ -19,12 +17,12 @@ void Pterodactyl::InitDefaultCommand() {
 
 double Pterodactyl::getAngle() {
 	return pot->GetAverageVoltage() * PTERODACTYL_VOLTAGE_TO_ANGLE;
+	//^needs^to^be^tested^for^value^and^thing
 }
 
 void Pterodactyl::setAngleMotorSpeed(float speed) {
 	if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
-			&& getAngle() > PTERODACTYL_MIN_ANGLE)) && !getLimNeg()
-			&& !getLimPos()) {
+			&& getAngle() > PTERODACTYL_MIN_ANGLE))) {
 		motorLeft->Set(speed);
 		motorRight->Set(-speed);
 	} else {
@@ -35,14 +33,6 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 
 float Pterodactyl::getAngleMotorSpeed() {
 	return motorLeft->Get();
-}
-
-int Pterodactyl::getLimNeg() {
-	return limNeg->Get();
-}
-
-int Pterodactyl::getLimPos() {
-	return limPos->Get();
 }
 
 Pterodactyl::BrakeState Pterodactyl::getBrake() {

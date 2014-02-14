@@ -8,8 +8,8 @@ Shootah::Shootah() :
 	wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
 	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
 
-	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
-	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
+//	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
+//	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
 
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
@@ -30,7 +30,7 @@ bool Shootah::getPullBackSwitch() {
 }
 
 double Shootah::getTurns() {
-	return SHOOTAH_SLOOP * wenchPot->GetAverageVoltage() + SHOOTAH_YCEPT;
+	return SHOOTAH_WENCH_POT_TO_DRAW(wenchPot->GetAverageVoltage());
 }
 
 double Shootah::getPotVoltage() {
@@ -58,11 +58,15 @@ bool Shootah::getWLatch() {
 }
 
 bool Shootah::isReallyDrawnBack() {
-	return ((getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK)) && sLatch->Get());
+	return /*((getPullBackSwitch() || */(getTurns() <= SHOOTAH_WENCH_POT_BACK)/*) && sLatch->Get())*/;
 }
 
 bool Shootah::isAngle(float setpoint) {
 	return setpoint == getTurns();
+}
+
+float Shootah::getWenchMotorSpeed() {
+	return wenchMotor->Get();
 }
 
 /*void Shootah::setPrepared(bool state){

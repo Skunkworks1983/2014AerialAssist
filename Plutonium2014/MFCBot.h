@@ -16,6 +16,7 @@ public:
 	virtual void TeleopInit();
 	virtual void TeleopPeriodic();
 	virtual void TestPeriodic();
+	void WatchDog();
 private:
 	LiveWindow *lw;
 };
