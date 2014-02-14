@@ -24,8 +24,9 @@ void DriveBase::InitDefaultCommand() {
 
 
 void DriveBase::setSpeed(double speedLeft, double speedRight){
-	/*motorLeftFront->Set(-speedLeft);
-	motorRightFront->Set(speedRight);
+	/*
+	 * motorLeftFront->Set(-speedLeft);
+	 * motorRightFront->Set(speedRight);
 	motorLeftBack->Set(-speedLeft);
 	motorRightBack->Set(speedRight);
 	*/
@@ -52,11 +53,13 @@ Encoder *DriveBase::getRightEncoder(){
 }
 
 void DriveBase::setDriveGear(DriveGear gear){
-	//shifter->Set(gear==kHigh);
+	//shifter->Set(gear);
 }
 
 DriveBase::DriveGear DriveBase::getDriveGear() {
-	//return shifter->Get()?kHigh:kLow;
+	//return DriveBase::DriveGear shifter->Get();
+	DriveBase::DriveGear foo;
+	return foo;
 }
 
 Gyro *DriveBase::getGyro(){

@@ -6,13 +6,12 @@
 
 FireZeMissle::FireZeMissle() :
 	CommandGroup("FireZeMissle") {
-	AddSequential(new SLatch(false));
+	AddSequential(new SLatch(Shootah::kUnlatched));
 }
 
 void FireZeMissle::Initialize() {
 }
 
 void FireZeMissle::End() {
-	//CommandBase::shootah->setPrepared(false);
 }
 

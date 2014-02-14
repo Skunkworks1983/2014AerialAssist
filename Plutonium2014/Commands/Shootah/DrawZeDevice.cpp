@@ -8,10 +8,10 @@
 
 DrawZeDevice::DrawZeDevice() :
 	CommandGroup("DrawZeDevice") {
-	AddSequential(new SLatch(true));
-	AddSequential(new WLatch(true));
+	AddSequential(new SLatch(Shootah::kLatched));
+	AddSequential(new WLatch(Shootah::kUnlatched));
 	AddSequential(new DrawShootahBack());
-	AddSequential(new WLatch(false));
+	AddSequential(new WLatch(Shootah::kLatched));
 }
 
 void DrawZeDevice::Initialize() {

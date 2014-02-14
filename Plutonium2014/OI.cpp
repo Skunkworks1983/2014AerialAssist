@@ -33,9 +33,9 @@ void OI::registerButtonListeners() {
 		
 //  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathForward, new AngelChange(0.16)));
 //  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathBackward, new AngelChange(-0.16)));
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, drawBack, new DrawShootahBack()));
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, prepare, new ReleaseTension(1.0f)));
-//	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, drawBack, new DrawZeDevice()));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, prepare, new PrepareZeDevice(1.0f)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
 }
 Joystick *OI::getJoystickLeft() {
 	return joystickLeft;

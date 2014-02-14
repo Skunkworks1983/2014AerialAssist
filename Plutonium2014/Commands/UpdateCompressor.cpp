@@ -5,11 +5,15 @@ UpdateCompressor::UpdateCompressor() {
 }
 
 void UpdateCompressor::Initialize() {
-	
+	ticksSinceUpdate = 0;
 }
 
 void UpdateCompressor::Execute() {
-	pneumatics->setState(pneumatics->isBelowPressure());
+	if(ticksSinceUpdate > 10){
+		pneumatics->setState(pneumatics->isBelowPressure());
+		ticksSinceUpdate = 0;
+	}
+	++ticksSinceUpdate;
 }
 
 /**

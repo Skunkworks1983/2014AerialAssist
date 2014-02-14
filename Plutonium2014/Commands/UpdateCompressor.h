@@ -9,6 +9,9 @@
  * @author Ross Bajocich
  */
 class UpdateCompressor: public CommandBase {
+private:
+	int ticksSinceUpdate;
+
 public:
 	UpdateCompressor();
 	virtual void Initialize();

@@ -28,5 +28,4 @@ void DrawShootahBack::End() {
 
 void DrawShootahBack::Interrupted() {
 	shootah->setWenchMotor(0);
-	//shootah->setBrake(true);
 }

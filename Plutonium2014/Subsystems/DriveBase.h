@@ -28,8 +28,7 @@ private:
 
 public:
 	enum DriveGear {
-		kLow,
-		kHigh
+		kLow = false, kHigh = true
 	};
 
 	DriveBase();

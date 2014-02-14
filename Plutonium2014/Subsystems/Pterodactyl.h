@@ -13,34 +13,33 @@ class SolenoidPair;
 class Pterodactyl: public Subsystem {
 public:
 	enum BrakeState {
-		kActive,
-		kDeactive
+		kActive = true, kDeactive = false
 	};
-	
+
 private:
 	SpeedController *motorLeft;
 	SpeedController *motorRight;
-	
+
 	Encoder *encoderLeft;
 	Encoder *encoderRight;
-	
+
 	PIDController *pid;
 	AnalogChannel *pot;
-	
+
 	SolenoidPair *brake;
 
 public:
 	Pterodactyl();
 	void InitDefaultCommand();
-	
+
 	double getAngle();
 	void setAngleMotorSpeed(float speed);
 	float getAngleMotorSpeed();
 	void setAngle(float target);
-	
+
 	int getLimNeg();
 	int getLimPos();
-	
+
 	BrakeState getBrake();
 	void setBrakeState(BrakeState state);
 };

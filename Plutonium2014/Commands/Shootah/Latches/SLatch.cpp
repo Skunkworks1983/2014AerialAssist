@@ -2,7 +2,7 @@
 #include "../../../Utils/Time.h"
 #include "../../../Robotmap.h"
 
-SLatch::SLatch(bool isLocked) {
+SLatch::SLatch(Shootah::LatchPosition isLocked) {
 	Requires(shootah);
 	this->isLocked = isLocked;
 	time = 0;
@@ -10,17 +10,7 @@ SLatch::SLatch(bool isLocked) {
 }
 
 void SLatch::Initialize() {
-	if (!isLocked && !shootah->isReallyDrawnBack()) {
-		shootah->setSLatch(isLocked);
-	}
-	
-	else if (!isLocked && shootah->isReallyDrawnBack()) {
-		shootah->setSLatch(!isLocked);
-	}
-	
-	else {
-		shootah->setSLatch(isLocked);
-	}
+	shootah->setSLatch(isLocked);
 }
 
 void SLatch::Execute() {
@@ -28,20 +18,20 @@ void SLatch::Execute() {
 }
 
 bool SLatch::IsFinished() {
-	if(shootah->getSLatch() == isLocked) {
+	if (shootah->getSLatch() == isLocked) {
 		return true;
 	}
-		
-	else if (time >= SHOOTAH_SLATCH_WAIT){
+
+	else if (time >= SHOOTAH_SLATCH_WAIT) {
 		// Shutting down the shooter
 		return true;
 	}
-	
+
 	return false;
 }
 
 void SLatch::End() {
-	
+
 }
 
 void SLatch::Interrupted() {

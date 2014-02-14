@@ -10,12 +10,12 @@
  */
 class SLatch: public CommandBase {
 private:
-	bool isLocked;
+	Shootah::LatchPosition isLocked;
 	double time;
 	double bTime;
 	
 public:
-	SLatch(bool isLocked);
+	SLatch(Shootah::LatchPosition isLocked);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

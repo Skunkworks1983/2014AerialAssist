@@ -18,6 +18,7 @@ MFCBot::MFCBot() {
 //	new Relay(2,2);
 //	new Talon(COLLECTOR_ROLLER_MOTOR_LEFT);
 //	new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT);
+	dont = 0;
 }
 
 MFCBot::~MFCBot() {
@@ -40,7 +41,6 @@ void MFCBot::AutonomousPeriodic() {
 }
 
 void MFCBot::TeleopInit() {
-
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -50,6 +50,10 @@ void MFCBot::TeleopPeriodic() {
 
 void MFCBot::TestPeriodic() {
 	lw->Run();
+	if (++dont > 50){
+		printf("JawState: %d, Slatch: %d, PullBackSwitch: %d\n", CommandBase::collector->getJawState(), CommandBase::shootah->getSLatch(), CommandBase::shootah->getPullBackSwitch());
+		dont = 0;
+	}
 	//WatchDog();
 }
 

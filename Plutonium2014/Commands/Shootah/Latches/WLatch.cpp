@@ -2,7 +2,7 @@
 #include "../../../Utils/Time.h"
 #include "../../../Robotmap.h"
 
-WLatch::WLatch(bool state) {
+WLatch::WLatch(Shootah::LatchPosition state) {
 	Requires(shootah);
 	this->state = state;
 	time = 0;

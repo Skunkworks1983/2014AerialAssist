@@ -36,10 +36,10 @@ float Pterodactyl::getAngleMotorSpeed() {
 }
 
 Pterodactyl::BrakeState Pterodactyl::getBrake() {
-	return brake->Get() ? Pterodactyl::kActive : Pterodactyl::kDeactive;
+	return (Pterodactyl::BrakeState) brake->Get();
 }
 
 void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
-	brake->Set(state == Pterodactyl::kActive);
+	brake->Set(state);
 }
 

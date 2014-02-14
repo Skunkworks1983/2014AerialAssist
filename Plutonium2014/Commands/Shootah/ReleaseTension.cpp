@@ -16,8 +16,6 @@ void ReleaseTension::Initialize() {
 
 void ReleaseTension::Execute() {
 	shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_FORWARD);
-	//printf("Turns: %f, PullBackSwitch: %d, Voltage: %f, isDrawnBack: %d\n",
-	//		shootah->getTurns(), shootah->getPullBackSwitch(), shootah->getPotVoltage(), shootah->isReallyDrawnBack());
 }
 
 bool ReleaseTension::IsFinished() {
@@ -25,11 +23,9 @@ bool ReleaseTension::IsFinished() {
 }
 
 void ReleaseTension::End() {
-	//shootah->setBrake(true);
 	shootah->setWenchMotor(0);
 }
 
 void ReleaseTension::Interrupted() {
-	//shootah->setBrake(true);
 	shootah->setWenchMotor(0);
 }

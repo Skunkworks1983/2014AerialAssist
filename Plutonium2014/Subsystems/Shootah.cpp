@@ -8,17 +8,15 @@ Shootah::Shootah() :
 	wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
 	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
 
-//	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
-//	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
+	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
+	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
 
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
 	pullBackSwitchRight = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_RIGHT_PULLBACK_CHECK);
-
-	wLatchSensor = new DigitalInput(SHOOTAH_W_LATCH_SENSOR);
+	
 	sLatchSensor = new DigitalInput(SHOOTAH_S_LATCH_SENSOR);
-	//preparedness = false;
 }
 
 void Shootah::InitDefaultCommand() {
@@ -26,7 +24,7 @@ void Shootah::InitDefaultCommand() {
 }
 
 bool Shootah::getPullBackSwitch() {
-	return pullBackSwitchLeft->Get() || pullBackSwitchRight->Get();
+	return pullBackSwitchLeft->Get(); //|| pullBackSwitchRight->Get();
 }
 
 double Shootah::getTurns() {
@@ -41,24 +39,24 @@ void Shootah::setWenchMotor(float speed) {
 	wenchMotor->Set(speed);
 }
 
-void Shootah::setSLatch(bool state) {
+void Shootah::setSLatch(Shootah::LatchPosition state) {
 	sLatch->Set(state);
 }
 
-void Shootah::setWLatch(bool state) {
+void Shootah::setWLatch(Shootah::LatchPosition state) {
 	wLatch->Set(state);
 }
 
-bool Shootah::getSLatch() {
-	return sLatchSensor->Get();
+Shootah::LatchPosition Shootah::getSLatch() {
+	return (Shootah::LatchPosition) sLatchSensor->Get();
 }
 
-bool Shootah::getWLatch() {
-	return wLatchSensor->Get();
+Shootah::LatchPosition Shootah::getWLatch() {
+	return (Shootah::LatchPosition) wLatch->Get();
 }
 
 bool Shootah::isReallyDrawnBack() {
-	return /*((getPullBackSwitch() || */(getTurns() <= SHOOTAH_WENCH_POT_BACK)/*) && sLatch->Get())*/;
+	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK))/*) && sLatch->Get())*/;
 }
 
 bool Shootah::isAngle(float setpoint) {
@@ -68,11 +66,3 @@ bool Shootah::isAngle(float setpoint) {
 float Shootah::getWenchMotorSpeed() {
 	return wenchMotor->Get();
 }
-
-/*void Shootah::setPrepared(bool state){
-	preparedness = state;
-}
-
-bool Shootah::isPrepared(){
-	return preparedness;
-}*/

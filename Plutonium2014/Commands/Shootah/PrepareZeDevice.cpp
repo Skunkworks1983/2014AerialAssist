@@ -7,9 +7,9 @@
 
 PrepareZeDevice::PrepareZeDevice(float setTurns) :
 	CommandGroup("PrepareZeDevice") {
-	AddSequential(new WLatch(true));
+	AddSequential(new WLatch(Shootah::kUnlatched));
 	AddSequential(new ReleaseTension(setTurns));
-	AddSequential(new WLatch(false));
+	AddSequential(new WLatch(Shootah::kLatched));
 }
 
 void PrepareZeDevice::Initialize() {

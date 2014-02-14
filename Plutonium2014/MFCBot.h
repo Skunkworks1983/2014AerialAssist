@@ -6,6 +6,9 @@
 #include "CommandBase.h"
 
 class MFCBot: public IterativeRobot {
+private:
+	int dont;
+	
 public:
 	MFCBot();
 	

@@ -12,12 +12,12 @@ class Time;
 
 class WLatch: public CommandBase {
 private:
-	bool state;
+	Shootah::LatchPosition state;
 	double time;
 	double bTime;
 	
 public:
-	WLatch(bool state);
+	WLatch(Shootah::LatchPosition state);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

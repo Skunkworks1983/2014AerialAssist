@@ -3,9 +3,7 @@
 #include "../Utils/SolenoidPair.h"
 #include "WPILib.h"
 
-Collector::Collector() :
-	Subsystem("Collector") {
-
+Collector::Collector() : Subsystem("Collector") {
 	rollerMotorLeft = new Talon(COLLECTOR_ROLLER_MOTOR_LEFT);
 	rollerMotorRight = new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT);
 
@@ -21,12 +19,11 @@ Collector::Collector() :
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);
 
-	//SmartDashboard::PutData("Roller PID", rollerPIDController);
-			ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
-			//	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
-			//			COLLECTOR_JAW_SOLENOID_B);
-			jawState = new DigitalInput(COLLECTOR_JAW_STATE);
-		}
+	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
+	//	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
+	//			COLLECTOR_JAW_SOLENOID_B);
+	jawState = new DigitalInput(COLLECTOR_JAW_STATE);
+}
 
 void Collector::InitDefaultCommand() {
 	// Nothing here...
