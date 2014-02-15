@@ -1,6 +1,7 @@
 #include "RollerRoll.h"
 
-RollerRoll::RollerRoll(float speed) {
+RollerRoll::RollerRoll(float speed) :
+	CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
 	Requires(collector);
 	this->speed = speed;
 }

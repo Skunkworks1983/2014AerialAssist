@@ -2,7 +2,7 @@
 #include "../../Robotmap.h"
 #include <math.h>
 
-AngelChange::AngelChange(float target) {
+AngelChange::AngelChange(float target) : CommandBase(CommandBase::createNameFromFloat("AngleChange",target)){
 	Requires(pterodactyl);
 	this->target = target;
 }

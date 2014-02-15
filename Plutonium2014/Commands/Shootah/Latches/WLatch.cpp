@@ -2,7 +2,12 @@
 #include "../../../Utils/Time.h"
 #include "../../../Robotmap.h"
 
-WLatch::WLatch(Shootah::LatchPosition state) {
+WLatch::WLatch(Shootah::LatchPosition state) :
+			CommandBase(
+					CommandBase::createNameFromString(
+							"WLatch",
+							state == Shootah::kLatched ? "Latched"
+									: "Unlatched")) {
 	Requires(shootah);
 	this->state = state;
 	time = 0;
@@ -19,11 +24,11 @@ void WLatch::Execute() {
 
 bool WLatch::IsFinished() {
 	printf("Latch: %d\n", shootah->getWLatch());
-	if(shootah->getWLatch() == state) {
+	if (shootah->getWLatch() == state) {
 		return true;
 	}
-		
-	else if (time >= SHOOTAH_WLATCH_WAIT){
+
+	else if (time >= SHOOTAH_WLATCH_WAIT) {
 		printf("error stuff\n");
 		// error stuff aka dankSuperdawg
 		return true;
@@ -33,7 +38,7 @@ bool WLatch::IsFinished() {
 }
 
 void WLatch::End() {
-	
+
 }
 
 void WLatch::Interrupted() {

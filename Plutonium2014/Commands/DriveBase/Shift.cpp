@@ -2,7 +2,12 @@
 
 #include "../../CommandBase.h"
 
-Shift::Shift(ShiftStyle style) {
+Shift::Shift(ShiftStyle style) :
+			CommandBase(
+					CommandBase::createNameFromString(
+							"String",
+							style == Shift::kToggle ? "Toggle" : (style
+									== Shift::kHigh ? "High" : "Low"))) {
 	this->style = style;
 }
 

@@ -1,12 +1,15 @@
 #include "JawMove.h"
 
-JawMove::JawMove(bool state) {
+JawMove::JawMove(bool closed) :
+			CommandBase(
+					CommandBase::createNameFromString("JawMove",
+							closed ? "Closed" : "Open")) {
 	Requires(collector);
-	this->state = state;
+	this->state = closed;
 }
 
 void JawMove::Initialize() {
-	
+
 }
 
 void JawMove::Execute() {
@@ -18,9 +21,9 @@ bool JawMove::IsFinished() {
 }
 
 void JawMove::End() {
-	
+
 }
 
 void JawMove::Interrupted() {
-	
+
 }

@@ -41,8 +41,8 @@ void Collector::InitDefaultCommand() {
 	// Nothing here...
 }
 
-void Collector::setJawState(bool on) {
-	jawController->Set(on);
+void Collector::setJawState(bool closed) {
+	jawController->Set(closed);
 }
 
 bool Collector::getJawState() {

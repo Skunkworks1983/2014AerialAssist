@@ -2,7 +2,7 @@
 #include "../../Subsystems/Shootah.h"
 #include "../../Robotmap.h"
 
-ReleaseTension::ReleaseTension(float setTurns) {
+ReleaseTension::ReleaseTension(float setTurns) : CommandBase(CommandBase::createNameFromFloat("ReleaseTension",setTurns)) {
 	Requires(shootah);
 	this->setTurns = setTurns;
 }
