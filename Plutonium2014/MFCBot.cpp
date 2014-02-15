@@ -5,6 +5,7 @@
 #include "Utils/SolenoidPair.h"
 #include "Robotmap.h"
 #include "Utils/StallableMotor.h"
+#include "Subsystems/Pterodactyl.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -31,6 +32,7 @@ void MFCBot::RobotInit() {
 	lw = LiveWindow::GetInstance();
 	CommandBase::oi->registerButtonListeners();
 	SmartDashboard::PutData(Scheduler::GetInstance());
+	SmartDashboard::PutNumber("Pterodactyl",CommandBase::pterodactyl->getAngle());
 }
 
 void MFCBot::AutonomousInit() {

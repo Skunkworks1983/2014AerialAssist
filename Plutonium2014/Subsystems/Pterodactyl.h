@@ -9,7 +9,8 @@
  * @author Dayveed
  */
 
-class SolenoidPair;
+class AnalogPot;
+class DualLiveSpeed;
 class Pterodactyl: public Subsystem {
 public:
 	enum BrakeState {
@@ -17,16 +18,15 @@ public:
 	};
 
 private:
-	SpeedController *motorLeft;
-	SpeedController *motorRight;
+	DualLiveSpeed *angleMotors;
 
 	Encoder *encoderLeft;
 	Encoder *encoderRight;
 
 	PIDController *pid;
-	AnalogChannel *pot;
+	AnalogPot *pot;
 
-	SolenoidPair *brake;
+	Relay *brake;
 
 public:
 	Pterodactyl();
@@ -42,6 +42,10 @@ public:
 
 	BrakeState getBrake();
 	void setBrakeState(BrakeState state);
+
+	void setTarget(float target);
+	void stopPID();
+	bool isPIDFinished();
 };
 
 #endif

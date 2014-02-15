@@ -7,7 +7,7 @@ class OI {
 private:
 	Joystick *joystickLeft;
 	Joystick *joystickRight;
-	
+
 	JoystickButton *shiftButton;
 	JoystickButton *rollerOn;
 	JoystickButton *rollerOff;
@@ -16,8 +16,10 @@ private:
 	JoystickButton *drawBack;
 	JoystickButton *prepare;
 	JoystickButton *shootGlatGlat;
+	JoystickButton *armODeathBackward;
+	JoystickButton *armODeathForward;
 	float scale;
-	
+
 public:
 	OI();
 	Joystick *getJoystickLeft();

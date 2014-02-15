@@ -4,6 +4,7 @@
 class SpeedController;
 class Encoder;
 class SolenoidPair;
+class DualLiveSpeed;
 
 #include "WPILib.h"
 /**
@@ -13,14 +14,10 @@ class SolenoidPair;
  */
 class DriveBase: public Subsystem {
 private:
-	SpeedController *motorLeftFront;
-	SpeedController *motorRightFront;
-	SpeedController *motorLeftBack;
-	SpeedController *motorRightBack;
+	DualLiveSpeed *motorLeft;
+	DualLiveSpeed *motorRight;
 	Encoder *encoderLeft;
 	Encoder *encoderRight;
-	Encoder *encoderLeftBack;
-	Encoder *encoderRightBack;
 	SolenoidPair *shifter;
 	Gyro *gyro;
 	// It's desirable that everything possible under private except
