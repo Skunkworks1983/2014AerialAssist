@@ -60,11 +60,11 @@ void Shootah::setWLatch(Shootah::LatchPosition state) {
 }
 
 Shootah::LatchPosition Shootah::getSLatch() {
-	return (Shootah::LatchPosition) sLatchSensor->Get();
+	return sLatchSensor->Get() ? Shootah::kLatched : Shootah::kUnlatched;
 }
 
 Shootah::LatchPosition Shootah::getWLatch() {
-	return (Shootah::LatchPosition) wLatch->Get();
+	return wLatch->Get() ? Shootah::kLatched : Shootah::kUnlatched;
 }
 
 bool Shootah::isReallyDrawnBack() {

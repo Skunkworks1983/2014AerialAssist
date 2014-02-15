@@ -63,7 +63,7 @@ void DriveBase::setDriveGear(DriveGear gear) {
 }
 
 DriveBase::DriveGear DriveBase::getDriveGear() {
-	return (DriveBase::DriveGear) shifter->Get();
+	return shifter->Get() ? DriveBase::kHigh : DriveBase::kLow;
 }
 
 Gyro *DriveBase::getGyro() {

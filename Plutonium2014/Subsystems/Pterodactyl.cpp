@@ -19,7 +19,9 @@ Pterodactyl::Pterodactyl() :
 
 	pid = new PIDController(1.0, .1, .01, pot, angleMotors, 0.05f);
 	pid->SetInputRange(-2.0, 2.0);
-	pid->SetOutputRange(-.3, .6);
+	pid->SetOutputRange(-.5, .6);
+	pid->SetAbsoluteTolerance(
+			PTERODACTYL_ANGLE_THRESHOLD / (double) PTERODACTYL_MAX_ANGLE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "PID Controller", pid);
 	SmartDashboard::PutData("Pterodactyl PID", pid);
 
@@ -72,8 +74,7 @@ void Pterodactyl::stopPID() {
 }
 
 bool Pterodactyl::isPIDFinished() {
-	return fabs(
-			(pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle()
-					< PTERODACTYL_ANGLE_THRESHOLD);
+	return fabs((pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle())
+			< PTERODACTYL_ANGLE_THRESHOLD;
 }
 

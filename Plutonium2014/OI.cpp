@@ -23,12 +23,14 @@ OI::OI() {
 	RollerRollOn = new JoystickButton(joystickLeft, 4);
 	RollerRollOff = new JoystickButton(joystickLeft, 5);
 	shootGlatGlat = new JoystickButton(joystickLeft, 1);
-	
+
 	armODeathForward = new JoystickButton(joystickRight, 4);
 	armODeathBackward = new JoystickButton(joystickRight, 5);
 }
 void OI::registerButtonListeners() {
-	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shiftButton, new Shift(Shift::kToggle)));
+	Scheduler::GetInstance()->AddButton(
+			new PressedButtonScheduler(false, shiftButton,
+					new Shift(Shift::kToggle)));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new Collect()));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new Collect()));
 	Scheduler::GetInstance()->AddButton(
@@ -44,7 +46,7 @@ void OI::registerButtonListeners() {
 	Scheduler::GetInstance()->AddButton(
 			new PressedButtonScheduler(false, armODeathBackward,
 					new AngelChange(60)));
-	
+
 	Scheduler::GetInstance()->AddButton(
 			new PressedButtonScheduler(false, drawBack, new DrawZeDevice()));
 	Scheduler::GetInstance()->AddButton(
