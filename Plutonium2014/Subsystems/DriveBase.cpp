@@ -37,7 +37,7 @@ void DriveBase::InitDefaultCommand() {
 }
 
 void DriveBase::setSpeed(double speedLeft, double speedRight) {
-	motorLeft->Set(speedLeft);
+	motorLeft->Set(-speedLeft);
 	motorRight->Set(speedRight);
 }
 
