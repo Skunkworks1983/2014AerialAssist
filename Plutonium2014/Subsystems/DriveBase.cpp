@@ -21,11 +21,11 @@ DriveBase::DriveBase() :
 	// TODO Add to livewindow
 
 	encoderLeft = new Encoder(DRIVE_ENCODER_LEFT, false, Encoder::k4X);
-	LiveWindow::GetInstance()->AddSensor("Drive Base", "Encoder", encoderLeft);
+	LiveWindow::GetInstance()->AddSensor("Drive Base", "EncoderLeft", encoderLeft);
 	encoderLeft->Start();
 
 	encoderRight = new Encoder(DRIVE_ENCODER_RIGHT, true, Encoder::k4X);
-	LiveWindow::GetInstance()->AddSensor("Drive Base", "Encoder", encoderRight);
+	LiveWindow::GetInstance()->AddSensor("Drive Base", "EncoderRight", encoderRight);
 	encoderRight->Start();
 	
 	shifter = new SolenoidPair(DRIVE_SHIFT_HIGH, DRIVE_SHIFT_LOW);

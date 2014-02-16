@@ -7,10 +7,11 @@
  *
  * @author David
  */
-class SpeedController;
 class SolenoidPair;
 class DigitalInput;
 class AnalogChannel;
+class AnalogPot;
+class StallableMotor;
 
 class Shootah: public Subsystem {
 public:
@@ -19,8 +20,8 @@ public:
 	};
 
 private:
-	SpeedController *wenchMotor;
-	AnalogChannel *wenchPot;
+	StallableMotor *wenchMotor;
+	AnalogPot *wenchPot;
 
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
@@ -44,8 +45,6 @@ public:
 	bool isReallyDrawnBack();
 	bool isAngle(float setpoint);
 	bool getPullBackSwitch();
-
-	double getPotVoltage();
 
 	float getWenchMotorSpeed();
 };

@@ -40,7 +40,7 @@ void MFCBot::AutonomousInit() {
 
 void MFCBot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
-	//WatchDog();
+	WatchDog();
 }
 
 void MFCBot::TeleopInit() {
@@ -48,17 +48,16 @@ void MFCBot::TeleopInit() {
 
 void MFCBot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
-	//WatchDog();
+	WatchDog();
 	StallableMotor::updateControllers();
+	if (dont++ > 10) {
+		dont=0;
+	}
 }
 
 void MFCBot::TestPeriodic() {
 	lw->Run();
-	if (++dont > 50){
-		printf("JawState: %d, Slatch: %d, PullBackSwitch: %d\n", CommandBase::collector->getJawState(), CommandBase::shootah->getSLatch(), CommandBase::shootah->getPullBackSwitch());
-		dont = 0;
-	}
-	//WatchDog();
+	WatchDog();
 }
 
 void MFCBot::WatchDog() {

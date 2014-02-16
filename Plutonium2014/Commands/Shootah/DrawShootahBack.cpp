@@ -15,7 +15,7 @@ void DrawShootahBack::Execute() {
 	}
 	
 	printf("Turns: %f, PullBackSwitch: %d, Voltage: %f, isDrawnBack: %d\n",
-		shootah->getTurns(), shootah->getPullBackSwitch(), shootah->getPotVoltage(), shootah->isReallyDrawnBack());
+		shootah->getTurns(), shootah->getPullBackSwitch(), shootah->isReallyDrawnBack());
 }
 
 bool DrawShootahBack::IsFinished() {

@@ -1,15 +1,20 @@
 #include "Shootah.h"
 #include "../Robotmap.h"
 #include "../Utils/SolenoidPair.h"
+#include "../Utils/StallableMotor.h"
+#include "../Utils/AnalogPot.h"
+#include "../Utils/DualLiveSpeed.h"
 #include "WPILib.h"
 
 Shootah::Shootah() :
 	Subsystem("Shootah") {
-	wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
-	// TODO LiveWindow::GetInstance()->AddActuator("Shootah", "Wench Motor", wenchMotor);
-	wenchPot = new AnalogChannel(SHOOTAH_CAT_POT);
-	LiveWindow::GetInstance()->AddSensor("Shootah", "Wench Potentiometer",
-			wenchPot);
+	wenchPot = new AnalogPot(SHOOTAH_CAT_POT);
+	wenchPot->setVoltageToAngle(SHOOTAH_POT_TO_DRAW_COEFF);
+	wenchMotor = new StallableMotor(new Talon(SHOOTAH_MOTOR_WENCH), PTERODACTYL_POT_RATE_ZERO_THRESHOLD, 100.0, 1000.0);
+	wenchMotor->setPotSource(wenchPot);
+	//wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
+	LiveWindow::GetInstance()->AddActuator("Shootah", "Wench Motor", new DualLiveSpeed(wenchMotor));
+	LiveWindow::GetInstance()->AddSensor("Shootah", "Wench Potentiometer", wenchPot);
 
 	wLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_W_LATCH);
 	LiveWindow::GetInstance()->AddActuator("Shootah", "Wench Latch", wLatch);
@@ -18,8 +23,7 @@ Shootah::Shootah() :
 
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
-	LiveWindow::GetInstance()->AddSensor("Shootah", "Left Pullback Switch",
-			pullBackSwitchLeft);
+	LiveWindow::GetInstance()->AddSensor("Shootah", "Left Pullback Switch", pullBackSwitchLeft);
 
 	pullBackSwitchRight = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_RIGHT_PULLBACK_CHECK);
@@ -27,8 +31,7 @@ Shootah::Shootah() :
 			pullBackSwitchRight);
 
 	sLatchSensor = new DigitalInput(SHOOTAH_S_LATCH_SENSOR);
-	LiveWindow::GetInstance()->AddSensor("Shootah", "Shooter Latch Sensor",
-			sLatchSensor);
+	LiveWindow::GetInstance()->AddSensor("Shootah", "Shooter Latch Sensor", sLatchSensor);
 }
 
 void Shootah::InitDefaultCommand() {
@@ -36,15 +39,12 @@ void Shootah::InitDefaultCommand() {
 }
 
 bool Shootah::getPullBackSwitch() {
-	return pullBackSwitchLeft->Get(); //|| pullBackSwitchRight->Get();
+	return !pullBackSwitchLeft->Get(); //|| pullBackSwitchRight->Get();
 }
 
 double Shootah::getTurns() {
-	return SHOOTAH_WENCH_POT_TO_DRAW(wenchPot->GetAverageVoltage());
-}
-
-double Shootah::getPotVoltage() {
-	return wenchPot->GetAverageVoltage();
+	printf("Current Angle: %f\tCurrent Rate: %f\n", wenchPot->GetAngle(), wenchPot->GetRate());
+	return wenchPot->GetAngle();
 }
 
 void Shootah::setWenchMotor(float speed) {

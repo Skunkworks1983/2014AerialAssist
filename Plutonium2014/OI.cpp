@@ -13,6 +13,7 @@
 OI::OI() {
 	joystickLeft = new Joystick(1);
 	joystickRight = new Joystick(2);
+	joystickButtonsThings = new Joystick(3);
 	// Process operator interface input here.
 	shiftButton = new JoystickButton(joystickRight, 1);
 	drawBack = new JoystickButton(joystickLeft, 2);
@@ -24,36 +25,34 @@ OI::OI() {
 	RollerRollOff = new JoystickButton(joystickLeft, 5);
 	shootGlatGlat = new JoystickButton(joystickLeft, 1);
 
-	armODeathForward = new JoystickButton(joystickRight, 4);
-	armODeathBackward = new JoystickButton(joystickRight, 5);
+	armODeathZero = new JoystickButton(joystickButtonsThings, 6);
+	armODeathThirty = new JoystickButton(joystickButtonsThings, 7);
+	armODeathSixty = new JoystickButton(joystickButtonsThings, 11);
+	armODeathNintey = new JoystickButton(joystickButtonsThings, 10);
 }
 void OI::registerButtonListeners() {
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, shiftButton,
-					new Shift(Shift::kToggle)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shiftButton,
+			new Shift(Shift::kToggle)));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new Collect()));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new Collect()));
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, RollerRollOn,
-					new RollerRoll(1000)));
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, RollerRollOff,
-					new RollerRoll(0.0)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, RollerRollOn,
+			new RollerRoll(1000)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, RollerRollOff,
+			new RollerRoll(-1000)));
 
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, armODeathForward,
-					new AngelChange(30)));
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, armODeathBackward,
-					new AngelChange(60)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathZero,
+			new AngelChange(5)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathThirty,
+			new AngelChange(30)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathSixty,
+			new AngelChange(60)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathNintey,
+			new AngelChange(90)));
 
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, drawBack, new DrawZeDevice()));
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, prepare,
-					new PrepareZeDevice(1.0f)));
-	Scheduler::GetInstance()->AddButton(
-			new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, drawBack, new DrawZeDevice()));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, prepare,
+			new PrepareZeDevice(1.0f)));
+	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
 }
 Joystick *OI::getJoystickLeft() {
 	return joystickLeft;
