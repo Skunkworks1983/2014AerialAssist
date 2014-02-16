@@ -4,6 +4,7 @@
 #include "../Utils/StallableMotor.h"
 #include "../Utils/AnalogPot.h"
 #include "../Utils/DualLiveSpeed.h"
+#include "../Utils/Time.h"
 #include "WPILib.h"
 
 Shootah::Shootah() :
@@ -52,14 +53,40 @@ void Shootah::setWenchMotor(float speed) {
 
 void Shootah::setSLatch(Shootah::LatchPosition state) {
 	sLatch->Set(state);
+	if (state != sLatchPatternBuffer.initialRequestedState) {
+		sLatchPatternBuffer.lastFallingEdge = -1;
+		sLatchPatternBuffer.lastRisingEdge = -1;
+	}
 }
 
 void Shootah::setWLatch(Shootah::LatchPosition state) {
 	wLatch->Set(state);
 }
 
-Shootah::LatchPosition Shootah::getSLatch() {
-	return sLatchSensor->Get() ? Shootah::kLatched : Shootah::kUnlatched;
+Shootah::LatchPosition Shootah::getRawSLatch() {
+	Shootah::LatchPosition pos = !sLatchSensor->Get() ? Shootah::kLatched
+			: Shootah::kUnlatched;
+	if (sLatchPatternBuffer.lastState != pos) {
+		// Something happened
+		printf("SLatched changed from %d to %d\n",
+				sLatchPatternBuffer.lastState, pos);
+		if (pos) {
+			sLatchPatternBuffer.lastRisingEdge = getCurrentMillis();
+		} else {
+			sLatchPatternBuffer.lastFallingEdge = getCurrentMillis();
+			sLatchPatternBuffer.initialRequestedState = sLatch->Get();
+		}
+	}
+	sLatchPatternBuffer.lastState = pos;
+	return pos;
+}
+
+bool Shootah::isShooterReallyLatched() {
+	Shootah::LatchPosition pos = getRawSLatch();
+	return (sLatchPatternBuffer.lastFallingEdge > 0)
+			&& (sLatchPatternBuffer.lastRisingEdge > 0)
+			&& (sLatchPatternBuffer.lastFallingEdge
+					< sLatchPatternBuffer.lastRisingEdge) && pos;
 }
 
 Shootah::LatchPosition Shootah::getWLatch() {
@@ -67,7 +94,8 @@ Shootah::LatchPosition Shootah::getWLatch() {
 }
 
 bool Shootah::isReallyDrawnBack() {
-	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK))/*) && sLatch->Get())*/;
+	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK)
+			|| isShooterReallyLatched());
 }
 
 bool Shootah::isAngle(float setpoint) {

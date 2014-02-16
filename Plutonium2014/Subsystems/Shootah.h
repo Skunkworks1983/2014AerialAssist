@@ -13,13 +13,19 @@ class AnalogChannel;
 class AnalogPot;
 class StallableMotor;
 
-class Shootah: public Subsystem {
+class Shootah : public Subsystem {
 public:
 	enum LatchPosition {
 		kLatched = true, kUnlatched = false
 	};
-
 private:
+	typedef struct {
+		double lastFallingEdge;
+		double lastRisingEdge;
+		bool lastState;
+		bool initialRequestedState;
+	} DigitalEdgeWatcher;
+
 	StallableMotor *wenchMotor;
 	AnalogPot *wenchPot;
 
@@ -31,6 +37,7 @@ private:
 	DigitalInput *pullBackSwitchRight;
 	DigitalInput *sLatchSensor;
 
+	DigitalEdgeWatcher sLatchPatternBuffer;
 public:
 	Shootah();
 	void InitDefaultCommand();
@@ -39,7 +46,8 @@ public:
 	void setWLatch(LatchPosition state);
 	LatchPosition getWLatch();
 	void setSLatch(LatchPosition state);
-	LatchPosition getSLatch();
+	LatchPosition getRawSLatch();
+	bool isShooterReallyLatched();
 
 	double getTurns();
 	bool isReallyDrawnBack();

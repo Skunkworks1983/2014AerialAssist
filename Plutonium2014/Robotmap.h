@@ -10,8 +10,8 @@
 // ================
 // == Pneumatics ==
 // ================
-#define COMPRESSOR_RELAY (BOTTOM_SIDECAR,1) /*S1*/
-#define COMPRESSOR_PRESSURE_SENSOR (BOTTOM_SIDECAR,1) /*BD1*/
+#define COMPRESSOR_RELAY BOTTOM_SIDECAR,1 /*S1*/
+#define COMPRESSOR_PRESSURE_SENSOR BOTTOM_SIDECAR,1 /*BD1*/
 
 // ===============
 // == DriveBase ==

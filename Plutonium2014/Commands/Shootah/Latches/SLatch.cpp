@@ -21,7 +21,7 @@ void SLatch::Execute() {
 }
 
 bool SLatch::IsFinished() {
-	if (shootah->getSLatch() == isLocked) {
+	if (shootah->getRawSLatch() == isLocked) {
 		return true;
 	}
 

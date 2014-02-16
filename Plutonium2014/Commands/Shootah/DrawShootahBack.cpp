@@ -14,7 +14,7 @@ void DrawShootahBack::Execute() {
 		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_BACK);
 	}
 	
-	printf("Turns: %f, PullBackSwitch: %d, Voltage: %f, isDrawnBack: %d\n",
+	printf("Turns: %f, PullBackSwitch: %d, isDrawnBack: %d\n",
 		shootah->getTurns(), shootah->getPullBackSwitch(), shootah->isReallyDrawnBack());
 }
 
