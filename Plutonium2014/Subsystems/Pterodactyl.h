@@ -33,9 +33,10 @@ public:
 	void InitDefaultCommand();
 
 	double getAngle();
+	double getRate();
+	void setAngle(float target);
 	void setAngleMotorSpeed(float speed);
 	float getAngleMotorSpeed();
-	void setAngle(float target);
 
 	int getLimNeg();
 	int getLimPos();
@@ -44,6 +45,7 @@ public:
 	void setBrakeState(BrakeState state);
 
 	void setTarget(float target);
+	void setOutputRange();
 	void stopPID();
 	bool isPIDFinished();
 };

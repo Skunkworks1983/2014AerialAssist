@@ -31,9 +31,6 @@ void MFCBot::RobotInit() {
 	CommandBase::init();
 	lw = LiveWindow::GetInstance();
 	CommandBase::oi->registerButtonListeners();
-	SmartDashboard::PutData(Scheduler::GetInstance());
-	SmartDashboard::PutNumber("Pterodactyl",
-			CommandBase::pterodactyl->getAngle());
 }
 
 void MFCBot::AutonomousInit() {
@@ -48,41 +45,47 @@ void MFCBot::TeleopInit() {
 }
 
 void MFCBot::TeleopPeriodic() {
+	SmartDashboard::PutData(Scheduler::GetInstance());
 	Scheduler::GetInstance()->Run();
 	WatchDog();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
 		dont=0;
-		printf("State: %d\tReally: %d\n", CommandBase::shootah->getRawSLatch(),
-				CommandBase::shootah->isShooterReallyLatched());
 	}
 }
 
 void MFCBot::TestPeriodic() {
 	lw->Run();
 	StallableMotor::updateControllers();
+	if (dont++ > 10) {
+		dont=0;
+		printf("LeftEncoder: %d\tRightEncoder %d\n",
+				CommandBase::driveBase->getLeftEncoder()->GetDistance(),
+				CommandBase::driveBase->getRightEncoder()->GetDistance());
+	}
 	WatchDog();
 }
 
 void MFCBot::WatchDog() {
-	if (CommandBase::shootah->getWenchMotorSpeed() < 0
-			&& CommandBase::shootah->getTurns() > 1.25) {
-		CommandBase::shootah->setWenchMotor(0.0);
-		printf("Watchdog: Shooter motor overeleased!\n");
-	}
-
-	if (CommandBase::shootah->getWenchMotorSpeed()> 0) {
-		if (CommandBase::shootah->getTurns() < 0) {
+	if (CommandBase::shootah!=NULL) {
+		if (CommandBase::shootah->getWenchMotorSpeed() < 0
+				&& CommandBase::shootah->getTurns() > 1.25) {
 			CommandBase::shootah->setWenchMotor(0.0);
-			printf("Watchdog: Shooter motor overdrawn: POT FILTER!\n");
+			printf("Watchdog: Shooter motor overeleased!\n");
 		}
-		if (CommandBase::shootah->getPullBackSwitch()) {
-			CommandBase::shootah->setWenchMotor(0.0);
-			printf("Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
-		}
-		if (CommandBase::shootah->isShooterReallyLatched()) {
-			CommandBase::shootah->setWenchMotor(0.0);
-			printf("Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
+		if (CommandBase::shootah->getWenchMotorSpeed()> 0) {
+			if (CommandBase::shootah->getTurns() < 0) {
+				CommandBase::shootah->setWenchMotor(0.0);
+				printf("Watchdog: Shooter motor overdrawn: POT FILTER!\n");
+			}
+			if (CommandBase::shootah->getPullBackSwitch()) {
+				CommandBase::shootah->setWenchMotor(0.0);
+				printf("Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
+			}
+			if (CommandBase::shootah->isShooterReallyLatched()) {
+				CommandBase::shootah->setWenchMotor(0.0);
+				printf("Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
+			}
 		}
 	}
 }

@@ -3,9 +3,8 @@
 #include "../../../Robotmap.h"
 
 SLatch::SLatch(Shootah::LatchPosition isLocked) :
-			CommandBase(
-					CommandBase::createNameFromString("SLatch",
-							isLocked ? "Locked" : "Unlocked")) {
+	CommandBase(CommandBase::createNameFromString("SLatch", isLocked ? "Locked"
+			: "Unlocked")) {
 	Requires(shootah);
 	this->isLocked = isLocked;
 	time = 0;
@@ -23,9 +22,7 @@ void SLatch::Execute() {
 bool SLatch::IsFinished() {
 	if (shootah->getRawSLatch() == isLocked) {
 		return true;
-	}
-
-	else if (time >= SHOOTAH_SLATCH_WAIT) {
+	} else if (time >= SHOOTAH_SLATCH_WAIT) {
 		// Shutting down the shooter
 		return true;
 	}
