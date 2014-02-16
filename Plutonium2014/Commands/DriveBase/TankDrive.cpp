@@ -1,8 +1,9 @@
 #include "TankDrive.h"
 #include "WPILib.h"
 #include "Joystick.h"
-#include <cmath>
+#include <math.h>
 #include "../../CommandBase.h"
+#include "../../Robotmap.h"
 
 TankDrive::TankDrive() {
 	// Use Requires() here to declare subsystem dependencies
@@ -19,17 +20,22 @@ void TankDrive::Initialize() {
 void TankDrive::Execute() {
 	double left = oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
 	double right = oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
-	double n = 2.0;
-	
+	if (fabs(left) < OI_JOYSTICK_DRIVE_DEADBAND) {
+		left = 0;
+	}
+	if (fabs(right) < OI_JOYSTICK_DRIVE_DEADBAND) {
+		right = 0;
+	}
+
 	double sum = (left + right);
 	double error = (left - right);
-	
+
 	double favgSpeed = fabs(sum / 2);
-	double scale = pow(favgSpeed, n) / 2;
+	double scale = pow(favgSpeed, OI_JOYSTICK_SQUIRRLY_POWER) / 2;
 
 	left = left - (error * scale);
 	right = right + (error * scale);
-	
+
 	driveBase->setSpeed(left, right);
 }
 

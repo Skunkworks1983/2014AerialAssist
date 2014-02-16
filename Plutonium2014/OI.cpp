@@ -1,4 +1,5 @@
 #include "OI.h"
+#include "Robotmap.h"
 #include "Commands/DriveBase/Shift.h"
 #include "Buttons/PressedButtonScheduler.h"
 #include "Commands/Collector/RollerRoll.h"
@@ -11,8 +12,8 @@
 #include "Commands/Shootah/ReleaseTension.h"
 
 OI::OI() {
-	joystickLeft = new Joystick(1);
-	joystickRight = new Joystick(2);
+	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
+	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
 	joystickButtonsThings = new Joystick(3);
 	// Process operator interface input here.
 	shiftButton = new JoystickButton(joystickRight, 1);

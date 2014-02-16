@@ -89,13 +89,13 @@
 
 // =================
 // == Pterodactyl ==
-#define CRISP (.16)
-#define a2 2
 // =================
 #define PTERODACTYL_POT (1)
 #define THRESHOLD_LOWER 10
 #define THRESHOLD_UPPER 10
 #define PTERODACTYL_ANGLE_THRESHOLD (10)
+#define CRISP (.16)
+#define a2 2
 #define LIL_BIT 2
 #define PTERODACTYL_MOTOR_LEFT TOP_SIDECAR,9 /*T9*/
 #define PTERODACTYL_MOTOR_RIGHT TOP_SIDECAR,8 /*T8*/
@@ -111,5 +111,13 @@
 #define PTERODACTYL_MAX_ANGLE (90.0) // THIS MUST BE A FLOATING POINT
 #define PTERODACTYL_POT_VOLTAGE_TO_ANGLE_COEFF (0), (56.845/PTERODACTYL_MAX_ANGLE), (-62.489/PTERODACTYL_MAX_ANGLE)
 #define PTERODACTYL_POT_RATE_ZERO_THRESHOLD (-1)
+
+// =================
+// ====== OI =======
+// =================
+#define OI_JOYSTICK_LEFT (1)
+#define OI_JOYSTICK_RIGHT (2)
+#define OI_JOYSTICK_DRIVE_DEADBAND (0.05)
+#define OI_JOYSTICK_SQUIRRLY_POWER (2.0)
 
 #endif
