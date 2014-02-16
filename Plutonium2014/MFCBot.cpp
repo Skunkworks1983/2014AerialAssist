@@ -57,16 +57,19 @@ void MFCBot::TeleopPeriodic() {
 
 void MFCBot::TestPeriodic() {
 	lw->Run();
+	StallableMotor::updateControllers();
 	WatchDog();
 }
 
 void MFCBot::WatchDog() {
-	if (CommandBase::shootah->getWenchMotorSpeed() > 0 && CommandBase::shootah->getTurns() > 8) {
+	if (CommandBase::shootah->getWenchMotorSpeed() < 0 && CommandBase::shootah->getTurns() > 1.25) {
 		CommandBase::shootah->setWenchMotor(0.0);
+		printf("Watchdog: Shooter motor overeleased!\n");
 	}
 	
-	if (CommandBase::shootah->getWenchMotorSpeed() < 0 && (CommandBase::shootah->getTurns() < 0 || CommandBase::shootah->getPullBackSwitch())) {
+	if (CommandBase::shootah->getWenchMotorSpeed() > 0 && (CommandBase::shootah->getTurns() < 0 || CommandBase::shootah->getPullBackSwitch())) {
 		CommandBase::shootah->setWenchMotor(0.0);
+		printf("Watchdog: Shooter motor overdrawn!\n");
 	}
 }
 

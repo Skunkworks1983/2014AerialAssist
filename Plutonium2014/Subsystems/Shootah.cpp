@@ -10,7 +10,7 @@ Shootah::Shootah() :
 	Subsystem("Shootah") {
 	wenchPot = new AnalogPot(SHOOTAH_CAT_POT);
 	wenchPot->setVoltageToAngle(SHOOTAH_POT_TO_DRAW_COEFF);
-	wenchMotor = new StallableMotor(new Talon(SHOOTAH_MOTOR_WENCH), PTERODACTYL_POT_RATE_ZERO_THRESHOLD, 100.0, 1000.0);
+	wenchMotor = new StallableMotor(new Talon(SHOOTAH_MOTOR_WENCH), -1.0);
 	wenchMotor->setPotSource(wenchPot);
 	//wenchMotor = new Victor(SHOOTAH_MOTOR_WENCH);
 	LiveWindow::GetInstance()->AddActuator("Shootah", "Wench Motor", new DualLiveSpeed(wenchMotor));
@@ -43,7 +43,6 @@ bool Shootah::getPullBackSwitch() {
 }
 
 double Shootah::getTurns() {
-	printf("Current Angle: %f\tCurrent Rate: %f\n", wenchPot->GetAngle(), wenchPot->GetRate());
 	return wenchPot->GetAngle();
 }
 

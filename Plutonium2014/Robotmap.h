@@ -51,8 +51,9 @@
 #define SHOOTAH_PREPARE_SET_POINT 2
 #define SHOOTAH_SLOOP -2
 #define SHOOTAH_YCEPT 9.992
-#define SHOOTAH_WENCH_POT_TO_DRAW(x) ((x-2.365) / .75) /* 2.5 = voltage at full draw, .75 = voltage at release - voltage at full */
-#define SHOOTAH_POT_TO_DRAW_COEFF 0, 1.3333, -3.153333
+// 3.366 = out all the way
+// 2.365 = all the way in
+#define SHOOTAH_POT_TO_DRAW_COEFF 0, 1.0, -2.365
 
 #define SHOOTAH_SLATCH_WAIT 500
 #define SHOOTAH_WLATCH_WAIT 500
