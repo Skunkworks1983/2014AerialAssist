@@ -27,6 +27,7 @@ bool WLatch::IsFinished() {
 	if (time >= SHOOTAH_WLATCH_WAIT) {
 		return true;
 	}
+	return false;
 }
 
 void WLatch::End() {
