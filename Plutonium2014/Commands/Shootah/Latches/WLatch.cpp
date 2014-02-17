@@ -17,20 +17,16 @@ void WLatch::Initialize() {
 
 void WLatch::Execute() {
 	time = getCurrentMillis() - bTime;
-	if (time > SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK) {
-		shootah->setWenchMotor(-0.25);
+	if (state == Shootah::kUnlatched && time
+			> SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK) {
+		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FORCE_UNLATCH);
 	}
 }
 
 bool WLatch::IsFinished() {
-	if (shootah->getWLatch() == state) {
-		return true;
-	} else if (time >= SHOOTAH_WLATCH_WAIT) {
-		printf("error stuff\n");
-		// error stuff aka dankSuperdawg
+	if (time >= SHOOTAH_WLATCH_WAIT) {
 		return true;
 	}
-	return false;
 }
 
 void WLatch::End() {

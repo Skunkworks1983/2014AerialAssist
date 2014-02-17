@@ -41,11 +41,11 @@ OI::OI() {
 	armODeathThirty = new JoystickButton(joystickButtonsThings, 7);
 	armODeathSixty = new JoystickButton(joystickButtonsThings, 11);
 	armODeathNintey = new JoystickButton(joystickButtonsThings, 10);
-#endif
 
 	drawBack = new JoystickButton(joystickLeft, 2);
 	prepare = new JoystickButton(joystickLeft, 3);
 
+#endif
 	catch1 = new DigitalIOButton(1);
 	catch2 = new DigitalIOButton(3);
 	collect = new DigitalIOButton(5);
@@ -87,10 +87,9 @@ void OI::registerButtonListeners() {
 					new AngelChange(90)));
 
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
-#endif
 	drawBack->WhenPressed(new DrawZeDevice());
 	prepare->WhenPressed(new PrepareZeDevice(1.0f));
-
+#endif
 	// Real OI!
 	angleFloor->WhenPressed(new AngelChange(0));
 	angleLow->WhenPressed(new AngelChange(30));

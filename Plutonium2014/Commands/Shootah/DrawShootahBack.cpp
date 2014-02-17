@@ -10,12 +10,13 @@ void DrawShootahBack::Initialize() {
 }
 
 void DrawShootahBack::Execute() {
-	if(!shootah->isReallyDrawnBack()){
-		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_BACK);
+	if (!shootah->isReallyDrawnBack()) {
+		if (shootah->getTurns() < SHOOTAH_WENCH_SETPOINT_THRESH) {
+			shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_BACK_NEAR);
+		} else {
+			shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_BACK);
+		}
 	}
-	
-	printf("Turns: %f, PullBackSwitch: %d, isDrawnBack: %d\n",
-		shootah->getTurns(), shootah->getPullBackSwitch(), shootah->isReallyDrawnBack());
 }
 
 bool DrawShootahBack::IsFinished() {

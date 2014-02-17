@@ -10,7 +10,7 @@ AngelChange::AngelChange(float target) :
 }
 
 void AngelChange::Initialize() {
-	if ((fabs(target) - pterodactyl->getAngle()) > PTERODACTYL_ANGLE_THRESHOLD) {
+	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 		pterodactyl->setTarget(target);
 	}
@@ -38,21 +38,16 @@ void AngelChange::Execute() {
 }
 
 bool AngelChange::IsFinished() {
-	/*return fabs(
-	 (pterodactyl->getAngle() - target) < LIL_BIT || target
-	 < pterodactyl->getAngle() || target
-	 > pterodactyl->getAngle()); //checks if current angle is near target and stops*/
 	if (pterodactyl->isPIDFinished()) {
-		//pterodactyl->stopPID();
-		//pterodactyl->setBrakeState(Pterodactyl::kActive);
 		stability++;
-		printf("Stable to %d iterations\n", stability);
 	} else {
 		stability=0;
-		//pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-		//pterodactyl->setTarget(target);
 	}
-	return stability>5;
+	if (target <= 0 && pterodactyl->getAngle() < 10) {
+		pterodactyl->stopPID();
+		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+	}
+	return stability > (target<=0 ? 10 : 5);
 }
 
 void AngelChange::End() {
