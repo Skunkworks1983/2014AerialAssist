@@ -1,9 +1,9 @@
 #include "Pterodactyl.h"
 #include "../Robotmap.h"
-#include "../Utils/SolenoidPair.h"
-#include "../Utils/AnalogPot.h"
+#include "../Utils/Actuators/SolenoidPair.h"
+#include "../Utils/Sensors/AnalogPot.h"
 #include <math.h>
-#include "../Utils/DualLiveSpeed.h"
+#include "../Utils/Actuators/DualLiveSpeed.h"
 
 Pterodactyl::Pterodactyl() :
 	Subsystem("Pterodactyl") {

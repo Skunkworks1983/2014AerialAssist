@@ -3,8 +3,8 @@
 
 #include "WPILib.h"
 #include "../CommandBase.h"
-#include "../Utils/SolenoidPair.h"
-#include "../Utils/DualLiveSpeed.h"
+#include "../Utils/Actuators/SolenoidPair.h"
+#include "../Utils/Actuators/DualLiveSpeed.h"
 #include "../Commands/DriveBase/TankDrive.h"
 
 DriveBase::DriveBase() :

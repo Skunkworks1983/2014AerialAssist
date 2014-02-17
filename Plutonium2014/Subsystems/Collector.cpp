@@ -1,8 +1,8 @@
 #include "Collector.h"
 #include "../Robotmap.h"
-#include "../Utils/SolenoidPair.h"
+#include "../Utils/Actuators/SolenoidPair.h"
 #include "WPILib.h"
-#include "../Utils/StallableMotor.h"
+#include "../Utils/Actuators/StallableMotor.h"
 
 Collector::Collector() :
 	Subsystem("Collector") {

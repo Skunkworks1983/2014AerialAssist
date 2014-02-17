@@ -1,9 +1,9 @@
 #include "Shootah.h"
 #include "../Robotmap.h"
-#include "../Utils/SolenoidPair.h"
-#include "../Utils/StallableMotor.h"
-#include "../Utils/AnalogPot.h"
-#include "../Utils/DualLiveSpeed.h"
+#include "../Utils/Actuators/SolenoidPair.h"
+#include "../Utils/Actuators/StallableMotor.h"
+#include "../Utils/Sensors/AnalogPot.h"
+#include "../Utils/Actuators/DualLiveSpeed.h"
 #include "../Utils/Time.h"
 #include "WPILib.h"
 

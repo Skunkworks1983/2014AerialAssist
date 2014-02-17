@@ -2,9 +2,9 @@
 #include "Robotmap.h"
 #include "Buttons/Button.h"
 
-#include "Utils/CompositeButton.h"
-#include "Utils/OverridableButton.h"
-#include "Utils/AnalogRangeIOButton.h"
+#include "Utils/Buttons/CompositeButton.h"
+#include "Utils/Buttons/OverridableButton.h"
+#include "Utils/Buttons/AnalogRangeIOButton.h"
 
 #include "Commands/DriveBase/Shift.h"
 #include "Commands/Collector/RollerRoll.h"

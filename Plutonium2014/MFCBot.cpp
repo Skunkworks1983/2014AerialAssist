@@ -2,9 +2,9 @@
 #include "Commands/Command.h"
 #include "MFCBot.h"
 #include "CommandBase.h"
-#include "Utils/SolenoidPair.h"
+#include "Utils/Actuators/SolenoidPair.h"
 #include "Robotmap.h"
-#include "Utils/StallableMotor.h"
+#include "Utils/Actuators/StallableMotor.h"
 #include "Subsystems/Pterodactyl.h"
 
 MFCBot::MFCBot() {
