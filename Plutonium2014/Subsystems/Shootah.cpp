@@ -91,7 +91,7 @@ Shootah::LatchPosition Shootah::getRawSLatch() {
 	return pos;
 }
 
-bool Shootah::isShooterReallyLatched() {
+bool Shootah::isLatchedByPattern() {
 	Shootah::LatchPosition pos = getRawSLatch();
 	return (sLatchPatternBuffer.lastFallingEdge > 0)
 			&& (sLatchPatternBuffer.lastRisingEdge > 0)
@@ -105,7 +105,7 @@ Shootah::LatchPosition Shootah::getWLatch() {
 
 bool Shootah::isReallyDrawnBack() {
 	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK)
-			|| isShooterReallyLatched());
+			|| isLatchedByPattern());
 }
 
 bool Shootah::isAngle(float setpoint) {

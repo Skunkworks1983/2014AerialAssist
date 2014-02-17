@@ -8,6 +8,6 @@
 
 Collect::Collect() :
 	CommandGroup("Collect") {
-	AddParallel(new JawMove(false));
+	AddParallel(new JawMove(true));
 	AddSequential(new RollerRoll(COLLECTOR_ROLLER_INTAKE_SET_POINT));
 }

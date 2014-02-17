@@ -48,7 +48,7 @@ public:
 	LatchPosition getWLatch();
 	void setSLatch(LatchPosition state);
 	LatchPosition getRawSLatch();
-	bool isShooterReallyLatched();
+	bool isLatchedByPattern();
 
 	double getTurns();
 	bool isReallyDrawnBack();

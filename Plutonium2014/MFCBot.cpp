@@ -76,7 +76,7 @@ void MFCBot::TestPeriodic() {
 void MFCBot::WatchDog() {
 	if (CommandBase::shootah!=NULL) {
 		if (CommandBase::shootah->getWenchMotorSpeed() < 0
-				&& CommandBase::shootah->getTurns() > 1.25) {
+				&& CommandBase::shootah->getTurns() > 1.4) {
 			CommandBase::shootah->setWenchMotor(0.0);
 			printf("Watchdog: Shooter motor overeleased!\n");
 		}
@@ -89,7 +89,7 @@ void MFCBot::WatchDog() {
 				CommandBase::shootah->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
 			}
-			if (CommandBase::shootah->isShooterReallyLatched()) {
+			if (CommandBase::shootah->isLatchedByPattern()) {
 				CommandBase::shootah->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
 			}

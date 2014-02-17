@@ -6,6 +6,8 @@
 #include "Utils/Buttons/OverridableButton.h"
 #include "Utils/Buttons/AnalogRangeIOButton.h"
 
+#include "Utils/Commands/CommandCanceler.h"
+
 #include "Commands/DriveBase/Shift.h"
 #include "Commands/Collector/RollerRoll.h"
 #include "Commands/Collector/JawMove.h"
@@ -21,6 +23,8 @@
 #include "Commands/Shootah/ReadyShot.h"
 
 #define JOYSTICK_OF_THINGS 0
+
+#define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
 
 OI::OI() {
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
@@ -92,13 +96,13 @@ void OI::registerButtonListeners() {
 #endif
 	// Real OI!
 	angleFloor->WhenPressed(new AngelChange(0));
-	angleLow->WhenPressed(new AngelChange(30));
-	angleMed->WhenPressed(new AngelChange(60));
-	angleHigh->WhenPressed(new AngelChange(80));
+	angleLow->WhenPressed(new AngelChange(60));
+	angleMed->WhenPressed(new AngelChange(80));
+	angleHigh->WhenPressed(new AngelChange(90));
 	angleCarry->WhenPressed(new AngelChange(90));
 	
 	revCollector->WhenPressed(new RollerRoll(0));
-	collect->WhenPressed(new Collect());
+	START_STOP_COMMAND(collect, new Collect());
 	pass->WhenPressed(new Pass());
 	catch1->WhenPressed(new Catch(90));
 	catch2->WhenPressed(new Catch(30));

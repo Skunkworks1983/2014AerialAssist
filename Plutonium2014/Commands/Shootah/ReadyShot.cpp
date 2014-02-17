@@ -7,7 +7,6 @@
 ReadyShot::ReadyShot(float setTurns) :
 	CommandGroup("ReadyShot") {
 	AddSequential(new DrawZeDevice());
-	AddSequential(new WaitCommand(1));
 	AddSequential(new PrepareZeDevice(setTurns));
 }
 
