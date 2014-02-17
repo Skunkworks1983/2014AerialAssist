@@ -33,6 +33,9 @@ Shootah::Shootah() :
 
 	sLatchSensor = new DigitalInput(SHOOTAH_S_LATCH_SENSOR);
 	LiveWindow::GetInstance()->AddSensor("Shootah", "Shooter Latch Sensor", sLatchSensor);
+
+	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shootah::kLatched
+			: Shootah::kUnlatched;
 }
 
 void Shootah::InitDefaultCommand() {
@@ -53,10 +56,6 @@ void Shootah::setWenchMotor(float speed) {
 
 void Shootah::setSLatch(Shootah::LatchPosition state) {
 	sLatch->Set(state);
-	if (state != sLatchPatternBuffer.initialRequestedState) {
-		sLatchPatternBuffer.lastFallingEdge = -1;
-		sLatchPatternBuffer.lastRisingEdge = -1;
-	}
 }
 
 void Shootah::setWLatch(Shootah::LatchPosition state) {
@@ -74,8 +73,19 @@ Shootah::LatchPosition Shootah::getRawSLatch() {
 			sLatchPatternBuffer.lastRisingEdge = getCurrentMillis();
 		} else {
 			sLatchPatternBuffer.lastFallingEdge = getCurrentMillis();
-			sLatchPatternBuffer.initialRequestedState = sLatch->Get();
 		}
+		if (sLatchPatternBuffer.solenoidChangeTime + 500 > getCurrentMillis()) {
+			sLatchPatternBuffer.lastFallingEdge = -1;
+			sLatchPatternBuffer.lastRisingEdge = -1;
+			printf("Cleared pattern buffer recentchange\n");
+		}
+	}
+	if (sLatch->Get() != sLatchPatternBuffer.lastRequestedState) {
+		sLatchPatternBuffer.solenoidChangeTime = getCurrentMillis();
+		sLatchPatternBuffer.lastFallingEdge = -1;
+		sLatchPatternBuffer.lastRisingEdge = -1;
+		sLatchPatternBuffer.lastRequestedState = sLatch->Get();
+		printf("Cleared pattern buffer internal\n");
 	}
 	sLatchPatternBuffer.lastState = pos;
 	return pos;

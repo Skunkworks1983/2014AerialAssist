@@ -23,7 +23,8 @@ private:
 		double lastFallingEdge;
 		double lastRisingEdge;
 		bool lastState;
-		bool initialRequestedState;
+		double solenoidChangeTime;
+		bool lastRequestedState;
 	} DigitalEdgeWatcher;
 
 	StallableMotor *wenchMotor;

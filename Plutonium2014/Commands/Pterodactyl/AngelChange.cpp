@@ -10,8 +10,10 @@ AngelChange::AngelChange(float target) :
 }
 
 void AngelChange::Initialize() {
-	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-	pterodactyl->setTarget(target);
+	if ((fabs(target) - pterodactyl->getAngle()) > PTERODACTYL_ANGLE_THRESHOLD) {
+		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+		pterodactyl->setTarget(target);
+	}
 	stability=0;
 }
 
