@@ -34,6 +34,7 @@ void MFCBot::RobotInit() {
 }
 
 void MFCBot::AutonomousInit() {
+	Scheduler::GetInstance()->RemoveAll();
 }
 
 void MFCBot::AutonomousPeriodic() {
@@ -42,6 +43,7 @@ void MFCBot::AutonomousPeriodic() {
 }
 
 void MFCBot::TeleopInit() {
+	Scheduler::GetInstance()->RemoveAll();
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -54,14 +56,19 @@ void MFCBot::TeleopPeriodic() {
 	}
 }
 
+void MFCBot::DisabledInit() {
+	Scheduler::GetInstance()->RemoveAll();
+}
+
+void MFCBot::TestInit() {
+	Scheduler::GetInstance()->RemoveAll();
+}
+
 void MFCBot::TestPeriodic() {
 	lw->Run();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
 		dont=0;
-		printf("LeftEncoder: %d\tRightEncoder %d\n",
-				CommandBase::driveBase->getLeftEncoder()->GetDistance(),
-				CommandBase::driveBase->getRightEncoder()->GetDistance());
 	}
 	WatchDog();
 }

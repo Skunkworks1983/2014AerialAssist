@@ -2,17 +2,13 @@
 
 #include "JawMove.h"
 #include "RollerRoll.h"
+#include "../Pterodactyl/AngelChange.h"
 
 #include "../../Robotmap.h"
-//#include "RobotMap.h"
 
-Collect::Collect(): 
+Collect::Collect() :
 	CommandGroup("Collect") {
-	AddSequential(new JawMove(true));
+	AddParallel(new AngelChange(10));
+	AddParallel(new JawMove(false));
 	AddSequential(new RollerRoll(COLLECTOR_ROLLER_INTAKE_SET_POINT));
-//dun worry bebe everything is defined in the roller roll crispy chicken swag swag muda
-	AddSequential(new JawMove(false));
 }
-
-//Reload::~Reload() {
-//}

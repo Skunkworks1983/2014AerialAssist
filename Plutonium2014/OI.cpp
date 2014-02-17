@@ -1,8 +1,14 @@
 #include "OI.h"
 #include "Robotmap.h"
+#include "Buttons/Button.h"
+
+#include "Utils/CompositeButton.h"
+#include "Utils/OverridableButton.h"
+#include "Utils/AnalogRangeIOButton.h"
+
 #include "Commands/DriveBase/Shift.h"
-#include "Buttons/PressedButtonScheduler.h"
 #include "Commands/Collector/RollerRoll.h"
+#include "Commands/Collector/JawMove.h"
 #include "Commands/Pterodactyl/AngelChange.h"
 #include "Commands/Shootah/DrawZeDevice.h"
 #include "Commands/Shootah/PrepareZeDevice.h"
@@ -10,15 +16,20 @@
 #include "Commands/Collector/Collect.h"
 #include "Commands/Shootah/DrawShootahBack.h"
 #include "Commands/Shootah/ReleaseTension.h"
+#include "Commands/Collector/Pass.h"
+#include "Commands/Collector/Catch.h"
+#include "Commands/Shootah/ReadyShot.h"
+
+#define JOYSTICK_OF_THINGS 0
 
 OI::OI() {
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
 	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
-	joystickButtonsThings = new Joystick(3);
 	// Process operator interface input here.
 	shiftButton = new JoystickButton(joystickRight, 1);
-	drawBack = new JoystickButton(joystickLeft, 2);
-	prepare = new JoystickButton(joystickLeft, 3);
+
+#if JOYSTICK_OF_THINGS
+	joystickButtonsThings = new Joystick(3);
 
 	rollerOn = new JoystickButton(joystickRight, 3);
 	rollerOff = new JoystickButton(joystickRight, 2);
@@ -30,30 +41,77 @@ OI::OI() {
 	armODeathThirty = new JoystickButton(joystickButtonsThings, 7);
 	armODeathSixty = new JoystickButton(joystickButtonsThings, 11);
 	armODeathNintey = new JoystickButton(joystickButtonsThings, 10);
+#endif
+
+	drawBack = new JoystickButton(joystickLeft, 2);
+	prepare = new JoystickButton(joystickLeft, 3);
+
+	catch1 = new DigitalIOButton(1);
+	catch2 = new DigitalIOButton(3);
+	collect = new DigitalIOButton(5);
+	pass = new DigitalIOButton(7);
+
+	angleFloor = new DigitalIOButton(4);
+	angleLow = new DigitalIOButton(6);
+	angleMed = new DigitalIOButton(8);
+	angleHigh = new DigitalIOButton(13);
+	angleCarry = new DigitalIOButton(15);
+
+	fire = new DigitalIOButton(2);
+	revCollector = new DigitalIOButton(9);
+	jawToggle = new OverridableButton(new DigitalIOButton(12),new DigitalIOButton(11), false);
+	manShootOvr = new DigitalIOButton(10);
+	manAngleOvr = new DigitalIOButton(16);
+	
+	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.115-OI_ANALOG_TRESHOLD, 1.115+OI_ANALOG_TRESHOLD);
+	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.677-OI_ANALOG_TRESHOLD, 1.677+OI_ANALOG_TRESHOLD);
+	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 3.342-OI_ANALOG_TRESHOLD, 3.342+OI_ANALOG_TRESHOLD);
 }
 void OI::registerButtonListeners() {
+#if JOYSTICK_OF_THINGS
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shiftButton,
-			new Shift(Shift::kToggle)));
+					new Shift(Shift::kToggle)));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOn, new Collect()));
 	//  Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, rollerOff, new Collect()));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, RollerRollOn,
-			new RollerRoll(1000)));
+					new RollerRoll(1000)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, RollerRollOff,
-			new RollerRoll(-1000)));
-
+					new RollerRoll(0)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathZero,
-			new AngelChange(5)));
+					new AngelChange(5)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathThirty,
-			new AngelChange(30)));
+					new AngelChange(30)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathSixty,
-			new AngelChange(60)));
+					new AngelChange(60)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, armODeathNintey,
-			new AngelChange(90)));
+					new AngelChange(90)));
 
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, drawBack, new DrawZeDevice()));
-	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, prepare,
-			new PrepareZeDevice(1.0f)));
 	Scheduler::GetInstance()->AddButton(new PressedButtonScheduler(false, shootGlatGlat, new FireZeMissle()));
+#endif
+	drawBack->WhenPressed(new DrawZeDevice());
+	prepare->WhenPressed(new PrepareZeDevice(1.0f));
+
+	// Real OI!
+	angleFloor->WhenPressed(new AngelChange(0));
+	angleLow->WhenPressed(new AngelChange(30));
+	angleMed->WhenPressed(new AngelChange(60));
+	angleHigh->WhenPressed(new AngelChange(80));
+	angleCarry->WhenPressed(new AngelChange(90));
+	
+	revCollector->WhenPressed(new RollerRoll(0));
+	collect->WhenPressed(new Collect());
+	pass->WhenPressed(new Pass());
+	catch1->WhenPressed(new Catch(90));
+	catch2->WhenPressed(new Catch(30));
+
+	fire->WhenPressed(new FireZeMissle());
+
+	jawToggle->WhenPressed(new JawMove(true));
+	jawToggle->WhenReleased(new JawMove(false));
+	
+	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
+	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2));
+	power3->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_3));
 }
 Joystick *OI::getJoystickLeft() {
 	return joystickLeft;

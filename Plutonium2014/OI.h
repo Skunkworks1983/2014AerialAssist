@@ -1,7 +1,12 @@
 #ifndef OI_H
 #define OI_H
 
-#include "WPILib.h"
+class Joystick;
+class JoystickButton;
+class DigitalIOButton;
+class CompositeButton;
+class Button;
+class AnalogRangeIOButton;
 
 class OI {
 private:
@@ -21,6 +26,30 @@ private:
 	JoystickButton *armODeathThirty;
 	JoystickButton *armODeathSixty;
 	JoystickButton *armODeathNintey;
+	
+	DigitalIOButton *catch1;
+	DigitalIOButton *catch2;
+	DigitalIOButton *collect;
+	DigitalIOButton *pass;
+	
+	DigitalIOButton *angleFloor;
+	DigitalIOButton *angleLow;
+	DigitalIOButton *angleMed;
+	DigitalIOButton *angleHigh;
+	DigitalIOButton *angleCarry;
+	
+	DigitalIOButton *fire;
+	DigitalIOButton *revCollector;
+	
+	Button *jawToggle;
+	
+	DigitalIOButton *manShootOvr;
+	DigitalIOButton *manAngleOvr;
+	
+	AnalogRangeIOButton *power1;
+	AnalogRangeIOButton *power2;
+	AnalogRangeIOButton *power3;
+	
 	float scale;
 
 public:
