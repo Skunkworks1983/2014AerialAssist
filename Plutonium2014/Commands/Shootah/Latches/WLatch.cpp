@@ -17,9 +17,12 @@ void WLatch::Initialize() {
 
 void WLatch::Execute() {
 	time = getCurrentMillis() - bTime;
-	if (state == Shootah::kUnlatched && time
-			> SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK) {
-		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FORCE_UNLATCH);
+	if (time > SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK) {
+		if (state == Shootah::kUnlatched) {
+			shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FORCE_UNLATCH);
+		} else {
+			shootah->setWenchMotor(-SHOOTAH_WENCH_MOTOR_FORCE_UNLATCH);
+		}
 	}
 }
 
