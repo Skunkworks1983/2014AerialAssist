@@ -34,8 +34,11 @@ private:
 	SolenoidPair *sLatch;
 	SolenoidPair *brake;
 
+#if SHOOTAH_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
+#endif
+	
 	DigitalInput *sLatchSensor;
 
 	DigitalEdgeWatcher sLatchPatternBuffer;
@@ -53,7 +56,9 @@ public:
 	double getTurns();
 	bool isReallyDrawnBack();
 	bool isAngle(float setpoint);
+#if SHOOTAH_LIMITSWITCH
 	bool getPullBackSwitch();
+#endif
 
 	float getWenchMotorSpeed();
 };

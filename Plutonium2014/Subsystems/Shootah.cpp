@@ -22,6 +22,7 @@ Shootah::Shootah() :
 	sLatch = new SolenoidPair(SHOOTAH_PNEUMATIC_S_LATCH);
 	LiveWindow::GetInstance()->AddActuator("Shootah", "Shooter Latch", sLatch);
 
+#if SHOOTAH_LIMITSWITCH
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTAH_LIMITSWITCH_LEFT_PULLBACK_CHECK);
 	LiveWindow::GetInstance()->AddSensor("Shootah", "Left Pullback Switch", pullBackSwitchLeft);
@@ -30,6 +31,7 @@ Shootah::Shootah() :
 			SHOOTAH_LIMITSWITCH_RIGHT_PULLBACK_CHECK);
 	LiveWindow::GetInstance()->AddSensor("Shootah", "Right Pullback Switch",
 			pullBackSwitchRight);
+#endif
 
 	sLatchSensor = new DigitalInput(SHOOTAH_S_LATCH_SENSOR);
 	LiveWindow::GetInstance()->AddSensor("Shootah", "Shooter Latch Sensor", sLatchSensor);
@@ -42,9 +44,11 @@ void Shootah::InitDefaultCommand() {
 
 }
 
+#if SHOOTAH_LIMITSWITCH
 bool Shootah::getPullBackSwitch() {
 	return !pullBackSwitchLeft->Get(); //|| pullBackSwitchRight->Get();
 }
+#endif
 
 double Shootah::getTurns() {
 	return wenchPot->GetAngle();
@@ -74,7 +78,7 @@ Shootah::LatchPosition Shootah::getRawSLatch() {
 		} else {
 			sLatchPatternBuffer.lastFallingEdge = getCurrentMillis();
 		}
-		if (sLatchPatternBuffer.solenoidChangeTime + 500 > getCurrentMillis()) {
+		if (sLatchPatternBuffer.solenoidChangeTime + SHOOTAH_PATTERN_KILLZONE > getCurrentMillis()) {
 			sLatchPatternBuffer.lastFallingEdge = -1;
 			sLatchPatternBuffer.lastRisingEdge = -1;
 			printf("Cleared pattern buffer recentchange\n");
@@ -93,8 +97,8 @@ Shootah::LatchPosition Shootah::getRawSLatch() {
 
 bool Shootah::isLatchedByPattern() {
 	Shootah::LatchPosition pos = getRawSLatch();
-	return (sLatchPatternBuffer.lastFallingEdge > 0)
-			&& (sLatchPatternBuffer.lastRisingEdge > 0)
+	return (sLatchPatternBuffer.lastFallingEdge> 0)
+			&& (sLatchPatternBuffer.lastRisingEdge> 0)
 			&& (sLatchPatternBuffer.lastFallingEdge
 					< sLatchPatternBuffer.lastRisingEdge) && pos;
 }
@@ -104,8 +108,12 @@ Shootah::LatchPosition Shootah::getWLatch() {
 }
 
 bool Shootah::isReallyDrawnBack() {
+#if SHOOTAH_LIMITSWITCH
 	return (getPullBackSwitch() || (getTurns() <= SHOOTAH_WENCH_POT_BACK)
 			|| isLatchedByPattern());
+#else
+	return (getTurns() <= SHOOTAH_WENCH_POT_BACK) || isLatchedByPattern();
+#endif
 }
 
 bool Shootah::isAngle(float setpoint) {
