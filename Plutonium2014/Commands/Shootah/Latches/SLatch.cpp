@@ -8,11 +8,11 @@ SLatch::SLatch(Shootah::LatchPosition isLocked) :
 	Requires(shootah);
 	this->isLocked = isLocked;
 	time = 0;
-	bTime = getCurrentMillis();
 }
 
 void SLatch::Initialize() {
 	shootah->setSLatch(isLocked);
+	bTime = getCurrentMillis();
 }
 
 void SLatch::Execute() {
