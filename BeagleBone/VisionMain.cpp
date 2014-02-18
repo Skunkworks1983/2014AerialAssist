@@ -79,13 +79,14 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 		double arc = cv::arcLength(contours[i], true);
 		std::vector<cv::Point> newContour;
 		cv::approxPolyDP(contours[i], newContour, arc * 0.03, true);
+
 		double contourAreaRaw = cv::contourArea(contours[i]);
 		if (contourAreaRaw < 1000 || newContour.size() != 4
 				|| !cv::isContourConvex(newContour)) {
 			continue;
 		}
-
 		dirtyContours.push_back(contours[i]);
+
 		//cv::RotatedRect r = cv::minAreaRect(newContour);
 		double newContourArea = cv::contourArea(newContour);
 		double areaDiff = newContourArea - contourAreaRaw;
@@ -148,7 +149,7 @@ int main(int argc, char** argv) {
 	std::vector<MatchedShape> results;
 	size_t i;
 	cv::Mat temporaryMaterial;
-	ThreadedCapture threadedCapture(3);	//, atoi(argv[1]), atoi(argv[2]));
+	ThreadedCapture threadedCapture(1);	//, atoi(argv[1]), atoi(argv[2]));
 
 #if NETWORK
 	SocketServer *network = new SocketServer(NULL, NULL);
