@@ -18,11 +18,11 @@ void WLatch::Initialize() {
 void WLatch::Execute() {
 	time = getCurrentMillis() - bTime;
 	if (state == Shootah::kUnlatched && time
-			> SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK_DRIVE) {
+			> (SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_UNLOCK_DRIVE)) {
 		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FORCE_UNLATCH);
 	}
 	if (state == Shootah::kLatched && time
-			> SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_LOCK_DRIVE) {
+			> (SHOOTAH_WLATCH_WAIT - SHOOTAH_WLATCH_LOCK_DRIVE)) {
 		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FORCE_LATCH);
 	}
 }

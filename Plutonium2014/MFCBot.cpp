@@ -6,6 +6,7 @@
 #include "Robotmap.h"
 #include "Utils/Actuators/StallableMotor.h"
 #include "Subsystems/Pterodactyl.h"
+#include "Commands/Shootah/Latches/WLatch.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -31,6 +32,8 @@ void MFCBot::RobotInit() {
 	CommandBase::init();
 	lw = LiveWindow::GetInstance();
 	CommandBase::oi->registerButtonListeners();
+	SmartDashboard::PutData("WLATCH ON", new WLatch(Shootah::kLatched));
+	SmartDashboard::PutData("WLATCH OFF", new WLatch(Shootah::kUnlatched));
 }
 
 void MFCBot::AutonomousInit() {
