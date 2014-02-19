@@ -6,7 +6,7 @@
 #include "Robotmap.h"
 #include "Utils/Actuators/StallableMotor.h"
 #include "Subsystems/Pterodactyl.h"
-#include "Commands/Shootah/Latches/WLatch.h"
+#include "Commands/Shooter/Latches/WLatch.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -64,26 +64,26 @@ void MFCBot::TestPeriodic() {
 }
 
 void MFCBot::WatchDog() {
-	if (CommandBase::shootah!=NULL) {
-		if (CommandBase::shootah->getWenchMotorSpeed() < 0
-				&& CommandBase::shootah->getTurns()
-						> SHOOTAH_WENCH_POT_FULL_OUT) {
-			CommandBase::shootah->setWenchMotor(0.0);
+	if (CommandBase::shooter!=NULL) {
+		if (CommandBase::shooter->getWenchMotorSpeed() < 0
+				&& CommandBase::shooter->getTurns()
+						> SHOOTER_WENCH_POT_FULL_OUT) {
+			CommandBase::shooter->setWenchMotor(0.0);
 			printf("Watchdog: Shooter motor overeleased!\n");
 		}
-		if (CommandBase::shootah->getWenchMotorSpeed() > 0) {
-			if (CommandBase::shootah->getTurns() < 0) {
-				CommandBase::shootah->setWenchMotor(0.0);
+		if (CommandBase::shooter->getWenchMotorSpeed() > 0) {
+			if (CommandBase::shooter->getTurns() < 0) {
+				CommandBase::shooter->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: POT FILTER!\n");
 			}
-#if SHOOTAH_LIMITSWITCH
-			if (CommandBase::shootah->getPullBackSwitch()) {
-				CommandBase::shootah->setWenchMotor(0.0);
+#if SHOOTER_LIMITSWITCH
+			if (CommandBase::shooter->getPullBackSwitch()) {
+				CommandBase::shooter->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
 			}
 #endif
-			if (CommandBase::shootah->isLatchedByPattern()) {
-				CommandBase::shootah->setWenchMotor(0.0);
+			if (CommandBase::shooter->isLatchedByPattern()) {
+				CommandBase::shooter->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
 			}
 		}

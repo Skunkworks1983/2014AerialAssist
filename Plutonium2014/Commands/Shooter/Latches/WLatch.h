@@ -1,5 +1,5 @@
-#ifndef __S_LATCH_H
-#define __S_LATCH_H
+#ifndef __W_LATCH_H
+#define __W_LATCH_H
 
 #include "../../../CommandBase.h"
 
@@ -8,14 +8,16 @@
  *
  * @author David (for really tho)
  */
-class SLatch: public CommandBase {
+class Time;
+
+class WLatch: public CommandBase {
 private:
-	Shootah::LatchPosition isLocked;
+	Shooter::LatchPosition state;
 	double time;
 	double bTime;
 	
 public:
-	SLatch(Shootah::LatchPosition isLocked);
+	WLatch(Shooter::LatchPosition state);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

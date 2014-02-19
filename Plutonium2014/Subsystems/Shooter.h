@@ -1,5 +1,5 @@
-#ifndef __SHOOTAH_H
-#define __SHOOTAH_H
+#ifndef __SHOOTER_H
+#define __SHOOTER_H
 #include "Commands/Subsystem.h"
 
 /**
@@ -13,7 +13,7 @@ class AnalogChannel;
 class AnalogPot;
 class StallableMotor;
 
-class Shootah : public Subsystem {
+class Shooter : public Subsystem {
 public:
 	enum LatchPosition {
 		kLatched = true, kUnlatched = false
@@ -33,7 +33,7 @@ private:
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
 
-#if SHOOTAH_LIMITSWITCH
+#if SHOOTER_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
 #endif
@@ -42,7 +42,7 @@ private:
 
 	DigitalEdgeWatcher sLatchPatternBuffer;
 public:
-	Shootah();
+	Shooter();
 	void InitDefaultCommand();
 	void setWenchMotor(float speed);
 
@@ -55,7 +55,7 @@ public:
 	double getTurns();
 	bool isReallyDrawnBack();
 	bool isAngle(float setpoint);
-#if SHOOTAH_LIMITSWITCH
+#if SHOOTER_LIMITSWITCH
 	bool getPullBackSwitch();
 #endif
 

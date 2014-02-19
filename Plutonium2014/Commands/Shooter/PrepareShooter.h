@@ -1,5 +1,5 @@
-#ifndef __FIRE_ZE_MISSLE_H
-#define __FIRE_ZE_MISSLE_H
+#ifndef __PREPARE_SHOOTER_H
+#define __PREPARE_SHOOTER_H
 
 #include "../../CommandBase.h"
 
@@ -7,12 +7,12 @@
  *
  *
  * @author These are all david so I guess this is as well
- * DAVEEDq	
+ * DAVEED
  */
 
-class FireZeMissle: public CommandGroup {
+class PrepareShooter: public CommandGroup {
 public:
-	FireZeMissle();
+	PrepareShooter(float setTurns);
 	virtual void Initialize();
 	virtual void End();
 };

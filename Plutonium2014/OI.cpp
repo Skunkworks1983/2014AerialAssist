@@ -12,15 +12,13 @@
 #include "Commands/Collector/RollerRoll.h"
 #include "Commands/Collector/JawMove.h"
 #include "Commands/Pterodactyl/AngelChange.h"
-#include "Commands/Shootah/DrawZeDevice.h"
-#include "Commands/Shootah/PrepareZeDevice.h"
-#include "Commands/Shootah/FireZeMissle.h"
+#include "Commands/Shooter/DrawShooter.h"
+#include "Commands/Shooter/PrepareShooter.h"
+#include "Commands/Shooter/FireShooter.h"
 #include "Commands/Collector/Collect.h"
-#include "Commands/Shootah/DrawShootahBack.h"
-#include "Commands/Shootah/ReleaseTension.h"
 #include "Commands/Collector/Pass.h"
 #include "Commands/Collector/Catch.h"
-#include "Commands/Shootah/ReadyShot.h"
+#include "Commands/Shooter/ReadyShot.h"
 
 
 #define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
@@ -73,7 +71,7 @@ void OI::registerButtonListeners() {
 	catch2->WhenPressed(new Catch(30));
 
 	// Shooter operations
-	fire->WhenPressed(new FireZeMissle());
+	fire->WhenPressed(new FireShooter());
 
 	// Strap operations
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
