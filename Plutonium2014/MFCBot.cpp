@@ -55,7 +55,7 @@ void MFCBot::TeleopPeriodic() {
 	WatchDog();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
-		dont=0;
+		dont=0; //This kills the bug
 	}
 }
 
