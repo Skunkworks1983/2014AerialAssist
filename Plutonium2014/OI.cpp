@@ -109,8 +109,8 @@ void OI::registerButtonListeners() {
 
 	fire->WhenPressed(new FireZeMissle());
 
-	jawToggle->WhenPressed(new JawMove(true));
-	jawToggle->WhenReleased(new JawMove(false));
+	jawToggle->WhenPressed(new JawMove(Collector::kOpen));
+	jawToggle->WhenReleased(new JawMove(Collector::kClosed));
 	
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2));

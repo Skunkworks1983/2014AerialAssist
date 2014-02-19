@@ -27,10 +27,12 @@ bool RollerRoll::IsFinished() {
 
 void RollerRoll::End() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(!collector->isBallDetected());
+	collector->setJawState(collector->isBallDetected() ? Collector::kClosed
+			: Collector::kOpen);
 }
 
 void RollerRoll::Interrupted() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(!collector->isBallDetected());
+	collector->setJawState(collector->isBallDetected() ? Collector::kClosed
+			: Collector::kOpen);
 }

@@ -11,7 +11,7 @@ DrawZeDevice::DrawZeDevice() :
 	AddSequential(new SLatch(Shootah::kLatched));
 	AddSequential(new WLatch(Shootah::kUnlatched));
 	AddSequential(new DrawShootahBack());
-	AddSequential(new WLatch(Shootah::kLatched));
+	//AddSequential(new WLatch(Shootah::kLatched));
 }
 
 void DrawZeDevice::Initialize() {

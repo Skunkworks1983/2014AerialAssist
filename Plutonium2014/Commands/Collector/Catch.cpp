@@ -8,7 +8,7 @@
 
 Catch::Catch(float angle): 
 	CommandGroup("Catch") {
-	AddParallel(new JawMove(false));
+	AddParallel(new JawMove(Collector::kOpen));
 	AddParallel(new AngelChange(angle));
 }
 

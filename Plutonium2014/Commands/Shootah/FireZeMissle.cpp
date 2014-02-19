@@ -4,10 +4,12 @@
 #include "../Collector/JawMove.h"
 
 #include "Latches/SLatch.h"
+#include "Latches/WLatch.h"
 
 FireZeMissle::FireZeMissle() :
 	CommandGroup("FireZeMissle") {
-	AddSequential(new JawMove(true));
+	AddSequential(new JawMove(Collector::kOpen));
+	AddSequential(new WLatch(Shootah::kLatched));
 	AddSequential(new SLatch(Shootah::kUnlatched));
 }
 

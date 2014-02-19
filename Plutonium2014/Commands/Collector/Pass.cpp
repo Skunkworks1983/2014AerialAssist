@@ -10,7 +10,7 @@
 Pass::Pass(): 
 	CommandGroup("Pass") {
 //	AddParallel(new AngelChange(10));
-	AddParallel(new JawMove(false));
+	AddParallel(new JawMove(Collector::kOpen));
 	AddSequential(new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 }
 

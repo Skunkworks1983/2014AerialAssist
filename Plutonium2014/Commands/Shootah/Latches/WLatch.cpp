@@ -11,8 +11,11 @@ WLatch::WLatch(Shootah::LatchPosition state) :
 }
 
 void WLatch::Initialize() {
-	shootah->setWLatch(state);
 	bTime = getCurrentMillis();
+	if (shootah->getWLatch() == state) {
+		bTime += 1000000000;
+	}
+	shootah->setWLatch(state);
 }
 
 void WLatch::Execute() {

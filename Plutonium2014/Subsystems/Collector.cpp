@@ -42,12 +42,12 @@ void Collector::InitDefaultCommand() {
 	// Nothing here...
 }
 
-void Collector::setJawState(bool closed) {
-	jawController->Set(closed);
+void Collector::setJawState(Collector::JawState state) {
+	jawController->Set(state);
 }
 
-bool Collector::getJawState() {
-	return jawState->Get();
+Collector::JawState Collector::getJawState() {
+	return (Collector::JawState) jawState->Get();
 }
 
 void Collector::setRollerSpeed(float speed) {
