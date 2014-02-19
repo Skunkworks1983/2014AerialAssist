@@ -1,39 +1,40 @@
 #include "ReleaseTension.h"
-#include "../../Subsystems/Shootah.h"
-#include "../../Robotmap.h"
+#include "../../../Subsystems/Shooter.h"
+#include "../../../Robotmap.h"
 #include <math.h>
 
 ReleaseTension::ReleaseTension(float setTurns) :
 	CommandBase(CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
-	Requires(shootah);
+	Requires(shooter);
 	this->setTurns = setTurns;
+	this->isDone = false;
 }
 
 void ReleaseTension::Initialize() {
 	isDone = true;
-	if (!shootah->isReallyDrawnBack()) {
+	if (!shooter->isReallyDrawnBack()) {
 		printf("Run release without draw.\n");
 		isDone = false;
 	}
 }
 
 void ReleaseTension::Execute() {
-	if (shootah->getTurns() >= setTurns) {
-		shootah->setWenchMotor(SHOOTAH_WENCH_MOTOR_FULL_RELEASE);
+	if (shooter->getTurns() >= setTurns) {
+		shooter->setWenchMotor(SHOOTER_WENCH_MOTOR_FULL_RELEASE);
 	} else {
-		shootah->setWenchMotor(-SHOOTAH_WENCH_MOTOR_FULL_RELEASE);
+		shooter->setWenchMotor(-SHOOTER_WENCH_MOTOR_FULL_RELEASE);
 	}
 }
 
 bool ReleaseTension::IsFinished() {
-	return (fabs(shootah->getTurns() - setTurns)
-			< SHOOTAH_WENCH_PAYOUT_TOLERANCE) || !isDone;
+	return (fabs(shooter->getTurns() - setTurns)
+			< SHOOTER_WENCH_PAYOUT_TOLERANCE) || !isDone;
 }
 
 void ReleaseTension::End() {
-	shootah->setWenchMotor(0);
+	shooter->setWenchMotor(0);
 }
 
 void ReleaseTension::Interrupted() {
-	shootah->setWenchMotor(0);
+	shooter->setWenchMotor(0);
 }

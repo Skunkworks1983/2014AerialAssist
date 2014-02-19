@@ -5,7 +5,7 @@
 #include "Subsystems/Collector.h"
 #include "Subsystems/DriveBase.h"
 #include "Subsystems/Pterodactyl.h"
-#include "Subsystems/Shootah.h"
+#include "Subsystems/Shooter.h"
 #include "Subsystems/Pneumatics.h"
 #include "OI.h"
 
@@ -24,7 +24,7 @@ public:
 	static Collector *collector;
 	static DriveBase *driveBase;
 	static Pterodactyl *pterodactyl;
-	static Shootah *shootah;
+	static Shooter *shooter;
 	static Pneumatics *pneumatics;
 	static OI *oi;
 	

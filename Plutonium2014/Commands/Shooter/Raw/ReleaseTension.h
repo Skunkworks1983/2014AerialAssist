@@ -1,7 +1,7 @@
 #ifndef __RELEASE_TENSION_H
 #define __RELEASE_TENSION_H
 
-#include "../../CommandBase.h"
+#include "../../../CommandBase.h"
 
 
 /**

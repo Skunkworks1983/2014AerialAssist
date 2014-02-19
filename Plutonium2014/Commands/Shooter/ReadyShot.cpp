@@ -1,13 +1,13 @@
 #include "ReadyShot.h"
 #include "../../Robotmap.h"
 
-#include "DrawZeDevice.h"
-#include "PrepareZeDevice.h"
+#include "DrawShooter.h"
+#include "PrepareShooter.h"
 
 ReadyShot::ReadyShot(float setTurns) :
 	CommandGroup("ReadyShot") {
-	AddSequential(new DrawZeDevice());
-	AddSequential(new PrepareZeDevice(setTurns));
+	AddSequential(new DrawShooter());
+	AddSequential(new PrepareShooter(setTurns));
 }
 
 void ReadyShot::Initialize() {

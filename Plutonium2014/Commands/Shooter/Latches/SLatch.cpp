@@ -2,16 +2,16 @@
 #include "../../../Utils/Time.h"
 #include "../../../Robotmap.h"
 
-SLatch::SLatch(Shootah::LatchPosition isLocked) :
+SLatch::SLatch(Shooter::LatchPosition isLocked) :
 	CommandBase(CommandBase::createNameFromString("SLatch", isLocked ? "Locked"
 			: "Unlocked")) {
-	Requires(shootah);
+	Requires(shooter);
 	this->isLocked = isLocked;
 	time = 0;
 }
 
 void SLatch::Initialize() {
-	shootah->setSLatch(isLocked);
+	shooter->setSLatch(isLocked);
 	bTime = getCurrentMillis();
 }
 
@@ -20,9 +20,9 @@ void SLatch::Execute() {
 }
 
 bool SLatch::IsFinished() {
-	if (shootah->getRawSLatch() == isLocked) {
+	if (shooter->getRawSLatch() == isLocked) {
 		return true;
-	} else if (time >= SHOOTAH_SLATCH_WAIT) {
+	} else if (time >= SHOOTER_SLATCH_WAIT) {
 		// Shutting down the shooter
 		return true;
 	}

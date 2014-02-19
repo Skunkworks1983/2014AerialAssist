@@ -1,16 +1,16 @@
-#ifndef __DRAW_SHOOTAH_BACK_H
-#define __DRAW_SHOOTAH_BACK_H
+#ifndef __DRAW_SHOOTER_BACK_H
+#define __DRAW_SHOOTER_BACK_H
 
-#include "../../CommandBase.h"
+#include "../../../CommandBase.h"
 
 /**
  *
  *
  * @author David
  */
-class DrawShootahBack: public CommandBase {
+class FullTension: public CommandBase {
 public:
-	DrawShootahBack();
+	FullTension();
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
