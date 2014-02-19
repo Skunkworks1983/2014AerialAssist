@@ -17,7 +17,7 @@ class SolenoidPair;
 class Collector : public Subsystem, public PIDOutput { // TODO: Make the Jaw state enum make sense (but no)
 public:
 	enum JawState {
-		kOpen=false, kClosed=true
+		kOpen=true, kClosed=false
 	};
 private:
 	SolenoidPair *jawController;

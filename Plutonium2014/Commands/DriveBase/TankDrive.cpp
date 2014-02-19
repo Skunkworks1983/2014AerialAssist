@@ -5,7 +5,8 @@
 #include "../../CommandBase.h"
 #include "../../Robotmap.h"
 
-TankDrive::TankDrive() {
+TankDrive::TankDrive() :
+	CommandBase("TankDrive") {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(chassis);
 	Requires(driveBase);

@@ -1,6 +1,7 @@
 #include "UpdateCompressor.h"
 
-UpdateCompressor::UpdateCompressor() {
+UpdateCompressor::UpdateCompressor() :
+	CommandBase("UpdateCompressor") {
 	Requires(pneumatics);
 }
 
@@ -9,7 +10,7 @@ void UpdateCompressor::Initialize() {
 }
 
 void UpdateCompressor::Execute() {
-	if(ticksSinceUpdate > 10){
+	if (ticksSinceUpdate > 10) {
 		pneumatics->setState(pneumatics->isBelowPressure());
 		ticksSinceUpdate = 0;
 	}

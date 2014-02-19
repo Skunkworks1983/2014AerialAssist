@@ -13,7 +13,7 @@ WLatch::WLatch(Shooter::LatchPosition state) :
 void WLatch::Initialize() {
 	bTime = getCurrentMillis();
 	if (shooter->getWLatch() == state) {
-		bTime += 1000000000;
+		bTime = 0;
 	}
 	shooter->setWLatch(state);
 }

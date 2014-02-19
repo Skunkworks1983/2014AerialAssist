@@ -8,6 +8,7 @@ ReleaseTension::ReleaseTension(float setTurns) :
 	Requires(shooter);
 	this->setTurns = setTurns;
 	this->isDone = false;
+	printf("Running relase\n");
 }
 
 void ReleaseTension::Initialize() {
@@ -19,7 +20,7 @@ void ReleaseTension::Initialize() {
 }
 
 void ReleaseTension::Execute() {
-	if (shooter->getTurns() >= setTurns) {
+	if (shooter->getTurns() <= setTurns) {
 		shooter->setWenchMotor(SHOOTER_WENCH_MOTOR_FULL_RELEASE);
 	} else {
 		shooter->setWenchMotor(-SHOOTER_WENCH_MOTOR_FULL_RELEASE);
