@@ -32,7 +32,6 @@ private:
 
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
-	SolenoidPair *brake;
 
 #if SHOOTAH_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;

@@ -6,6 +6,7 @@ AngelChange::AngelChange(float target) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
 	Requires(pterodactyl);
 	this->target = target;
+	this->stability = 0;
 	SetInterruptible(true);
 }
 

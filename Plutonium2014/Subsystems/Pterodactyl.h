@@ -19,15 +19,9 @@ public:
 
 private:
 	DualLiveSpeed *angleMotors;
-
-	Encoder *encoderLeft;
-	Encoder *encoderRight;
-
 	PIDController *pid;
 	AnalogPot *pot;
-
 	Relay *brake;
-
 public:
 	Pterodactyl();
 	void InitDefaultCommand();
