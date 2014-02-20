@@ -12,6 +12,7 @@ class DigitalInput;
 class AnalogChannel;
 class AnalogPot;
 class StallableMotor;
+class Command;
 
 class Shooter : public Subsystem {
 public:
@@ -32,7 +33,7 @@ private:
 
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
-
+	
 #if SHOOTER_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
@@ -44,6 +45,9 @@ private:
 public:
 	Shooter();
 	void InitDefaultCommand();
+
+	static Command *createArmShooter();
+	
 	void setWenchMotor(float speed);
 
 	void setWLatch(LatchPosition state);

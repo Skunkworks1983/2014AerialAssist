@@ -7,6 +7,8 @@
 #include "../Utils/Time.h"
 #include "WPILib.h"
 
+#include "../Commands/Shooter/DrawShooter.h"
+
 Shooter::Shooter() :
 	Subsystem("Shooter") {
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
@@ -38,6 +40,10 @@ Shooter::Shooter() :
 
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
+}
+
+Command *Shooter::createArmShooter() {
+	return new DrawShooter();
 }
 
 void Shooter::InitDefaultCommand() {
