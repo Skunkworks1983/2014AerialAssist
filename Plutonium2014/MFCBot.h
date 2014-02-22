@@ -24,6 +24,7 @@ public:
 	void WatchDog();
 private:
 	LiveWindow *lw;
+	SendableChooser *chooser;
 };
 
 #endif

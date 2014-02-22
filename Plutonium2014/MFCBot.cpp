@@ -7,6 +7,7 @@
 #include "Utils/Actuators/StallableMotor.h"
 #include "Subsystems/Pterodactyl.h"
 #include "Commands/Shooter/Latches/WLatch.h"
+#include "Utils/Scripting.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -25,6 +26,7 @@ void MFCBot::RobotInit() {
 
 void MFCBot::AutonomousInit() {
 	Scheduler::GetInstance()->RemoveAll();
+	((ScriptRunner*) chooser->GetSelected())->startCommand();
 }
 
 void MFCBot::AutonomousPeriodic() {
