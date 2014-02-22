@@ -95,6 +95,8 @@
 #define AUTO_TURN_SPEED_RANGE (AUTO_TURN_SPEED_MAX - AUTO_TURN_SPEED_MIN)
 #define AUTO_TURN_SLOW_DOWN (12)
 #define AUTO_TURN_GYRO_THRESHOLD (.25)
+#define AUTO_SHOT_ANGLE (80)
+#define AUTO_SHOT_SCALAR (5)
 
 // =================
 // == Pterodactyl ==
