@@ -58,8 +58,8 @@ void OI::registerButtonListeners() {
 	angleFloor->WhenPressed(new AngelChange(0));
 	angleLow->WhenPressed(new AngelChange(60));
 	angleMed->WhenPressed(new AngelChange(80));
-	angleHigh->WhenPressed(new AngelChange(90));
-	angleCarry->WhenPressed(new AngelChange(90));
+	angleHigh->WhenPressed(new AngelChange(100));
+	angleCarry->WhenPressed(new AngelChange(95));
 	
 	// Collector rollers
 	revCollector->WhenPressed(new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));

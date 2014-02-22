@@ -13,7 +13,8 @@ FireShooter::FireShooter() :
 	AddSequential(new WLatch(Shooter::kLatched));
 	AddSequential(new SLatch(Shooter::kUnlatched));
 	AddSequential(new WaitCommand(1));
-	AddSequential(new CommandStarter(Shooter::createArmShooter));
+	AddSequential(new SLatch(Shooter::kLatched));
+//	AddSequential(new CommandStarter(Shooter::createArmShooter));
 }
 
 void FireShooter::Initialize() {

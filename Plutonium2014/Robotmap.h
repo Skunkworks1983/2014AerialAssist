@@ -51,7 +51,7 @@
 #define SHOOTER_WENCH_MOTOR_FULL_RELEASE (-1.00)
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE (0.1)
 
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.25 /*0, 1.0, -2.365*/
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.272 /*0, 1.0, -2.365*/
 
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms after which any changes are discarded*/
 

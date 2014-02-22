@@ -4,6 +4,7 @@ JawMove::JawMove(Collector::JawState state) :
 	CommandBase(CommandBase::createNameFromString("JawMove", state
 			==Collector::kClosed ? "Closed" : "Open")) {
 	Requires(collector);
+	SetTimeout(0.125);
 	this->state = state;
 }
 
@@ -16,7 +17,7 @@ void JawMove::Execute() {
 }
 
 bool JawMove::IsFinished() {
-	return state==collector->getJawState();
+	return IsTimedOut();//state==collector->getJawState();
 }
 
 void JawMove::End() {
