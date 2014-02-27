@@ -8,7 +8,7 @@
 class MFCBot: public IterativeRobot {
 private:
 	int dont;
-	
+	void createAutonomi();
 public:
 	MFCBot();
 	

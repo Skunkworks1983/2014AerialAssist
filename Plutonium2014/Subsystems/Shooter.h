@@ -1,6 +1,7 @@
 #ifndef __SHOOTER_H
 #define __SHOOTER_H
 #include "Commands/Subsystem.h"
+#include "../Robotmap.h"
 
 /**
  *
@@ -37,6 +38,7 @@ private:
 #if SHOOTER_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
+	DigitalEdgeWatcher pullBackSwitchPatternBuffer;
 #endif
 	
 	DigitalInput *sLatchSensor;
@@ -49,6 +51,7 @@ public:
 	static Command *createArmShooter();
 	
 	void setWenchMotor(float speed);
+	float getWenchMotorSpeed();
 
 	void setWLatch(LatchPosition state);
 	LatchPosition getWLatch();
@@ -57,13 +60,14 @@ public:
 	bool isLatchedByPattern();
 
 	double getTurns();
+	double getTurnRate();
+	
 	bool isReallyDrawnBack();
 	bool isAngle(float setpoint);
 #if SHOOTER_LIMITSWITCH
-	bool getPullBackSwitch();
+	bool isLatchedByProximity();
+	bool getRawProximity();
 #endif
-
-	float getWenchMotorSpeed();
 };
 
 #endif

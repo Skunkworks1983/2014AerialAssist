@@ -25,4 +25,5 @@ Autonomous *Autonomous::createAutoBall(int ballCount, float distance){
 	cmd->AddParallel(new AutoDriveDistance(distance,10,0.5));
 	cmd->AddParallel(new DrawShooter());
 	cmd->AddSequential(new AngelChange(0));
+	return cmd;
 }

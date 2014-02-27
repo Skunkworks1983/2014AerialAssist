@@ -8,7 +8,7 @@ Collector::Collector() :
 	Subsystem("Collector") {
 
 	rollerClawEncoder = new Encoder( COLLECTOR_CLAW_ENCODER_CHANNEL_A ,
-			COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
+	COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
 	rollerClawEncoder->SetPIDSourceParameter(Encoder::kRate);
 	rollerClawEncoder->SetDistancePerPulse(1.0
 			/COLLECTOR_ROLLER_TICKS_PER_ROTATION*60.0/COLLECTOR_ROLLER_MAX_RPM);
@@ -16,9 +16,9 @@ Collector::Collector() :
 	LiveWindow::GetInstance()->AddSensor("Collector", "Roller Encoder", rollerClawEncoder);
 
 	rollerMotorLeft
-			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT),0))->setEncoderSource(rollerClawEncoder);
+			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT),0.0))->setEncoderSource(rollerClawEncoder);
 	rollerMotorRight
-			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT),0))->setEncoderSource(rollerClawEncoder);
+			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT),0.0))->setEncoderSource(rollerClawEncoder);
 
 	rollerPIDController= new PIDController(1, .1, .01, rollerClawEncoder,
 			this, 0.05f);
@@ -47,7 +47,7 @@ void Collector::setJawState(Collector::JawState state) {
 }
 
 Collector::JawState Collector::getJawState() {
-	return (Collector::JawState) jawState->Get();
+	return (Collector::JawState) !jawState->Get();
 }
 
 void Collector::setRollerSpeed(float speed) {

@@ -7,7 +7,8 @@
 #include "Utils/Actuators/StallableMotor.h"
 #include "Subsystems/Pterodactyl.h"
 #include "Commands/Shooter/Latches/WLatch.h"
-#include "Utils/Scripting.h"
+#include "Commands/Autonomous/Autonomous.h"
+#include "Subsystems/Pterodactyl.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -18,20 +19,40 @@ MFCBot::~MFCBot() {
 
 }
 
+void MFCBot::createAutonomi() {
+	chooser = new SendableChooser();
+	chooser->AddDefault("One Ball", Autonomous::createAutoBall(1, 0));
+	chooser->AddObject("One Ball, Drive Back",
+			Autonomous::createAutoBall(1, -10));
+	chooser->AddObject("Two Ball", Autonomous::createAutoBall(2, 0));
+	chooser->AddObject("Two Ball, Drive Back",
+			Autonomous::createAutoBall(2, -10));
+	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
+	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
+	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
+	chooser->AddObject("Blank", new Autonomous());
+	SmartDashboard::PutData("Autonomous Modes", chooser);
+}
+
 void MFCBot::RobotInit() {
 	CommandBase::init();
 	lw = LiveWindow::GetInstance();
 	CommandBase::oi->registerButtonListeners();
+	createAutonomi();
 }
 
 void MFCBot::AutonomousInit() {
 	Scheduler::GetInstance()->RemoveAll();
-	((ScriptRunner*) chooser->GetSelected())->startCommand();
+	((Command*) chooser->GetSelected())->Start();
 }
 
 void MFCBot::AutonomousPeriodic() {
 	Scheduler::GetInstance()->Run();
 	WatchDog();
+	if (dont++ > 10) {
+		printf	("Encoder Left: %f, Encoder Right: %f \n", CommandBase::driveBase->getLeftEncoder(), CommandBase::driveBase->getRightEncoder());
+		dont = 0;
+	}
 }
 
 void MFCBot::TeleopInit() {
@@ -44,7 +65,9 @@ void MFCBot::TeleopPeriodic() {
 	WatchDog();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
-		dont=0; //This kills the bug
+		SmartDashboard::PutNumber("Winch rate", CommandBase::shooter->getTurnRate());
+		SmartDashboard::PutNumber("Winch position", CommandBase::shooter->getTurns());
+		dont = 0; //This kills the bug
 	}
 }
 
@@ -60,13 +83,13 @@ void MFCBot::TestPeriodic() {
 	lw->Run();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
-		dont=0;
+		dont = 0;
 	}
 	WatchDog();
 }
 
 void MFCBot::WatchDog() {
-	if (CommandBase::shooter!=NULL) {
+	if (CommandBase::shooter != NULL) {
 		if (CommandBase::shooter->getWenchMotorSpeed() < 0
 				&& CommandBase::shooter->getTurns()
 						> SHOOTER_WENCH_POT_FULL_OUT) {
@@ -79,19 +102,19 @@ void MFCBot::WatchDog() {
 				printf("Watchdog: Shooter motor overdrawn: POT FILTER!\n");
 			}
 #if SHOOTER_LIMITSWITCH
-			if (CommandBase::shooter->getPullBackSwitch()) {
+			if (CommandBase::shooter->isLatchedByProximity()) {
 				CommandBase::shooter->setWenchMotor(0.0);
 				printf("Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
 			}
 #endif
 			if (CommandBase::shooter->isLatchedByPattern()) {
 				CommandBase::shooter->setWenchMotor(0.0);
-				printf("Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
+				printf(
+						"Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
 			}
 		}
 	}
 }
 
-START_ROBOT_CLASS(MFCBot)
-;
+START_ROBOT_CLASS( MFCBot);
 

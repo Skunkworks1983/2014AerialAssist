@@ -16,8 +16,10 @@ Shooter::Shooter() :
 	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH), -1.0);
 	wenchMotor->setPotSource(wenchPot);
 	//wenchMotor = new Victor(SHOOTER_MOTOR_WENCH);
-	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor", new DualLiveSpeed(wenchMotor));
-	LiveWindow::GetInstance()->AddSensor("Shooter", "Wench Potentiometer", wenchPot);
+	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor",
+			new DualLiveSpeed(wenchMotor));
+	LiveWindow::GetInstance()->AddSensor("Shooter", "Wench Potentiometer",
+			wenchPot);
 
 	wLatch = new SolenoidPair(SHOOTER_PNEUMATIC_W_LATCH);
 	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Latch", wLatch);
@@ -27,16 +29,14 @@ Shooter::Shooter() :
 #if SHOOTER_LIMITSWITCH
 	pullBackSwitchLeft = new DigitalInput(
 			SHOOTER_LIMITSWITCH_LEFT_PULLBACK_CHECK);
-	LiveWindow::GetInstance()->AddSensor("Shooter", "Left Pullback Switch", pullBackSwitchLeft);
 
 	pullBackSwitchRight = new DigitalInput(
 			SHOOTER_LIMITSWITCH_RIGHT_PULLBACK_CHECK);
-	LiveWindow::GetInstance()->AddSensor("Shooter", "Right Pullback Switch",
-			pullBackSwitchRight);
 #endif
 
 	sLatchSensor = new DigitalInput(SHOOTER_S_LATCH_SENSOR);
-	LiveWindow::GetInstance()->AddSensor("Shooter", "Shooter Latch Sensor", sLatchSensor);
+	LiveWindow::GetInstance()->AddSensor("Shooter", "Shooter Latch Sensor",
+			sLatchSensor);
 
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
@@ -51,8 +51,21 @@ void Shooter::InitDefaultCommand() {
 }
 
 #if SHOOTER_LIMITSWITCH
-bool Shooter::getPullBackSwitch() {
-	return !pullBackSwitchLeft->Get(); //|| pullBackSwitchRight->Get();
+bool Shooter::isLatchedByProximity() {
+	bool state = getRawProximity();
+	return state && pullBackSwitchPatternBuffer.lastRisingEdge + SHOOTER_LIMITSWITCH_DELAY < getCurrentMillis();
+}
+bool Shooter::getRawProximity() {
+	bool state = !pullBackSwitchLeft->Get() || !pullBackSwitchRight->Get();
+	if (pullBackSwitchPatternBuffer.lastState != state) {
+		pullBackSwitchPatternBuffer.lastState = state;
+		if (state) {
+			pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
+		} else {
+			pullBackSwitchPatternBuffer.lastFallingEdge = getCurrentMillis();
+		}
+	}
+	return state;
 }
 #endif
 
@@ -84,7 +97,8 @@ Shooter::LatchPosition Shooter::getRawSLatch() {
 		} else {
 			sLatchPatternBuffer.lastFallingEdge = getCurrentMillis();
 		}
-		if (sLatchPatternBuffer.solenoidChangeTime + SHOOTER_PATTERN_KILLZONE > getCurrentMillis()) {
+		if (sLatchPatternBuffer.solenoidChangeTime + SHOOTER_PATTERN_KILLZONE
+				> getCurrentMillis()) {
 			sLatchPatternBuffer.lastFallingEdge = -1;
 			sLatchPatternBuffer.lastRisingEdge = -1;
 			printf("Cleared pattern buffer recentchange\n");
@@ -103,8 +117,8 @@ Shooter::LatchPosition Shooter::getRawSLatch() {
 
 bool Shooter::isLatchedByPattern() {
 	Shooter::LatchPosition pos = getRawSLatch();
-	return (sLatchPatternBuffer.lastFallingEdge> 0)
-			&& (sLatchPatternBuffer.lastRisingEdge> 0)
+	return (sLatchPatternBuffer.lastFallingEdge > 0)
+			&& (sLatchPatternBuffer.lastRisingEdge > 0)
 			&& (sLatchPatternBuffer.lastFallingEdge
 					< sLatchPatternBuffer.lastRisingEdge) && pos;
 }
@@ -115,7 +129,7 @@ Shooter::LatchPosition Shooter::getWLatch() {
 
 bool Shooter::isReallyDrawnBack() {
 #if SHOOTER_LIMITSWITCH
-	return (getPullBackSwitch() || (getTurns() <= SHOOTER_WENCH_POT_BACK)
+	return (isLatchedByProximity() || (getTurns() <= SHOOTER_WENCH_POT_BACK)
 			|| isLatchedByPattern());
 #else
 	return (getTurns() <= SHOOTER_WENCH_POT_BACK) || isLatchedByPattern();
@@ -128,4 +142,8 @@ bool Shooter::isAngle(float setpoint) {
 
 float Shooter::getWenchMotorSpeed() {
 	return wenchMotor->Get();
+}
+
+double Shooter::getTurnRate() {
+	return wenchPot->GetRate();
 }
