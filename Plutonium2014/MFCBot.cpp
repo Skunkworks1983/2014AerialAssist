@@ -67,7 +67,8 @@ void MFCBot::TeleopPeriodic() {
 	if (dont++ > 10) {
 		SmartDashboard::PutNumber("Winch rate", CommandBase::shooter->getTurnRate());
 		SmartDashboard::PutNumber("Winch position", CommandBase::shooter->getTurns());
-		dont = 0; //This kills the bug
+		CommandBase::collector->getRollerSpeed();
+		dont = 0; 
 	}
 }
 
@@ -83,7 +84,7 @@ void MFCBot::TestPeriodic() {
 	lw->Run();
 	StallableMotor::updateControllers();
 	if (dont++ > 10) {
-		dont = 0;
+		dont = 0; //This kills the bug
 	}
 	WatchDog();
 }

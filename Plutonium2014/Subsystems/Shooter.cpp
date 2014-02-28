@@ -13,9 +13,8 @@ Shooter::Shooter() :
 	Subsystem("Shooter") {
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
 	wenchPot->setVoltageToAngle(SHOOTER_POT_TO_DRAW_COEFF);
-	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH), -1.0);
+	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH), -1);
 	wenchMotor->setPotSource(wenchPot);
-	//wenchMotor = new Victor(SHOOTER_MOTOR_WENCH);
 	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor",
 			new DualLiveSpeed(wenchMotor));
 	LiveWindow::GetInstance()->AddSensor("Shooter", "Wench Potentiometer",
