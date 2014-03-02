@@ -39,6 +39,9 @@ public:
 	double getRollerSpeed();
 	double getRollerDistance();
 
+	bool isPIDEnabled();
+	bool isRollerStalled();
+	
 	bool isBallDetected();
 };
 

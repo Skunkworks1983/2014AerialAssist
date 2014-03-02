@@ -22,7 +22,7 @@ void RollerRoll::Execute() {
 bool RollerRoll::IsFinished() {
 	return (collector->isBallDetected() && speed >= 0)
 			|| ((!collector->isBallDetected() && speed <= 0)
-					&& (getCurrentMillis()- timeWait >= 1000));
+					&& (getCurrentMillis()- timeWait >= 2000));
 }
 
 void RollerRoll::End() {

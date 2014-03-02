@@ -62,6 +62,7 @@ public:
 	void setSLatch(LatchPosition state);
 	LatchPosition getRawSLatch();
 	bool isLatchedByPattern();
+	bool isShooterMotorStalled();
 
 	double getTurns();
 	double getTurnRate();

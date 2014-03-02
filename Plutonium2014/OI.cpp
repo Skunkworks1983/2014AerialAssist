@@ -94,5 +94,5 @@ Joystick *OI::getJoystickRight() {
 }
 
 bool OI::isShooterArmingPrevented() {
-	return !manAngleOvr->Get();
+	return !preventShooterArming->Get();
 }
