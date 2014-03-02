@@ -2,20 +2,21 @@
 #include "../../../Subsystems/Shooter.h"
 #include "../../../Robotmap.h"
 #include <math.h>
+int ReleaseTension::runCount = 0;
 
 ReleaseTension::ReleaseTension(float setTurns) :
 	CommandBase(CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
 	Requires(shooter);
 	this->setTurns = setTurns;
 	this->isDone = false;
-	printf("Running relase\n");
 }
 
 void ReleaseTension::Initialize() {
+	CommandBase::shooter->lastReleasePosition = setTurns;
 	isDone = true;
 	if (!shooter->isReallyDrawnBack()) {
-		printf("Run release without draw.\n");
-		isDone = false;
+		printf("Warning: Run release without draw.\n");
+		//isDone = false;
 	}
 }
 
@@ -25,6 +26,8 @@ void ReleaseTension::Execute() {
 	} else {
 		shooter->setWenchMotor(-SHOOTER_WENCH_MOTOR_FULL_RELEASE);
 	}
+	SmartDashboard::PutNumber("Current Winch", shooter->getTurns());
+	SmartDashboard::PutNumber("Current Winch Target", setTurns);
 }
 
 bool ReleaseTension::IsFinished() {

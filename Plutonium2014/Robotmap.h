@@ -1,6 +1,15 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
+// ===============
+// = Preferences =
+// ===============
+#define GET_FLOAT(x) (Preferences::GetInstance()->GetFloat(#x, x))
+#define GET_DOUBLE(x) (Preferences::GetInstance()->GetDouble(#x, x))
+#define GET_STRING(x) (Preferences::GetInstance()->GetString(#x, x))
+#define GET_BOOL(x) (Preferences::GetInstance()->GetBoolean(#x, x))
+#define GET_INT(x) (Preferences::GetInstance()->GetInt(#x, x))
+
 // ================
 // ==  Sidecars  ==
 // ================
@@ -34,27 +43,30 @@
 #define SHOOTER_PNEUMATIC_W_LATCH 8,7 /*R12 TBD*/
 #define SHOOTER_PNEUMATIC_S_LATCH 5,6 /*L12 TBD*/
 #define SHOOTER_S_LATCH_SENSOR TOP_SIDECAR,2 /*T2*/
+#define SHOOTER_W_LATCH_SENSOR TOP_SIDECAR,1 /*T1*/
+#define SHOOTER_SLATCH_PATTERN_DELAY (100) /* Milliseconds to delay proximity reaction */
 
 #define SHOOTER_LIMITSWITCH 1
 #if SHOOTER_LIMITSWITCH
 #define SHOOTER_LIMITSWITCH_LEFT_PULLBACK_CHECK TOP_SIDECAR,6 /*TODO SOON*/
 #define SHOOTER_LIMITSWITCH_RIGHT_PULLBACK_CHECK TOP_SIDECAR,7 /*SOON TODO*/
-#define SHOOTER_LIMITSWITCH_DELAY (100) /* Milliseconds to delay proximity reaction */
+#define SHOOTER_LIMITSWITCH_DELAY (500) /* Milliseconds to delay proximity reaction */
 #endif
 
 #define SHOOTER_WENCH_ENCODER 8,9
-#define SHOOTER_WENCH_POT_BACK 0
+#define SHOOTER_WENCH_POT_BACK (0.0)
+#define SHOOTER_WENCH_POT_BACK_NEAR (0.08)
+
+#define SHOOTER_WENCH_POT_REVERSE_ALLOW (0.1)
 
 #define SHOOTER_PREPARE_SPEED 0.16
 #define SHOOTER_WENCH_MOTOR_FULL_BACK (1.0)
 #define SHOOTER_WENCH_MOTOR_FULL_BACK_NEAR (0.75)
-#define SHOOTER_WENCH_SETPOINT_THRESH (0.08)
 
 #define SHOOTER_WENCH_MOTOR_FULL_RELEASE (-1.00)
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE (0.1)
-#define SHOOTER_WENCH_STALL_SPEED (0.05) /* TODO */
 
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.272
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.2375
 
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms after which any changes are discarded*/
 
@@ -72,7 +84,6 @@
 // == Collector ==
 // ===============
 #define COLLECTOR_BALL_SENSOR TOP_SIDECAR,3 /*T3*/
-#define COLLECTOR_JAW_STATE TOP_SIDECAR,1 /*T1*/
 #define COLLECTOR_ROLLER_MOTOR_LEFT TOP_SIDECAR,6 /*T6*/
 #define COLLECTOR_ROLLER_MOTOR_RIGHT TOP_SIDECAR,7 /*T7*/
 #define COLLECTOR_CLAW_ENCODER_CHANNEL_A TOP_SIDECAR,4 /*T4*/

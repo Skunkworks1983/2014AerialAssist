@@ -14,14 +14,13 @@ class StallableMotor;
  *
  * @author Ross Bajocich
  */
-class Collector : public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
+class Collector: public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
 public:
 	enum JawState {
-		kOpen=true, kClosed=false
+		kOpen=false, kClosed=true
 	};
 private:
 	SolenoidPair *jawController;
-	DigitalInput *jawState;
 	DigitalInput *ballSensor;
 	PIDController *rollerPIDController;
 	Encoder *rollerClawEncoder;

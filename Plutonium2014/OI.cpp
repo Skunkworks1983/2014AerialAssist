@@ -7,6 +7,7 @@
 #include "Utils/Buttons/AnalogRangeIOButton.h"
 
 #include "Utils/Commands/CommandCanceler.h"
+#include "Utils/Commands/CommandStarter.h"
 
 #include "Commands/DriveBase/Shift.h"
 #include "Commands/Collector/RollerRoll.h"
@@ -43,7 +44,7 @@ OI::OI() {
 	fire = new DigitalIOButton(2);
 	revCollector = new DigitalIOButton(9);
 	jawToggle = new OverridableButton(new DigitalIOButton(12),new DigitalIOButton(11), false);
-	manShootOvr = new DigitalIOButton(10);
+	preventShooterArming = new DigitalIOButton(10);
 	manAngleOvr = new DigitalIOButton(16);
 	
 	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.115-OI_ANALOG_TRESHOLD, 1.115+OI_ANALOG_TRESHOLD);
@@ -57,7 +58,7 @@ void OI::registerButtonListeners() {
 	// Pterodactyl Angle
 	angleFloor->WhenPressed(new AngelChange(0));
 	angleLow->WhenPressed(new AngelChange(60));
-	angleMed->WhenPressed(new AngelChange(80));
+	angleMed->WhenPressed(new AngelChange(83));
 	angleHigh->WhenPressed(new AngelChange(100));
 	angleCarry->WhenPressed(new AngelChange(95));
 	
@@ -71,7 +72,8 @@ void OI::registerButtonListeners() {
 	catch2->WhenPressed(new Catch(30));
 
 	// Shooter operations
-	fire->WhenPressed(new FireShooter());
+	fire->WhenReleased(new FireShooter());
+	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
@@ -79,8 +81,8 @@ void OI::registerButtonListeners() {
 	power3->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_3));
 
 	// Jaw Override
-	jawToggle->WhenPressed(new JawMove(Collector::kOpen));
-	jawToggle->WhenReleased(new JawMove(Collector::kClosed));
+	jawToggle->WhenPressed(new JawMove(Collector::kClosed));
+	jawToggle->WhenReleased(new JawMove(Collector::kOpen));
 }
 
 Joystick *OI::getJoystickLeft() {
@@ -89,4 +91,8 @@ Joystick *OI::getJoystickLeft() {
 
 Joystick *OI::getJoystickRight() {
 	return joystickRight;
+}
+
+bool OI::isShooterArmingPrevented() {
+	return !manAngleOvr->Get();
 }

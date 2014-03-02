@@ -22,6 +22,8 @@ public:
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
+	static int runCount;
+	int fHandle;
 };
 
 #endif

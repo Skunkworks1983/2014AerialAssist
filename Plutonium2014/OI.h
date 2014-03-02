@@ -31,16 +31,18 @@ private:
 
 	Button *jawToggle;
 
-	DigitalIOButton *manShootOvr;
 	DigitalIOButton *manAngleOvr;
 
 	AnalogRangeIOButton *power1;
 	AnalogRangeIOButton *power2;
 	AnalogRangeIOButton *power3;
+
+	DigitalIOButton *preventShooterArming;
 public:
 	OI();
 	Joystick *getJoystickLeft();
 	Joystick *getJoystickRight();
+	bool isShooterArmingPrevented();
 	void registerButtonListeners();
 	float getScale();
 };

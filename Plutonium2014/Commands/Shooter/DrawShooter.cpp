@@ -11,11 +11,10 @@ DrawShooter::DrawShooter() :
 	AddSequential(new SLatch(Shooter::kLatched));
 	AddSequential(new WLatch(Shooter::kUnlatched));
 	AddSequential(new FullTension());
-	//AddSequential(new WLatch(Shooter::kLatched));
+	SetInterruptible(false);
 }
 
 void DrawShooter::Initialize() {
-	SetInterruptible(false);
 }
 
 void DrawShooter::End() {

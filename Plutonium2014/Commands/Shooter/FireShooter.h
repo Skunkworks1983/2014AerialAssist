@@ -15,6 +15,7 @@ public:
 	FireShooter();
 	virtual void Initialize();
 	virtual void End();
+	virtual void Interrupted();
 };
 
 #endif

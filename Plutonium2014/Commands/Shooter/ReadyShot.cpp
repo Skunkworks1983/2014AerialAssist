@@ -8,12 +8,16 @@ ReadyShot::ReadyShot(float setTurns) :
 	CommandGroup("ReadyShot") {
 	AddSequential(new DrawShooter());
 	AddSequential(new PrepareShooter(setTurns));
-}
-
-void ReadyShot::Initialize() {
 	SetInterruptible(false);
 }
 
+void ReadyShot::Initialize() {
+}
+
 void ReadyShot::End() {
+}
+
+void ReadyShot::Interrupted() {
+	printf("Kill me now\n");
 }
 

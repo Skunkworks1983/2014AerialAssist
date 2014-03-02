@@ -42,13 +42,17 @@ private:
 #endif
 	
 	DigitalInput *sLatchSensor;
+	DigitalInput *wLatchSensor;
 
 	DigitalEdgeWatcher sLatchPatternBuffer;
 public:
+	double lastReleasePosition;
+	
 	Shooter();
 	void InitDefaultCommand();
 
 	static Command *createArmShooter();
+	static Command *createCreateArmShooter();
 	
 	void setWenchMotor(float speed);
 	float getWenchMotorSpeed();

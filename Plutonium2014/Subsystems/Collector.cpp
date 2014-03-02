@@ -33,9 +33,6 @@ Collector::Collector() :
 	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
 			COLLECTOR_JAW_SOLENOID_B);
 	LiveWindow::GetInstance()->AddActuator("Collector", "Jaw Controller", jawController);
-
-	jawState = new DigitalInput(COLLECTOR_JAW_STATE);
-	LiveWindow::GetInstance()->AddSensor("Collector", "Jaw State", jawState);
 }
 
 void Collector::InitDefaultCommand() {
@@ -47,7 +44,7 @@ void Collector::setJawState(Collector::JawState state) {
 }
 
 Collector::JawState Collector::getJawState() {
-	return (Collector::JawState) !jawState->Get();
+	return (Collector::JawState) jawController->Get();
 }
 
 void Collector::setRollerSpeed(float speed) {

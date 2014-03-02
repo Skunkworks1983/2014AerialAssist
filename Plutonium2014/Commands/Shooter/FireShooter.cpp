@@ -9,17 +9,20 @@
 
 FireShooter::FireShooter() :
 	CommandGroup("FireShooter") {
-	AddSequential(new JawMove(Collector::kOpen));
 	AddSequential(new WLatch(Shooter::kLatched));
+	AddParallel(new JawMove(Collector::kOpen));
 	AddSequential(new SLatch(Shooter::kUnlatched));
-	AddSequential(new WaitCommand(1));
-	AddSequential(new SLatch(Shooter::kLatched));
-//	AddSequential(new CommandStarter(Shooter::createArmShooter));
+	AddSequential(new WaitCommand(1.5));
+	AddSequential(
+			new CommandStarter(Shooter::createCreateArmShooter));
 }
 
 void FireShooter::Initialize() {
 }
 
 void FireShooter::End() {
+}
+
+void FireShooter::Interrupted() {
 }
 

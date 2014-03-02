@@ -26,7 +26,6 @@ bool SLatch::IsFinished() {
 		// Shutting down the shooter
 		return true;
 	}
-
 	return false;
 }
 

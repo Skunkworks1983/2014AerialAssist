@@ -3,8 +3,11 @@
 #include "../../../Robotmap.h"
 
 WLatch::WLatch(Shooter::LatchPosition state) :
-	CommandBase(CommandBase::createNameFromString("WLatch", state
-			== Shooter::kLatched ? "Latched" : "Unlatched")) {
+			CommandBase(
+					CommandBase::createNameFromString(
+							"WLatch",
+							state == Shooter::kLatched ? "Latched"
+									: "Unlatched")) {
 	Requires(shooter);
 	this->state = state;
 	time = 0;
@@ -20,17 +23,25 @@ void WLatch::Initialize() {
 
 void WLatch::Execute() {
 	time = getCurrentMillis() - bTime;
-	if (state == Shooter::kUnlatched && time
-			> (SHOOTER_WLATCH_WAIT - SHOOTER_WLATCH_UNLOCK_DRIVE)) {
+	if (state == Shooter::kLatched && shooter->getWLatch() == state && time
+			< SHOOTER_WLATCH_WAIT - SHOOTER_WLATCH_UNLOCK_DRIVE) {
+		bTime = getCurrentMillis() - (SHOOTER_WLATCH_WAIT
+				- SHOOTER_WLATCH_UNLOCK_DRIVE) + 1;
+	}
+	if (state == Shooter::kUnlatched && time > (SHOOTER_WLATCH_WAIT
+			- SHOOTER_WLATCH_UNLOCK_DRIVE)) {
 		shooter->setWenchMotor(SHOOTER_WENCH_MOTOR_FORCE_UNLATCH);
 	}
-	if (state == Shooter::kLatched && time
-			> (SHOOTER_WLATCH_WAIT - SHOOTER_WLATCH_LOCK_DRIVE)) {
+	if (state == Shooter::kLatched && time > (SHOOTER_WLATCH_WAIT
+			- SHOOTER_WLATCH_LOCK_DRIVE)) {
 		shooter->setWenchMotor(SHOOTER_WENCH_MOTOR_FORCE_LATCH);
 	}
 }
 
 bool WLatch::IsFinished() {
+	if (state == Shooter::kUnlatched && shooter->getWLatch() == state) {
+		return true;
+	}
 	if (time >= SHOOTER_WLATCH_WAIT) {
 		return true;
 	}
