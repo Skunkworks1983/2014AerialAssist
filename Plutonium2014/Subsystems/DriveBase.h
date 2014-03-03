@@ -19,10 +19,6 @@ private:
 	Encoder *encoderLeft;
 	Encoder *encoderRight;
 	SolenoidPair *shifter;
-	Gyro *gyro;
-	// It's desirable that everything possible under private except
-	// for methods that implement subsystem capabilities
-
 public:
 	enum DriveGear {
 		kLow = false, kHigh = true
@@ -37,7 +33,6 @@ public:
 	void setDriveGear(DriveGear gear);
 	DriveGear getDriveGear();
 	float getMotorSpeed();
-	Gyro *getGyro();
 };
 
 #endif

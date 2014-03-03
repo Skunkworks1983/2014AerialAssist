@@ -1,5 +1,5 @@
-#ifndef __PREPARE_ZE_DEVICE_H
-#define __PREPARE_ZE_DEVICE_H
+#ifndef __READY_SHOT_H
+#define __READY_SHOT_H
 
 #include "../../CommandBase.h"
 
@@ -10,11 +10,12 @@
  * DAVEED
  */
 
-class PrepareZeDevice: public CommandGroup {
+class ReadyShot : public CommandGroup {
 public:
-	PrepareZeDevice(float setTurns);
+	ReadyShot(float setTurns);
 	virtual void Initialize();
 	virtual void End();
+	virtual void Interrupted();
 };
 
 #endif

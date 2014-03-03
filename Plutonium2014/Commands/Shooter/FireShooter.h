@@ -1,5 +1,5 @@
-#ifndef __FIRE_ZE_MISSLE_H
-#define __FIRE_ZE_MISSLE_H
+#ifndef __FIRE_SHOOTER_H
+#define __FIRE_SHOOTER_H
 
 #include "../../CommandBase.h"
 
@@ -10,11 +10,12 @@
  * DAVEEDq	
  */
 
-class FireZeMissle: public CommandGroup {
+class FireShooter: public CommandGroup {
 public:
-	FireZeMissle();
+	FireShooter();
 	virtual void Initialize();
 	virtual void End();
+	virtual void Interrupted();
 };
 
 #endif

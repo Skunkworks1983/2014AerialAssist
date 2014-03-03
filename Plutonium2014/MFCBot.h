@@ -8,7 +8,7 @@
 class MFCBot: public IterativeRobot {
 private:
 	int dont;
-	
+	void createAutonomi();
 public:
 	MFCBot();
 	
@@ -24,6 +24,7 @@ public:
 	void WatchDog();
 private:
 	LiveWindow *lw;
+	SendableChooser *chooser;
 };
 
 #endif

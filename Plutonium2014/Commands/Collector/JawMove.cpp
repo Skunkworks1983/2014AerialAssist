@@ -1,11 +1,11 @@
 #include "JawMove.h"
 
-JawMove::JawMove(bool closed) :
-			CommandBase(
-					CommandBase::createNameFromString("JawMove",
-							closed ? "Closed" : "Open")) {
+JawMove::JawMove(Collector::JawState state) :
+	CommandBase(CommandBase::createNameFromString("JawMove", state
+			==Collector::kClosed ? "Closed" : "Open")) {
 	Requires(collector);
-	this->state = closed;
+	SetTimeout(0.125);
+	this->state = state;
 }
 
 void JawMove::Initialize() {
@@ -17,7 +17,7 @@ void JawMove::Execute() {
 }
 
 bool JawMove::IsFinished() {
-	return collector->getJawState();
+	return IsTimedOut();//state==collector->getJawState();
 }
 
 void JawMove::End() {

@@ -3,25 +3,25 @@
 #include "../Utils/Actuators/SolenoidPair.h"
 #include "WPILib.h"
 #include "../Utils/Actuators/StallableMotor.h"
+#include "../Utils/Actuators/DualLiveSpeed.h"
 
 Collector::Collector() :
 	Subsystem("Collector") {
 
 	rollerClawEncoder = new Encoder( COLLECTOR_CLAW_ENCODER_CHANNEL_A ,
-			COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
+	COLLECTOR_CLAW_ENCODER_CHANNEL_B, true, Encoder::k4X);
 	rollerClawEncoder->SetPIDSourceParameter(Encoder::kRate);
 	rollerClawEncoder->SetDistancePerPulse(1.0
 			/COLLECTOR_ROLLER_TICKS_PER_ROTATION*60.0/COLLECTOR_ROLLER_MAX_RPM);
 	rollerClawEncoder->Start();
 	LiveWindow::GetInstance()->AddSensor("Collector", "Roller Encoder", rollerClawEncoder);
-
-	rollerMotorLeft
-			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT),0))->setEncoderSource(rollerClawEncoder);
-	rollerMotorRight
-			= (new StallableMotor(new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT),0))->setEncoderSource(rollerClawEncoder);
-
+	
+	DualLiveSpeed *motors = new DualLiveSpeed(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT), new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT), true);
+	rollerMotor
+			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED))->setEncoderSource(rollerClawEncoder);
+	
 	rollerPIDController= new PIDController(1, .1, .01, rollerClawEncoder,
-			this, 0.05f);
+			rollerMotor, 0.05f);
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);
 	LiveWindow::GetInstance()->AddActuator("Collector", "PID Controller", rollerPIDController);
@@ -33,21 +33,18 @@ Collector::Collector() :
 	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
 			COLLECTOR_JAW_SOLENOID_B);
 	LiveWindow::GetInstance()->AddActuator("Collector", "Jaw Controller", jawController);
-
-	jawState = new DigitalInput(COLLECTOR_JAW_STATE);
-	LiveWindow::GetInstance()->AddSensor("Collector", "Jaw State", jawState);
 }
 
 void Collector::InitDefaultCommand() {
 	// Nothing here...
 }
 
-void Collector::setJawState(bool closed) {
-	jawController->Set(closed);
+void Collector::setJawState(Collector::JawState state) {
+	jawController->Set(state);
 }
 
-bool Collector::getJawState() {
-	return jawState->Get();
+Collector::JawState Collector::getJawState() {
+	return (Collector::JawState) jawController->Get();
 }
 
 void Collector::setRollerSpeed(float speed) {
@@ -59,14 +56,8 @@ void Collector::setRollerSpeed(float speed) {
 		if (rollerPIDController->IsEnabled()) {
 			rollerPIDController->Disable();
 		}
-		rollerMotorLeft->Set(0);
-		rollerMotorRight->Set(0);
+		rollerMotor->Set(0);
 	}
-}
-
-void Collector::PIDWrite(float speed) {
-	rollerMotorLeft->Set(speed);
-	rollerMotorRight->Set(-speed);
 }
 
 double Collector::getDiff() {
@@ -74,7 +65,7 @@ double Collector::getDiff() {
 }
 
 double Collector::getRollerSpeed() {
-	SmartDashboard::PutBoolean("RollerStalled", rollerClawEncoder->GetStopped());
+	SmartDashboard::PutBoolean("RollerStalled", rollerMotor->isStalled());
 	return rollerClawEncoder->GetRate();
 }
 

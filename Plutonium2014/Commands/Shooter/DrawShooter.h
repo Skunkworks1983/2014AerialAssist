@@ -1,5 +1,5 @@
-#ifndef __READY_SHOT_H
-#define __READY_SHOT_H
+#ifndef __DRAW_SHOOTER_H
+#define __DRAW_SHOOTER_H
 
 #include "../../CommandBase.h"
 
@@ -10,9 +10,9 @@
  * DAVEED
  */
 
-class ReadyShot : public CommandGroup {
+class DrawShooter: public CommandGroup {
 public:
-	ReadyShot(float setTurns);
+	DrawShooter();
 	virtual void Initialize();
 	virtual void End();
 };

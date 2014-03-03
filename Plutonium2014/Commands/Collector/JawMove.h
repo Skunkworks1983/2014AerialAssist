@@ -10,9 +10,9 @@
  */
 class JawMove: public CommandBase {
 private:
-	bool state;
+	Collector::JawState state;
 public:
-	JawMove(bool state);
+	JawMove(Collector::JawState state);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

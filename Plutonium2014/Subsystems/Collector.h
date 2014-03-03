@@ -1,34 +1,36 @@
 #ifndef __COLLECTOR_H
 #define __COLLECTOR_H
 #include "Commands/Subsystem.h"
-#include "WPILib/PIDOutput.h"
 
 class DigitalInput;
 class PIDController;
 class SpeedController;
 class Encoder;
 class SolenoidPair;
+class StallableMotor;
 
 /**
  *
  *
  * @author Ross Bajocich
  */
-class Collector: public Subsystem, public PIDOutput { // TODO: Make the Jaw state enum make sense (but no)
+class Collector: public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
+public:
+	enum JawState {
+		kOpen=false, kClosed=true
+	};
 private:
 	SolenoidPair *jawController;
-	DigitalInput *jawState;
 	DigitalInput *ballSensor;
 	PIDController *rollerPIDController;
 	Encoder *rollerClawEncoder;
-	SpeedController *rollerMotorLeft;
-	SpeedController *rollerMotorRight;
-
+	StallableMotor *rollerMotor;
+	
 public:
 	Collector();
 	void InitDefaultCommand();
-	bool getJawState();
-	void setJawState(bool on);
+	JawState getJawState();
+	void setJawState(JawState state);
 
 	void setRollerSpeed(float speed);
 	void setPIDEnabled(bool state);
@@ -36,9 +38,8 @@ public:
 
 	double getRollerSpeed();
 	double getRollerDistance();
-	
+
 	bool isBallDetected();
-	virtual void PIDWrite(float speed);
 };
 
 #endif

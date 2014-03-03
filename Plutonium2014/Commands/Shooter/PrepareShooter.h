@@ -1,5 +1,5 @@
-#ifndef __DRAW_ZE_DEVICE_H
-#define __DRAW_ZE_DEVICE_H
+#ifndef __PREPARE_SHOOTER_H
+#define __PREPARE_SHOOTER_H
 
 #include "../../CommandBase.h"
 
@@ -10,9 +10,9 @@
  * DAVEED
  */
 
-class DrawZeDevice: public CommandGroup {
+class PrepareShooter: public CommandGroup {
 public:
-	DrawZeDevice();
+	PrepareShooter(float setTurns);
 	virtual void Initialize();
 	virtual void End();
 };

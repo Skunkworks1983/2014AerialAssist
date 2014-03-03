@@ -1,7 +1,7 @@
 #ifndef __RELEASE_TENSION_H
 #define __RELEASE_TENSION_H
 
-#include "../../CommandBase.h"
+#include "../../../CommandBase.h"
 
 
 /**
@@ -22,6 +22,8 @@ public:
 	virtual bool IsFinished();
 	virtual void End();
 	virtual void Interrupted();
+	static int runCount;
+	int fHandle;
 };
 
 #endif

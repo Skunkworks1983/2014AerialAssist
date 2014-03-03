@@ -12,50 +12,37 @@ class OI {
 private:
 	Joystick *joystickLeft;
 	Joystick *joystickRight;
-	Joystick *joystickButtonsThings;
 
 	JoystickButton *shiftButton;
-	JoystickButton *rollerOn;
-	JoystickButton *rollerOff;
-	JoystickButton *RollerRollOn;
-	JoystickButton *RollerRollOff;
-	JoystickButton *drawBack;
-	JoystickButton *prepare;
-	JoystickButton *shootGlatGlat;
-	JoystickButton *armODeathZero;
-	JoystickButton *armODeathThirty;
-	JoystickButton *armODeathSixty;
-	JoystickButton *armODeathNintey;
-	
+
 	DigitalIOButton *catch1;
 	DigitalIOButton *catch2;
 	DigitalIOButton *collect;
 	DigitalIOButton *pass;
-	
+
 	DigitalIOButton *angleFloor;
 	DigitalIOButton *angleLow;
 	DigitalIOButton *angleMed;
 	DigitalIOButton *angleHigh;
 	DigitalIOButton *angleCarry;
-	
+
 	DigitalIOButton *fire;
 	DigitalIOButton *revCollector;
-	
+
 	Button *jawToggle;
-	
-	DigitalIOButton *manShootOvr;
+
 	DigitalIOButton *manAngleOvr;
-	
+
 	AnalogRangeIOButton *power1;
 	AnalogRangeIOButton *power2;
 	AnalogRangeIOButton *power3;
-	
-	float scale;
 
+	DigitalIOButton *preventShooterArming;
 public:
 	OI();
 	Joystick *getJoystickLeft();
 	Joystick *getJoystickRight();
+	bool isShooterArmingPrevented();
 	void registerButtonListeners();
 	float getScale();
 };

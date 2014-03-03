@@ -1,6 +1,7 @@
-#ifndef __SHOOTAH_H
-#define __SHOOTAH_H
+#ifndef __SHOOTER_H
+#define __SHOOTER_H
 #include "Commands/Subsystem.h"
+#include "../Robotmap.h"
 
 /**
  *
@@ -12,8 +13,9 @@ class DigitalInput;
 class AnalogChannel;
 class AnalogPot;
 class StallableMotor;
+class Command;
 
-class Shootah : public Subsystem {
+class Shooter : public Subsystem {
 public:
 	enum LatchPosition {
 		kLatched = true, kUnlatched = false
@@ -32,17 +34,28 @@ private:
 
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
-	SolenoidPair *brake;
-
+	
+#if SHOOTER_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
+	DigitalEdgeWatcher pullBackSwitchPatternBuffer;
+#endif
+	
 	DigitalInput *sLatchSensor;
+	DigitalInput *wLatchSensor;
 
 	DigitalEdgeWatcher sLatchPatternBuffer;
 public:
-	Shootah();
+	double lastReleasePosition;
+	
+	Shooter();
 	void InitDefaultCommand();
+
+	static Command *createArmShooter();
+	static Command *createCreateArmShooter();
+	
 	void setWenchMotor(float speed);
+	float getWenchMotorSpeed();
 
 	void setWLatch(LatchPosition state);
 	LatchPosition getWLatch();
@@ -51,11 +64,14 @@ public:
 	bool isLatchedByPattern();
 
 	double getTurns();
+	double getTurnRate();
+	
 	bool isReallyDrawnBack();
 	bool isAngle(float setpoint);
-	bool getPullBackSwitch();
-
-	float getWenchMotorSpeed();
+#if SHOOTER_LIMITSWITCH
+	bool isLatchedByProximity();
+	bool getRawProximity();
+#endif
 };
 
 #endif

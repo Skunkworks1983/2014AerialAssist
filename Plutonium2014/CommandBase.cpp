@@ -2,7 +2,7 @@
 #include "Subsystems/Collector.h"
 #include "Subsystems/DriveBase.h"
 #include "Subsystems/Pterodactyl.h"
-#include "Subsystems/Shootah.h"
+#include "Subsystems/Shooter.h"
 #include "Subsystems/Pneumatics.h"
 #include "Commands/Scheduler.h"
 
@@ -17,7 +17,7 @@ Collector* CommandBase::collector = NULL;
 DriveBase* CommandBase::driveBase = NULL;
 Pterodactyl* CommandBase::pterodactyl = NULL;
 
-Shootah* CommandBase::shootah = NULL;
+Shooter* CommandBase::shooter = NULL;
 Pneumatics* CommandBase::pneumatics = NULL;
 OI* CommandBase::oi = NULL;
 
@@ -27,7 +27,7 @@ void CommandBase::init() {
 	collector = new Collector();
 	driveBase = new DriveBase();
 	pterodactyl = new Pterodactyl();
-	shootah = new Shootah();
+	shooter = new Shooter();
 	pneumatics = new Pneumatics();
 	oi = new OI();
 }
