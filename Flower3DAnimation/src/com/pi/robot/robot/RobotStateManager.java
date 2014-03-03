@@ -53,13 +53,10 @@ public class RobotStateManager {
 	private float targetJawsAngle = 0;
 	private float currentJawsAngle = 0;
 	private ITable table;
-	private Map<Vector3D, NotificationBubble> notifications;
 
-	public RobotStateManager(Skeleton sk,
-			Map<Vector3D, NotificationBubble> notifications) {
+	public RobotStateManager(Skeleton sk) {
 		this.sk = sk;
 		table = NetworkTable.getTable("Robot");
-		this.notifications = notifications;
 	}
 
 	private void colorAlliance(FloatBufferColor color) {
@@ -110,7 +107,7 @@ public class RobotStateManager {
 		Vector3D max = new Vector3D(0f, 6.1f, 25.76f);
 		TransMatrix bleh = new TransMatrix().setRotation(0f, 1f, 0f, -33f
 				* (float) Math.PI / 180.0f);
-		colorMesh(motorColor, sk.getBone(PTERODACTYL_ID).mesh, min, max, bleh);
+		colorMesh(motorColor, sk.getBone(JAWS_ID).mesh, min, max, bleh);
 	}
 
 	private void colorCompressor(FloatBufferColor compressorColor) {
@@ -183,10 +180,13 @@ public class RobotStateManager {
 			colorWinchMotor(winchState.getState().getColor());
 			if (winchState.getState() == MotorState.STALLED) {
 				// Icky icky TODO
-				notifications.put(winchNotificationPos, new NotificationBubble(
-						winchNotificationPos, NOTIFICATION_STALL_COLOR, 25));
+				sk.getBone(PTERODACTYL_ID).notifications.put(
+						winchNotificationPos, new NotificationBubble(
+								winchNotificationPos, NOTIFICATION_STALL_COLOR,
+								15));
 			} else {
-				notifications.remove(winchNotificationPos);
+				sk.getBone(PTERODACTYL_ID).notifications
+						.remove(winchNotificationPos);
 			}
 		}
 	}

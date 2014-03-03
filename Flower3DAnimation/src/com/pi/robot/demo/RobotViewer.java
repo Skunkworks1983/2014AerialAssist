@@ -37,8 +37,6 @@ public class RobotViewer {
 			.createFloatBuffer(4).put(new float[] { 0.25f, 0.25f, 0.25f, 1f })
 			.rewind();
 	boolean[] keys = new boolean[512];
-	Map<Vector3D, NotificationBubble> notifications = new HashMap<Vector3D, NotificationBubble>();
-
 	public RobotViewer() throws LWJGLException, IOException {
 		NetworkTable.setTeam(1983);
 		NetworkTable.setClientMode();
@@ -46,7 +44,7 @@ public class RobotViewer {
 
 		Skeleton sk = new Skeleton(new File("model/mesh.skl"));
 		sk.calculate();
-		RobotStateManager robot = new RobotStateManager(sk, notifications);
+		RobotStateManager robot = new RobotStateManager(sk);
 
 		init();
 
@@ -67,10 +65,6 @@ public class RobotViewer {
 			GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, l0_specular);
 
 			drawBone(sk.getRootBone());
-
-			for (NotificationBubble b : notifications.values()) {
-				b.render();
-			}
 
 			Display.update();
 			Display.sync(60);

@@ -2,7 +2,9 @@ package com.pi.robot;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -11,6 +13,7 @@ import com.pi.math.Quaternion;
 import com.pi.math.TransMatrix;
 import com.pi.math.Vector3D;
 import com.pi.robot.mesh.Mesh;
+import com.pi.robot.robot.NotificationBubble;
 import com.pi.robot.robot.RobotStateManager;
 
 public class Bone {
@@ -29,6 +32,7 @@ public class Bone {
 	private Vector3D boneEnd = new Vector3D();
 	private TransMatrix localToWorld = new TransMatrix();
 	public Mesh mesh;
+	public Map<Vector3D, NotificationBubble> notifications = new HashMap<Vector3D, NotificationBubble>();
 
 	public Bone(Vector3D pos) {
 		this(new Vector3D(), pos);
@@ -135,6 +139,9 @@ public class Bone {
 		GL11.glMultMatrix(localToWorld.toBuffer(BufferUtils
 				.createFloatBuffer(16)));
 		mesh.draw();
+		for (NotificationBubble bb : notifications.values()) {
+			bb.render();
+		}
 		GL11.glPopMatrix();
 	}
 }
