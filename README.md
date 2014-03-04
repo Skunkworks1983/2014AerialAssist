@@ -11,3 +11,7 @@ A small rectangle tracker written in OpenCV, tuned to recognize the green light 
 ### Compile Instructions
 This project requires OpenCV and Posix-Threads to compile.
 The gcc linker flags are -lopencv_core -lopencv_imgproc -lopencv_highgui -lpthread
+
+Flower3DAnimation
+======================
+A dashboard visualization of Skunk Works' 2014 robot Flower, as a 3D model that synchronizes its state with the robot use network tables.  Requires LWJGL and networktables libraries to compile.  Model files not included, but the skeleton specification is in model/mesh.skl.
