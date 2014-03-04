@@ -1,7 +1,5 @@
 package com.pi.robot.robot;
 
-import java.util.Map;
-
 import com.pi.math.Quaternion;
 import com.pi.math.TransMatrix;
 import com.pi.math.Vector3D;
@@ -176,14 +174,14 @@ public class RobotStateManager {
 		if (collectorState.hasChanged()) {
 			colorCollectorMotor(collectorState.getState().getColor());
 		}
-		if (winchState.hasChanged()) {
+		if (winchState.hasChanged() && sk.getBone(PTERODACTYL_ID) != null) {
 			colorWinchMotor(winchState.getState().getColor());
 			if (winchState.getState() == MotorState.STALLED) {
 				// Icky icky TODO
 				sk.getBone(PTERODACTYL_ID).notifications.put(
 						winchNotificationPos, new NotificationBubble(
 								winchNotificationPos, NOTIFICATION_STALL_COLOR,
-								15));
+								5));
 			} else {
 				sk.getBone(PTERODACTYL_ID).notifications
 						.remove(winchNotificationPos);

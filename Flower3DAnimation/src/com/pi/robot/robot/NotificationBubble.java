@@ -35,8 +35,8 @@ public class NotificationBubble {
 					* (time - EXPAND_TIME) * 10.0 / EXPAND_TIME)
 					* (size / 10.0) * Math.sqrt(EXPAND_TIME / time);
 		}
-		for (float theta = 0; theta < Math.PI; theta += Math.PI / 10.0) {
-			for (float ceta = 0; ceta <= Math.PI * 2.0; ceta += Math.PI / 10.0) {
+		for (float theta = 0; theta < Math.PI * 2.0; theta += Math.PI / 10.0) {
+			for (float ceta = 0; ceta <= Math.PI; ceta += Math.PI / 10.0) {
 				GL11.glVertex3f(
 						center.x
 								+ (float) (Math.cos(theta) * Math.cos(ceta) * radius),

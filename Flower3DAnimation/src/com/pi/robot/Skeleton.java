@@ -14,6 +14,7 @@ import com.pi.math.TransMatrix;
 import com.pi.math.Vector3D;
 import com.pi.robot.mesh.BinarySTLLoader;
 import com.pi.robot.mesh.Mesh;
+import com.pi.robot.mesh.MeshVertex;
 
 public class Skeleton {
 	private Bone rootBone;
@@ -55,13 +56,17 @@ public class Skeleton {
 							&& !chunks[3].equalsIgnoreCase("null")) {
 						File file = new File(chunks[3]);
 						File cache = new File(file.getAbsolutePath() + ".out");
+						MeshVertex.compareNormals = chunks.length > 4
+								&& chunks[4].equalsIgnoreCase("nrmcmp");
 						if (cache.exists()) {
-							System.out.println("Loading cache: " + cache.getAbsolutePath());
+							System.out.println("Loading cache: "
+									+ cache.getAbsolutePath());
 							b.mesh = Mesh.loadCache(cache);
 							System.out.println("Loaded cache: "
 									+ cache.getAbsolutePath());
 						} else {
-							System.out.println("Loading file: " + file.getAbsolutePath());
+							System.out.println("Loading file: "
+									+ file.getAbsolutePath());
 							b.mesh = BinarySTLLoader.loadSTL(file);
 							b.mesh.generateBuffers();
 							b.mesh.saveCache(cache);
@@ -69,7 +74,7 @@ public class Skeleton {
 									+ file.getAbsolutePath());
 						}
 						TransMatrix m = new TransMatrix();
-						int i = 4;
+						int i = MeshVertex.compareNormals ? 5 : 4;
 						while (i < chunks.length) {
 							String[] rot = chunks[i].split(",");
 							if (rot.length == 3) {
@@ -77,7 +82,8 @@ public class Skeleton {
 										Float.valueOf(rot[0]),
 										Float.valueOf(rot[1]),
 										Float.valueOf(rot[2]));
-							} else if (rot.length == 4 && rot[0].equals("scale")) {
+							} else if (rot.length == 4
+									&& rot[0].equals("scale")) {
 								m.identity().setScale(Float.valueOf(rot[1]),
 										Float.valueOf(rot[2]),
 										Float.valueOf(rot[3]));

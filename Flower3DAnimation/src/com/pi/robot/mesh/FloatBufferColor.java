@@ -60,6 +60,17 @@ public final class FloatBufferColor {
 		return (FloatBuffer) buffer.rewind();
 	}
 
+	public boolean equals(Object o) {
+		if (o instanceof FloatBufferColor) {
+			FloatBufferColor fb = (FloatBufferColor) o;
+			return fb.buffer.get(0) == buffer.get(0)
+					&& fb.buffer.get(1) == buffer.get(1)
+					&& fb.buffer.get(2) == buffer.get(2)
+					&& fb.buffer.get(3) == buffer.get(3);
+		}
+		return false;
+	}
+
 	public String toString() {
 		return getBuffer().get() + "," + getBuffer().get() + ","
 				+ getBuffer().get() + "," + getBuffer().get();

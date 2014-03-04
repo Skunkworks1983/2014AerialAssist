@@ -8,16 +8,18 @@ public class MeshVertex {
 	FloatBufferColor color;
 	private float[] textureUV;
 
+	public static boolean compareNormals = true;
+
 	public MeshVertex(Vector3D pos, Vector3D normal, float[] tex) {
 		this.position = pos;
 		this.normal = normal;
 		this.textureUV = tex;
 	}
-	
+
 	public void setColor(FloatBufferColor color) {
 		this.color = color;
 	}
-	
+
 	public FloatBufferColor getColor() {
 		return color;
 	}
@@ -40,7 +42,11 @@ public class MeshVertex {
 
 	public boolean equals(Object o) {
 		if (o instanceof MeshVertex) {
-			return ((MeshVertex) o).getPosition().equals(getPosition());
+			MeshVertex v = (MeshVertex) o;
+			return v.getPosition().equals(getPosition())
+					&& (!compareNormals || v.getNormal().equals(getNormal()))
+					&& (v.color == color || (v.color != null && color != null && v.color
+							.equals(color)));
 		}
 		return false;
 	}

@@ -1,5 +1,7 @@
 package com.pi.robot.mesh;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -23,6 +25,8 @@ public class Mesh {
 	private List<MeshVertex> verticies;
 	private List<Integer> indicies;
 	private int polygonSize;
+
+	public FloatBufferColor defaultColor;
 
 	private IntBuffer indexBuffer;
 	private FloatBuffer vertexBuffer;
@@ -62,8 +66,11 @@ public class Mesh {
 				if (colorBuffer != null) {
 					if (mV.color != null) {
 						colorBuffer.put(mV.color.getBuffer());
+					} else if (defaultColor != null) {
+						colorBuffer.put(defaultColor.getBuffer());
 					} else {
-						colorBuffer.put(RobotStateManager.defaultColor.getBuffer());
+						colorBuffer.put(RobotStateManager.defaultColor
+								.getBuffer());
 					}
 				}
 			}
@@ -116,11 +123,28 @@ public class Mesh {
 	}
 
 	public void saveCache(File f) throws IOException {
-		DataOutputStream dOut = new DataOutputStream(new FileOutputStream(f));
+		DataOutputStream dOut = new DataOutputStream(new BufferedOutputStream(
+				new FileOutputStream(f)));
 		dOut.writeBoolean(indexBuffer != null);
 		dOut.writeInt(polygonSize);
 		dOut.writeInt(verticies.size());
+
+		dOut.writeBoolean(defaultColor != null);
+		if (defaultColor != null) {
+			FloatBuffer buffer = defaultColor.getBuffer();
+			dOut.writeByte((byte) (buffer.get() * 255));
+			dOut.writeByte((byte) (buffer.get() * 255));
+			dOut.writeByte((byte) (buffer.get() * 255));
+			dOut.writeByte((byte) (buffer.get() * 255));
+		}
+
+		int perc = 0;
 		for (int i = 0; i < verticies.size(); i++) {
+			int pp = (int) (100 * i / (float) verticies.size());
+			if (pp > perc) {
+				System.out.print("\r" + pp);
+				perc = pp;
+			}
 			MeshVertex mV = verticies.get(i);
 			dOut.writeFloat(mV.getPosition().x);
 			dOut.writeFloat(mV.getPosition().y);
@@ -133,10 +157,10 @@ public class Mesh {
 			dOut.writeBoolean(mV.getColor() != null);
 			if (mV.getColor() != null) {
 				FloatBuffer buffer = mV.getColor().getBuffer();
-				dOut.writeFloat(buffer.get());
-				dOut.writeFloat(buffer.get());
-				dOut.writeFloat(buffer.get());
-				dOut.writeFloat(buffer.get());
+				dOut.writeByte((byte) (buffer.get() * 255));
+				dOut.writeByte((byte) (buffer.get() * 255));
+				dOut.writeByte((byte) (buffer.get() * 255));
+				dOut.writeByte((byte) (buffer.get() * 255));
 			}
 		}
 		if (indicies == null) {
@@ -151,12 +175,28 @@ public class Mesh {
 	}
 
 	public static Mesh loadCache(File f) throws IOException {
-		DataInputStream dIn = new DataInputStream(new FileInputStream(f));
+		DataInputStream dIn = new DataInputStream(new BufferedInputStream(
+				new FileInputStream(f)));
 		boolean indexed = dIn.readBoolean();
 		int polySize = dIn.readInt();
 		int vSize = dIn.readInt();
+		FloatBufferColor defaultColor = null;
+
+		if (dIn.readBoolean()) {
+			defaultColor = new FloatBufferColor();
+			defaultColor.set((dIn.readByte() & 0xFF) / 255f,
+					(dIn.readByte() & 0xFF) / 255f,
+					(dIn.readByte() & 0xFF) / 255f,
+					(dIn.readByte() & 0xFF) / 255f);
+		}
 		List<MeshVertex> verticies = new ArrayList<MeshVertex>(vSize);
+		int perc = 0;
 		for (int i = 0; i < vSize; i++) {
+			int pp = (int) (100 * i / (float) vSize);
+			if (pp > perc) {
+				// TODO System.out.print("\r" + pp);
+				perc = pp;
+			}
 			Vector3D pos = new Vector3D(dIn.readFloat(), dIn.readFloat(),
 					dIn.readFloat());
 			Vector3D norm = new Vector3D(dIn.readFloat(), dIn.readFloat(),
@@ -165,8 +205,10 @@ public class Mesh {
 			verticies.add(new MeshVertex(pos, norm, new float[] { 0, 0 }));
 			if (dIn.readBoolean()) {
 				FloatBufferColor color = new FloatBufferColor();
-				color.set(dIn.readFloat(), dIn.readFloat(), dIn.readFloat(),
-						dIn.readFloat());
+				color.set((dIn.readByte() & 0xFF) / 255f,
+						(dIn.readByte() & 0xFF) / 255f,
+						(dIn.readByte() & 0xFF) / 255f,
+						(dIn.readByte() & 0xFF) / 255f);
 				verticies.get(verticies.size() - 1).color = color;
 			}
 		}
@@ -185,6 +227,7 @@ public class Mesh {
 		if (indexed) {
 			m.generateBuffers();
 		}
+		m.defaultColor = defaultColor;
 		return m;
 	}
 
@@ -245,7 +288,7 @@ public class Mesh {
 			}
 			GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 			GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-		} else if (indexBuffer != null) {
+		} else if (indexBuffer != null) { // TODO Colors
 			GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 			GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 			GL11.glVertexPointer(3, 0, vertexBuffer);
@@ -260,7 +303,7 @@ public class Mesh {
 			}
 			GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 			GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-		} else {
+		} else { // TODO Colors
 			GL11.glBegin(getGLType());
 			if (getIndicies() != null) {
 				for (int i : getIndicies()) {
