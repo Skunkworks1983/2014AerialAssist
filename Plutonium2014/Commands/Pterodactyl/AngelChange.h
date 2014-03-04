@@ -12,6 +12,7 @@ class AngelChange: public CommandBase {
 private:
 	float target;
 	int stability;
+	float lastPosition;
 public:
 	AngelChange(float target);
 	virtual void Initialize();

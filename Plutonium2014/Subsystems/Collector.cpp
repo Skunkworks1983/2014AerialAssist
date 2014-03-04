@@ -64,8 +64,15 @@ double Collector::getDiff() {
 	return rollerPIDController->GetSetpoint() - rollerClawEncoder->GetRate();
 }
 
+bool Collector::isPIDEnabled() {
+	return rollerPIDController->IsEnabled();
+}
+
+bool Collector::isRollerStalled() {
+	return rollerMotor->isStalled();
+}
+
 double Collector::getRollerSpeed() {
-	SmartDashboard::PutBoolean("RollerStalled", rollerMotor->isStalled());
 	return rollerClawEncoder->GetRate();
 }
 

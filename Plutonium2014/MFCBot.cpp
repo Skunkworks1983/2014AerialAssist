@@ -40,8 +40,7 @@ void MFCBot::RobotInit() {
 	CommandBase::oi->registerButtonListeners();
 	createAutonomi();
 
-	SmartDashboard::PutData("WLatch Latch", new WLatch(Shooter::kLatched));
-	SmartDashboard::PutData("WLatch UnLatch", new WLatch(Shooter::kUnlatched));
+	robotState = NetworkTable::GetTable("Robot");
 }
 
 void MFCBot::AutonomousInit() {
@@ -62,6 +61,7 @@ void MFCBot::AutonomousPeriodic() {
 
 void MFCBot::TeleopInit() {
 	Scheduler::GetInstance()->RemoveAll();
+	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -70,6 +70,22 @@ void MFCBot::TeleopPeriodic() {
 	WatchDog();
 	StallableMotor::updateControllers();
 	{
+		robotState->PutBoolean("jawsClosed",
+				CommandBase::collector->getJawState());
+		robotState->PutNumber("pterodactylAngle",
+				CommandBase::pterodactyl->getAngle());
+		robotState->PutBoolean("hasBall",
+				CommandBase::collector->isBallDetected());
+		robotState->PutNumber(
+				"collectorMotorState",
+				CommandBase::collector->isPIDEnabled() ? (CommandBase::collector->isRollerStalled() ? 2
+						: 1)
+						: 0);
+		robotState->PutBoolean("shooterWinchStalled",
+				CommandBase::shooter->isShooterMotorStalled());
+		robotState->PutNumber("shooterStrap", CommandBase::shooter->getTurns());
+		robotState->PutBoolean("shooterLatched", CommandBase::shooter->isReallyDrawnBack());
+
 		SmartDashboard::PutNumber("Winch rate",
 				CommandBase::shooter->getTurnRate());
 		SmartDashboard::PutNumber("Winch position",
@@ -83,6 +99,8 @@ void MFCBot::TeleopPeriodic() {
 				CommandBase::shooter->isLatchedByProximity());
 		SmartDashboard::PutBoolean("Shooter Winch Latch",
 				CommandBase::shooter->getWLatch());
+		SmartDashboard::PutBoolean("Shooter Motor Stalled",
+				CommandBase::shooter->isShooterMotorStalled());
 	}
 	if (dont++ > 10) {
 		dont = 0;
@@ -117,7 +135,8 @@ void MFCBot::WatchDog() {
 		if (CommandBase::shooter->getWenchMotorSpeed() < 0
 				&& CommandBase::shooter->getWLatch() == Shooter::kLatched) {
 			CommandBase::shooter->setWenchMotor(0.0);
-			printf("Watchdog: Shooter motor released without pawl disengaged!\n");
+			printf(
+					"Watchdog: Shooter motor released without pawl disengaged!\n");
 		}
 		if (CommandBase::shooter->getWenchMotorSpeed() > 0) {
 			if (CommandBase::shooter->getTurns() < 0) {
@@ -137,6 +156,19 @@ void MFCBot::WatchDog() {
 					CommandBase::shooter->setWenchMotor(0.0);
 					printf(
 							"Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
+				}
+			}
+		}
+		if (CommandBase::shooter->isShooterMotorStalled()) {
+			Command *running = CommandBase::shooter->GetCurrentCommand();
+			if (running != NULL) {
+				if (running->GetName().compare("WLatch_Latched") != 0) {
+					printf(
+							"Watchdog: Killed command %s due to shooter stall!\n",
+							running->GetName().c_str());
+					Scheduler::GetInstance()->Remove(running);
+					Scheduler::GetInstance()->AddCommand(
+							new WLatch(Shooter::kLatched));
 				}
 			}
 		}

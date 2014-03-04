@@ -22,17 +22,17 @@ void RollerRoll::Execute() {
 bool RollerRoll::IsFinished() {
 	return (collector->isBallDetected() && speed >= 0)
 			|| ((!collector->isBallDetected() && speed <= 0)
-					&& (getCurrentMillis()- timeWait >= 1000));
+					&& (getCurrentMillis() - timeWait >= 3000));
 }
 
 void RollerRoll::End() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(collector->isBallDetected() ? Collector::kClosed
-			: Collector::kOpen);
+	collector->setJawState(
+			collector->isBallDetected() ? Collector::kClosed : Collector::kOpen);
 }
 
 void RollerRoll::Interrupted() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(collector->isBallDetected() ? Collector::kClosed
-			: Collector::kOpen);
+	collector->setJawState(
+			collector->isBallDetected() ? Collector::kClosed : Collector::kOpen);
 }

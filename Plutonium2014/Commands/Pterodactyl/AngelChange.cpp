@@ -15,27 +15,38 @@ void AngelChange::Initialize() {
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 		pterodactyl->setTarget(target);
 	}
-	stability=0;
+	stability = 0;
+	lastPosition = pterodactyl->getAngle(); 
 }
 
 void AngelChange::Execute() {
 	pterodactyl->setOutputRange();
-	SmartDashboard::PutNumber("pteroangle: ", pterodactyl->getAngle());
-	SmartDashboard::PutNumber("pterorate: ", pterodactyl->getRate());
+	
+	if (lastPosition > target && pterodactyl->getAngle() < target) {
+		// Maybe? pterodactyl->resetPID();
+	}
+	lastPosition = pterodactyl->getAngle(); 
+	
+	SmartDashboard::PutNumber("pteroangle", pterodactyl->getAngle());
+	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
 	// Let the PID run.
 }
 
 bool AngelChange::IsFinished() {
-	if (pterodactyl->isPIDFinished()) {
-		stability++;
+	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
+			<= 0)) {
+		if (stability++ == 5) {
+			pterodactyl->setBrakeState(Pterodactyl::kActive);
+		}
 	} else {
-		stability=0;
+		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+		stability = 0;
 	}
 	if (target <= 0 && pterodactyl->getAngle() < 10) {
 		pterodactyl->stopPID();
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 	}
-	return stability > (target<=0 ? 10 : 5);
+	return stability > 15;
 }
 
 void AngelChange::End() {

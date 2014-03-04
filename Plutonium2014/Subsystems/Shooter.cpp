@@ -15,7 +15,8 @@ Shooter::Shooter() :
 	Subsystem("Shooter") {
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
 	wenchPot->setVoltageToAngle(SHOOTER_POT_TO_DRAW_COEFF);
-	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH), -1);
+	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH),
+			SHOOTER_MOTOR_STALL_SPEED, SHOOTER_MOTOR_STALL_TIME, -1);
 	wenchMotor->setPotSource(wenchPot);
 	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor",
 			new DualLiveSpeed(wenchMotor));
@@ -68,6 +69,10 @@ Command *Shooter::createArmShooter() {
 		return new ReadyShot(CommandBase::shooter->lastReleasePosition);
 	}
 	return new DrawShooter();
+}
+
+bool Shooter::isShooterMotorStalled() {
+	return wenchMotor->isStalled();
 }
 
 void Shooter::InitDefaultCommand() {
