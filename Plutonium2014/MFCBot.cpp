@@ -61,6 +61,7 @@ void MFCBot::AutonomousPeriodic() {
 
 void MFCBot::TeleopInit() {
 	Scheduler::GetInstance()->RemoveAll();
+	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -82,6 +83,8 @@ void MFCBot::TeleopPeriodic() {
 						: 0);
 		robotState->PutBoolean("shooterWinchStalled",
 				CommandBase::shooter->isShooterMotorStalled());
+		robotState->PutNumber("shooterStrap", CommandBase::shooter->getTurns());
+		robotState->PutBoolean("shooterLatched", CommandBase::shooter->isReallyDrawnBack());
 
 		SmartDashboard::PutNumber("Winch rate",
 				CommandBase::shooter->getTurnRate());

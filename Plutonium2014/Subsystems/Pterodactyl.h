@@ -40,6 +40,7 @@ public:
 
 	void setTarget(float target);
 	void setOutputRange();
+	void resetPID();
 	void stopPID();
 	bool isPIDFinished();
 };
