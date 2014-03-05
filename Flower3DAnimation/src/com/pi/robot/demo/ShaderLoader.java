@@ -16,7 +16,7 @@ public class ShaderLoader {
 						+ "varying vec4 varyingVertex;\n"
 						+ "\n"
 						+ "void main() {\n"
-						+ "    varyingColour = gl_FrontMaterial.diffuse;\n"
+						+ "    varyingColour = gl_Color;\n"
 						+ "    varyingNormal = gl_Normal;\n"
 						+ "    varyingVertex = gl_Vertex;\n"
 						+ "    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;\n"
@@ -31,16 +31,18 @@ public class ShaderLoader {
 						+ "void main() {\n"
 						+ "    vec3 vertexPosition = (gl_ModelViewMatrix * varyingVertex).xyz;\n"
 						+ "    vec3 surfaceNormal = normalize((gl_NormalMatrix * varyingNormal).xyz);\n"
-						+ "    vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);\n"
-						+ "    float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));\n"
-						+ "    gl_FragColor.rgb = diffuseLightIntensity * varyingColour.rgb;\n"
+						+ "    gl_FragColor.rgb = vec3(0,0,0);\n"
 						+ "    gl_FragColor += gl_LightModel.ambient;\n"
+						+ "    for (int i = 0; i<2; i++) {"
+						+ "    vec3 lightDirection = normalize(gl_LightSource[i].position.xyz - vertexPosition);\n"
+						+ "    float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));\n"
+						+ "    gl_FragColor.rgb += diffuseLightIntensity * varyingColour.rgb;\n"
 						+ "    vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));\n"
 						+ "    float specular = max(0.0, dot(surfaceNormal, reflectionDirection));\n"
 						+ "    if (diffuseLightIntensity != 0) {\n"
 						+ "        float fspecular = pow(specular, gl_FrontMaterial.shininess);\n"
 						+ "        gl_FragColor += fspecular;\n" + "    }\n"
-						+ "}");
+						+ "    }\n" + "}");
 
 		GL20.glShaderSource(vertexShader, vertexShaderSource);
 		GL20.glCompileShader(vertexShader);

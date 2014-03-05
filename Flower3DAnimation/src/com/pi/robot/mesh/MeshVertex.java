@@ -43,8 +43,10 @@ public class MeshVertex {
 	public boolean equals(Object o) {
 		if (o instanceof MeshVertex) {
 			MeshVertex v = (MeshVertex) o;
+			// Are normals similar?
 			return v.getPosition().equals(getPosition())
-					&& (!compareNormals || v.getNormal().equals(getNormal()))
+					&& (!compareNormals || Vector3D.dotProduct(v.getNormal(),
+							getNormal()) > 0.75)
 					&& (v.color == color || (v.color != null && color != null && v.color
 							.equals(color)));
 		}

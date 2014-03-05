@@ -32,6 +32,7 @@ public class TextOverlay {
 		}
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glColor4f(0f, 0f, 0f, 0.5f);
 		GL11.glBegin(GL11.GL_QUADS);
 		if (messages.size() > 0) {

@@ -193,7 +193,7 @@ public class RobotStateManager {
 		if (sk.getBone(CATAPULT_ID) != null) {
 			sk.getBone(CATAPULT_ID).slerp(new Quaternion(0f, (float) 0f, 0f),
 					new Quaternion(0.0f, (float) 1.0f, 0.0f),
-					shooterAngle - (float) Math.PI / 3f);
+					shooterAngle - (float) Math.PI / 3f - (float) Math.PI / 6f);
 		}
 	}
 

@@ -84,6 +84,18 @@ public class Mesh {
 				indexBuffer.put(indicies.get(i).intValue());
 			}
 			indexBuffer = (IntBuffer) indexBuffer.flip();
+
+			System.out.println("Generated buffers for mesh: ");
+			System.out.println("Vertex:\t" + (vertexBuffer.limit() * 4 / 1024)
+					+ "kb");
+			System.out.println("Normal:\t" + (normalBuffer.limit() * 4 / 1024)
+					+ "kb");
+			if (colorBuffer != null) {
+				System.out.println("Color:\t"
+						+ (colorBuffer.limit() * 4 / 1024) + "kb");
+			}
+			System.out.println("Index:\t" + (indexBuffer.limit() * 4 / 1024)
+					+ "kb");
 		}
 	}
 

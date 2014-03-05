@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class RobotViewer {
 	private static double horizontalTan = Math.tan(Math.toRadians(25));
 
-	private int shaders;
 	private TextOverlay textOverlay = new TextOverlay();
 	int width = 768, height = 768;
 
@@ -44,19 +43,20 @@ public class RobotViewer {
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
 			double aspect = (double) height / (double) width;
-			GL11.glFrustum(-horizontalTan, horizontalTan, aspect * -horizontalTan,
-					aspect * horizontalTan, 1, 100000);
+			GL11.glFrustum(-horizontalTan, horizontalTan, aspect
+					* -horizontalTan, aspect * horizontalTan, 1, 100000);
 			GL11.glViewport(0, 0, width, height);
-			
+
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
 
 			cam.translate();
 			GL11.glTranslatef(0, -25, 0);
-			GL20.glUseProgram(shaders);
 			Lighting.apply();
 
 			drawBone(sk.getRootBone());
+
+			overlay();
 
 			Display.update();
 			Display.sync(60);
@@ -65,15 +65,17 @@ public class RobotViewer {
 		}
 
 		unloadBone(sk.getRootBone());
-		GL20.glDeleteProgram(shaders);
-
+		Lighting.takedown();
 	}
 
 	private void overlay() {
+		GL20.glUseProgram(0);
 		double aspect = ((double) height) / ((double) width);
 		// Overlay
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
+		GL11.glNormal3f(0, 0, 0);
 		GL11.glTranslatef(-(float) horizontalTan,
 				(float) (horizontalTan * aspect), -1);
 		GL11.glScalef((float) horizontalTan / width * 2f,
@@ -112,7 +114,6 @@ public class RobotViewer {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		shaders = ShaderLoader.loadShaderPair();
 	}
 
 	public static void main(String[] args) throws LWJGLException, IOException {
