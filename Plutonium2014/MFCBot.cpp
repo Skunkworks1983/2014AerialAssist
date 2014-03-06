@@ -1,6 +1,7 @@
 #include "WPILib.h"
 #include "Commands/Command.h"
 #include "MFCBot.h"
+#include <math.h>
 #include "CommandBase.h"
 #include "Utils/Actuators/SolenoidPair.h"
 #include "Robotmap.h"
@@ -61,7 +62,8 @@ void MFCBot::AutonomousPeriodic() {
 
 void MFCBot::TeleopInit() {
 	Scheduler::GetInstance()->RemoveAll();
-	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
+	robotState->PutNumber("alliance",
+			DriverStation::GetInstance()->GetAlliance());
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -84,7 +86,14 @@ void MFCBot::TeleopPeriodic() {
 		robotState->PutBoolean("shooterWinchStalled",
 				CommandBase::shooter->isShooterMotorStalled());
 		robotState->PutNumber("shooterStrap", CommandBase::shooter->getTurns());
-		robotState->PutBoolean("shooterLatched", CommandBase::shooter->isReallyDrawnBack());
+		robotState->PutBoolean("shooterLatched",
+				CommandBase::shooter->isReallyDrawnBack());
+		robotState->PutNumber("compressorState",
+				CommandBase::pneumatics->isCompressorOn() ? 1 : 0);
+		robotState->PutNumber("driveLeftState",
+				fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
+		robotState->PutNumber("driveRightState",
+				fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
 
 		SmartDashboard::PutNumber("Winch rate",
 				CommandBase::shooter->getTurnRate());

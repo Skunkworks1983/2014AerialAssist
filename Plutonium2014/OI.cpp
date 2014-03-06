@@ -21,7 +21,6 @@
 #include "Commands/Collector/Catch.h"
 #include "Commands/Shooter/ReadyShot.h"
 
-
 #define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
 
 OI::OI() {
@@ -43,27 +42,32 @@ OI::OI() {
 
 	fire = new DigitalIOButton(2);
 	revCollector = new DigitalIOButton(9);
-	jawToggle = new OverridableButton(new DigitalIOButton(12),new DigitalIOButton(11), false);
+	jawToggle = new OverridableButton(new DigitalIOButton(12),
+			new DigitalIOButton(11), false);
 	preventShooterArming = new DigitalIOButton(10);
 	manAngleOvr = new DigitalIOButton(16);
-	
-	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.115-OI_ANALOG_TRESHOLD, 1.115+OI_ANALOG_TRESHOLD);
-	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.677-OI_ANALOG_TRESHOLD, 1.677+OI_ANALOG_TRESHOLD);
-	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 3.342-OI_ANALOG_TRESHOLD, 3.342+OI_ANALOG_TRESHOLD);
+
+	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
+	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
+	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
 }
 void OI::registerButtonListeners() {
 	// Drivebase
 	shiftButton->WhenPressed(new Shift(Shift::kToggle));
 
 	// Pterodactyl Angle
-	angleFloor->WhenPressed(new AngelChange(0));
+	angleFloor->WhenPressed(new AngelChange(-1.25));
 	angleLow->WhenPressed(new AngelChange(30));//75));
 	angleMed->WhenPressed(new AngelChange(60));//90));
 	angleHigh->WhenPressed(new AngelChange(90));//100));
 	angleCarry->WhenPressed(new AngelChange(100));//95));
-	
+
 	// Collector rollers
-	revCollector->WhenPressed(new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
+	revCollector->WhenPressed(
+			new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	START_STOP_COMMAND(collect, new Collect());
 
 	// Jaw Operations

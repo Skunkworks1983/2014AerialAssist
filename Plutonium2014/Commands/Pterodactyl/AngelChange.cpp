@@ -35,11 +35,8 @@ void AngelChange::Execute() {
 bool AngelChange::IsFinished() {
 	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
 			<= 0)) {
-		if (stability++ == 5) {
-			pterodactyl->setBrakeState(Pterodactyl::kActive);
-		}
+		stability++;
 	} else {
-		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 		stability = 0;
 	}
 	if (target <= 0 && pterodactyl->getAngle() < 10) {

@@ -124,9 +124,7 @@
 // =================
 // == Pterodactyl ==
 // =================
-#define PTERODACTYL_PID_DOWN_0 1.0,0.2,15.0 
-#define PTERODACTYL_PID_UP_60 2.0, 0.075, 7.0
-#define PTERODACTYL_PID_UP_90 2.0, 0.075, 4.0
+#define PTERODACTYL_PID 6.0,2.0,26.725
 #define PTERODACTYL_POT (1)
 #define PTERODACTYL_ANGLE_THRESHOLD (3)
 #define PTERODACTYL_MOTOR_LEFT TOP_SIDECAR,9 /*T9*/
