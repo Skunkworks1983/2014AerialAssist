@@ -17,7 +17,7 @@ Pterodactyl::Pterodactyl() :
 
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 
-	pid = new PIDController(PTERODACTYL_PID,pot,  this, 0.05f);
+	pid = new PIDController(PTERODACTYL_PID_UP,pot,  this, 0.05f);
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
 	pid->SetAbsoluteTolerance(
@@ -36,6 +36,7 @@ void Pterodactyl::InitDefaultCommand() {
 double Pterodactyl::getAngle() {
 	return pot->GetAngle() * PTERODACTYL_MAX_ANGLE;
 }
+
 double Pterodactyl::getRate() {
 	return pot->GetRate() * PTERODACTYL_MAX_ANGLE;
 }
@@ -92,6 +93,11 @@ void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 void Pterodactyl::setTarget(float target) {
 	//realSetpoint = target / (double) PTERODACTYL_MAX_ANGLE;
 	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
+	if (pid->GetSetpoint() > pid->Get()) {
+		pid->SetPID(PTERODACTYL_PID_UP);
+	} else {
+		pid ->SetPID(PTERODACTYL_PID_DOWN);
+	}
 	pid->Reset();
 	if (!pid->IsEnabled()) {
 		pid->Enable();
