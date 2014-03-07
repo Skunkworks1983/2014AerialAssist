@@ -40,9 +40,9 @@ public class BinarySTLLoader {
 		if ((attribA & 0x40) == 0x40) {
 			// Custom color
 			int attrib = ((attribB << 8) & 0xFF00) | (attribA & 0xFF);
-			int blue = (attrib & 0x1F) * 8;
+			int red = (attrib & 0x1F) * 8;
 			int green = ((attrib >> 5) & 0x1F) * 8;
-			int red = ((attrib >> 10) & 0x1F) * 8;
+			int blue = ((attrib >> 10) & 0x1F) * 8;
 			if (red >= 0 && blue >= 0 && green >= 0 && red <= 255
 					&& blue <= 255 && green <= 255) {
 				custom = new Color(red, green, blue,
@@ -108,7 +108,6 @@ public class BinarySTLLoader {
 			data.read(ioBuffer);
 			dataBuffer = ByteBuffer.wrap(ioBuffer);
 			dataBuffer.order(ByteOrder.nativeOrder());
-			System.out.println("Number of faces= " + numberOfFaces);
 			verticies = new ArrayList<MeshVertex>(numberOfFaces * 3);
 			indicies = new ArrayList<Integer>(numberOfFaces * 3);
 			int perc = 0;

@@ -17,6 +17,8 @@ import com.pi.robot.mesh.Mesh;
 import com.pi.robot.mesh.MeshVertex;
 
 public class Skeleton {
+	public static boolean COMPLEX = false;
+
 	private Bone rootBone;
 	private Map<Integer, Bone> bones = new HashMap<Integer, Bone>();
 
@@ -55,6 +57,14 @@ public class Skeleton {
 					if (chunks.length >= 4
 							&& !chunks[3].equalsIgnoreCase("null")) {
 						File file = new File(chunks[3]);
+						if (!file.exists()) {
+							String main = file.getAbsolutePath().substring(0,
+									file.getAbsolutePath().lastIndexOf('.'));
+							String ext = file.getAbsolutePath().substring(
+									file.getAbsolutePath().lastIndexOf('.'));
+							file = new File(main + "-"
+									+ (COMPLEX ? "complex" : "simple") + ext);
+						}
 						File cache = new File(file.getAbsolutePath() + ".out");
 						MeshVertex.compareNormals = chunks.length > 4
 								&& chunks[4].equalsIgnoreCase("nrmcmp");
