@@ -19,6 +19,7 @@ Collector::Collector() :
 	DualLiveSpeed *motors = new DualLiveSpeed(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT), new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT), true);
 	rollerMotor
 			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED))->setEncoderSource(rollerClawEncoder);
+	rollerMotor->setName("Collector Motor");
 	
 	rollerPIDController= new PIDController(1, .1, .01, rollerClawEncoder,
 			rollerMotor, 0.05f);

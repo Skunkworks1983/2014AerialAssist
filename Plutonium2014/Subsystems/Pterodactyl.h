@@ -43,7 +43,9 @@ public:
 	void setOutputRange();
 	void stopPID();
 	bool isPIDFinished();
+	
 	virtual void PIDWrite(float f);
+	void writeAngleMotorRaw(float f);
 };
 
 #endif

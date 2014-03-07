@@ -21,6 +21,8 @@
 #include "Commands/Collector/Catch.h"
 #include "Commands/Shooter/ReadyShot.h"
 
+#include <math.h>
+
 #define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
 
 OI::OI() {
@@ -66,8 +68,8 @@ void OI::registerButtonListeners() {
 	angleCarry->WhenPressed(new AngelChange(100));//95));
 
 	// Collector rollers
-	revCollector->WhenPressed(
-			new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
+	revCollector->WhenPressed(new Pass());
+			//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	START_STOP_COMMAND(collect, new Collect());
 
 	// Jaw Operations
@@ -99,4 +101,14 @@ Joystick *OI::getJoystickRight() {
 
 bool OI::isShooterArmingPrevented() {
 	return !preventShooterArming->Get();
+}
+
+float OI::getAngleAdjustment() {
+	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(3);
+	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
+}
+
+float OI::getPowerAdjustment() {
+	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(1);
+	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
 }

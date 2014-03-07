@@ -71,47 +71,52 @@ void MFCBot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	WatchDog();
 	StallableMotor::updateControllers();
-	{
-		robotState->PutBoolean("jawsClosed",
-				CommandBase::collector->getJawState());
-		robotState->PutNumber("pterodactylAngle",
-				CommandBase::pterodactyl->getAngle());
-		robotState->PutBoolean("hasBall",
-				CommandBase::collector->isBallDetected());
-		robotState->PutNumber(
-				"collectorMotorState",
-				CommandBase::collector->isPIDEnabled() ? (CommandBase::collector->isRollerStalled() ? 2
-						: 1)
-						: 0);
-		robotState->PutBoolean("shooterWinchStalled",
-				CommandBase::shooter->isShooterMotorStalled());
-		robotState->PutNumber("shooterStrap", CommandBase::shooter->getTurns());
-		robotState->PutBoolean("shooterLatched",
-				CommandBase::shooter->isReallyDrawnBack());
-		robotState->PutNumber("compressorState",
-				CommandBase::pneumatics->isCompressorOn() ? 1 : 0);
-		robotState->PutNumber("driveLeftState",
-				fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
-		robotState->PutNumber("driveRightState",
-				fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
-
-		SmartDashboard::PutNumber("Winch rate",
-				CommandBase::shooter->getTurnRate());
-		SmartDashboard::PutNumber("Winch position",
-				CommandBase::shooter->getTurns());
-
-		SmartDashboard::PutNumber("pteroangle",
-				CommandBase::pterodactyl->getAngle());
-		SmartDashboard::PutBoolean("Shooter Pattern Latched",
-				CommandBase::shooter->isLatchedByPattern());
-		SmartDashboard::PutBoolean("Shooter Promixity Latched",
-				CommandBase::shooter->isLatchedByProximity());
-		SmartDashboard::PutBoolean("Shooter Winch Latch",
-				CommandBase::shooter->getWLatch());
-		SmartDashboard::PutBoolean("Shooter Motor Stalled",
-				CommandBase::shooter->isShooterMotorStalled());
-	}
 	if (dont++ > 10) {
+		{
+			robotState->PutBoolean("jawsClosed",
+					CommandBase::collector->getJawState());
+			robotState->PutNumber("pterodactylAngle",
+					CommandBase::pterodactyl->getAngle());
+			robotState->PutBoolean("hasBall",
+					CommandBase::collector->isBallDetected());
+			robotState->PutNumber(
+					"collectorMotorState",
+					CommandBase::collector->isPIDEnabled() ? (CommandBase::collector->isRollerStalled() ? 2
+							: 1)
+							: 0);
+			robotState->PutBoolean("shooterWinchStalled",
+					CommandBase::shooter->isShooterMotorStalled());
+			robotState->PutNumber("shooterStrap",
+					CommandBase::shooter->getTurns());
+			robotState->PutBoolean("shooterLatched",
+					CommandBase::shooter->isReallyDrawnBack());
+			robotState->PutNumber("compressorState",
+					CommandBase::pneumatics->isCompressorOn() ? 1 : 0);
+			robotState->PutNumber("driveLeftState",
+					fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
+			robotState->PutNumber("driveRightState",
+					fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
+		}
+		{
+			SmartDashboard::PutNumber("Winch rate",
+					CommandBase::shooter->getTurnRate());
+			SmartDashboard::PutNumber("Winch position",
+					CommandBase::shooter->getTurns());
+
+			SmartDashboard::PutNumber("pteroangle",
+					CommandBase::pterodactyl->getAngle());
+			SmartDashboard::PutBoolean("Shooter Pattern Latched",
+					CommandBase::shooter->isLatchedByPattern());
+			SmartDashboard::PutBoolean("Shooter Promixity Latched",
+					CommandBase::shooter->isLatchedByProximity());
+			SmartDashboard::PutBoolean("Shooter Winch Latch",
+					CommandBase::shooter->getWLatch());
+			SmartDashboard::PutBoolean("Shooter Motor Stalled",
+					CommandBase::shooter->isShooterMotorStalled());
+			
+			SmartDashboard::PutNumber("ShooterOUT", CommandBase::oi->getPowerAdjustment());
+			SmartDashboard::PutNumber("AngleOUT", CommandBase::oi->getAngleAdjustment());
+		}
 		dont = 0;
 	}
 }

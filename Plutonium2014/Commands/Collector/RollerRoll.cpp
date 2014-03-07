@@ -5,11 +5,11 @@ RollerRoll::RollerRoll(float speed) :
 	CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
 	Requires(collector);
 	this->speed = speed;
-	this->timeWait = 0;
 }
 
 void RollerRoll::Initialize() {
 	collector->setRollerSpeed(speed);
+	this->timeWait = 0;
 }
 
 void RollerRoll::Execute() {

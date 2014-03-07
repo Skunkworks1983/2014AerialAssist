@@ -18,6 +18,8 @@ Shooter::Shooter() :
 	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH),
 			SHOOTER_MOTOR_STALL_SPEED, SHOOTER_MOTOR_STALL_TIME, -1);
 	wenchMotor->setPotSource(wenchPot);
+	wenchMotor->setName("Winch Motor");
+	
 	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor",
 			new DualLiveSpeed(wenchMotor));
 	LiveWindow::GetInstance()->AddSensor("Shooter", "Wench Potentiometer",
@@ -49,8 +51,12 @@ Shooter::Shooter() :
 	// Icky Icky.  This code is repeated
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
+	
 	pullBackSwitchPatternBuffer.lastState = Shooter::kUnlatched;
 	pullBackSwitchPatternBuffer.lastRequestedState = sLatch->Get();
+	if (getRawProximity()) {
+		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
+	}
 
 	lastReleasePosition = 0.0;
 }

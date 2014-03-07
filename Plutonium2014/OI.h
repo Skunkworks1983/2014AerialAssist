@@ -44,7 +44,9 @@ public:
 	Joystick *getJoystickRight();
 	bool isShooterArmingPrevented();
 	void registerButtonListeners();
-	float getScale();
+
+	float getAngleAdjustment();
+	float getPowerAdjustment();
 };
 
 #endif
