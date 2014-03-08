@@ -10,14 +10,17 @@
 FireShooter::FireShooter() :
 	CommandGroup("FireShooter") {
 	AddSequential(new WLatch(Shooter::kLatched));
-	AddParallel(new JawMove(Collector::kOpen));
+	Command *jawMove = new JawMove(Collector::kOpen, 1.25);
+	AddSequential(jawMove);
 	AddSequential(new SLatch(Shooter::kUnlatched));
 	AddSequential(new WaitCommand(1.5));
-	AddSequential(
-			new CommandStarter(Shooter::createCreateArmShooter));
+	AddSequential(new CommandStarter(Shooter::createCreateArmShooter));
 }
 
 void FireShooter::Initialize() {
+	if (CommandBase::pterodactyl->getAngle() < 45 || CommandBase::pterodactyl->getPIDTarget() < 45) {
+		Cancel();
+	}
 }
 
 void FireShooter::End() {

@@ -11,8 +11,9 @@
 class JawMove: public CommandBase {
 private:
 	Collector::JawState state;
+	bool killIt;
 public:
-	JawMove(Collector::JawState state);
+	JawMove(Collector::JawState state, float timeout = 0.125);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

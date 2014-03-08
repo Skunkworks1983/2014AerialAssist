@@ -22,6 +22,7 @@ void WLatch::Initialize() {
 }
 
 void WLatch::Execute() {
+	shooter->setWLatch(state);
 	time = getCurrentMillis() - bTime;
 	if (state == Shooter::kLatched && shooter->getWLatch() == state && time
 			< SHOOTER_WLATCH_WAIT - SHOOTER_WLATCH_UNLOCK_DRIVE) {

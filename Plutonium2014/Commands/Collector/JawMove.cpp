@@ -1,23 +1,29 @@
 #include "JawMove.h"
 
-JawMove::JawMove(Collector::JawState state) :
-	CommandBase(CommandBase::createNameFromString("JawMove", state
-			==Collector::kClosed ? "Closed" : "Open")) {
+JawMove::JawMove(Collector::JawState state, float timeout) :
+			CommandBase(
+					CommandBase::createNameFromString("JawMove",
+							state == Collector::kClosed ? "Closed" : "Open")) {
 	Requires(collector);
-	SetTimeout(0.125);
+	SetTimeout(timeout);
 	this->state = state;
 }
 
 void JawMove::Initialize() {
-
+	killIt = false;
+	if (collector->getJawState() == state) {
+		killIt = true;
+	}
 }
 
 void JawMove::Execute() {
-	collector->setJawState(state);
+	if (shooter->isReallyDrawnBack()) {
+		collector->setJawState(state);
+	}
 }
 
 bool JawMove::IsFinished() {
-	return IsTimedOut();//state==collector->getJawState();
+	return killIt || IsTimedOut();
 }
 
 void JawMove::End() {

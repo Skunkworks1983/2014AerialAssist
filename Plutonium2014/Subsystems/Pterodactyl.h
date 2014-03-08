@@ -18,7 +18,7 @@ public:
 	};
 
 private:
-	float realSetpoint;
+	bool goingUp;
 	DualLiveSpeed *angleMotors;
 	PIDController *pid;
 	AnalogPot *pot;
@@ -43,7 +43,8 @@ public:
 	void setOutputRange();
 	void stopPID();
 	bool isPIDFinished();
-	
+
+	float getPIDTarget();
 	virtual void PIDWrite(float f);
 	void writeAngleMotorRaw(float f);
 };

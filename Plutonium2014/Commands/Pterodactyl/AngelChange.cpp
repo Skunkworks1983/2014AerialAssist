@@ -11,27 +11,22 @@ AngelChange::AngelChange(float target) :
 }
 
 void AngelChange::Initialize() {
-	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
+//	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-		float tmpTarget = target;
-		if (tmpTarget < 10 && shooter->getTurns() > 0.25
+		tmpTarget = target;
+		if (tmpTarget < 45 && shooter->getTurns() > 0.25
 				&& !shooter->isReallyDrawnBack()) {
-			//tmpTarget = 10;//Safeties  Collector shouldn't go down in this case
-			// TODO Make it go down once the shooter has been drawn back.
+			tmpTarget = 45;//Safeties  Collector shouldn't go down in this case
 		}
 		pterodactyl->setTarget(tmpTarget);
-	}
-	stability = 0;
-	lastPosition = pterodactyl->getAngle();
+		stability = 0;
+//	} else {
+//		stability = 50;
+//	}
 }
 
 void AngelChange::Execute() {
 	pterodactyl->setOutputRange();
-
-	if (lastPosition > target && pterodactyl->getAngle() < target) {
-		// Maybe? pterodactyl->resetPID();
-	}
-	lastPosition = pterodactyl->getAngle();
 
 	SmartDashboard::PutNumber("pteroangle", pterodactyl->getAngle());
 	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
@@ -42,6 +37,10 @@ void AngelChange::Execute() {
 		stability++;
 	} else {
 		stability = 0;
+	}
+	if (tmpTarget == 45 && target < 45 && shooter->isReallyDrawnBack()) {
+		tmpTarget = target;
+		pterodactyl->setTarget(tmpTarget);
 	}
 	if (target <= 0 && pterodactyl->getAngle() < 10) {
 		pterodactyl->stopPID();

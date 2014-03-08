@@ -30,6 +30,7 @@ OI::OI() {
 	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
 	// Process operator interface input here.
 	shiftButton = new JoystickButton(joystickLeft, 1);
+	collectButton = new CompositeButton(new JoystickButton(joystickRight, 1),NULL,CompositeButton::kNOT);
 
 	catch1 = new DigitalIOButton(1);
 	catch2 = new DigitalIOButton(3);
@@ -58,19 +59,21 @@ OI::OI() {
 }
 void OI::registerButtonListeners() {
 	// Drivebase
-	shiftButton->WhenPressed(new Shift(Shift::kToggle));
+	shiftButton->WhenPressed(new Shift(Shift::kHigh));
+	shiftButton->WhenReleased(new Shift(Shift::kLow));
 
 	// Pterodactyl Angle
 	angleFloor->WhenPressed(new AngelChange(-1.25));
-	angleLow->WhenPressed(new AngelChange(30));//75));
-	angleMed->WhenPressed(new AngelChange(60));//90));
-	angleHigh->WhenPressed(new AngelChange(90));//100));
-	angleCarry->WhenPressed(new AngelChange(100));//95));
+	angleLow->WhenPressed(new AngelChange(75));//75));
+	angleMed->WhenPressed(new AngelChange(89));//90));
+	angleHigh->WhenPressed(new AngelChange(100));//100));
+	angleCarry->WhenPressed(new AngelChange(95));//95));
 
 	// Collector rollers
 	revCollector->WhenPressed(new Pass());
-			//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
+	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	START_STOP_COMMAND(collect, new Collect());
+	START_STOP_COMMAND(collectButton, new Collect());
 
 	// Jaw Operations
 	pass->WhenPressed(new Pass());

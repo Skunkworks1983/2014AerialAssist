@@ -50,14 +50,14 @@ void MFCBot::AutonomousInit() {
 }
 
 void MFCBot::AutonomousPeriodic() {
-	Scheduler::GetInstance()->Run();
+	/*Scheduler::GetInstance()->Run();
 	WatchDog();
 	if (dont++ > 10) {
 		printf("Encoder Left: %f, Encoder Right: %f \n",
 				CommandBase::driveBase->getLeftEncoder()->GetDistance(),
 				CommandBase::driveBase->getRightEncoder()->GetDistance());
 		dont = 0;
-	}
+	}*/
 }
 
 void MFCBot::TeleopInit() {
@@ -105,6 +105,8 @@ void MFCBot::TeleopPeriodic() {
 
 			SmartDashboard::PutNumber("pteroangle",
 					CommandBase::pterodactyl->getAngle());
+			SmartDashboard::PutNumber("pterorate",
+					CommandBase::pterodactyl->getRate());
 			SmartDashboard::PutBoolean("Shooter Pattern Latched",
 					CommandBase::shooter->isLatchedByPattern());
 			SmartDashboard::PutBoolean("Shooter Promixity Latched",
@@ -173,7 +175,7 @@ void MFCBot::WatchDog() {
 				}
 			}
 		}
-		if (CommandBase::shooter->isShooterMotorStalled()) {
+		if (CommandBase::shooter->isShooterMotorStalled() && CommandBase::shooter->getTurns() > 0.125) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {

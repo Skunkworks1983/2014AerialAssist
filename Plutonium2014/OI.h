@@ -13,6 +13,7 @@ private:
 	Joystick *joystickLeft;
 	Joystick *joystickRight;
 
+	CompositeButton *collectButton;
 	JoystickButton *shiftButton;
 
 	DigitalIOButton *catch1;

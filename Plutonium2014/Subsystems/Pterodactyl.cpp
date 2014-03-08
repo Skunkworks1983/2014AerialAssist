@@ -12,7 +12,7 @@ Pterodactyl::Pterodactyl() :
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Motor", angleMotors);
 
 	pot = new AnalogPot(PTERODACTYL_POT);
-	pot->SetAverageBits(1); // dualsample
+	pot->SetAverageBits(2); // quadsample
 	pot->setVoltageToAngle(PTERODACTYL_POT_VOLTAGE_TO_ANGLE_COEFF);
 
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
@@ -34,7 +34,7 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle() {
-	return pot->GetAngle() * PTERODACTYL_MAX_ANGLE;
+	return pot->GetAngle(2.0 / 100.0) * PTERODACTYL_MAX_ANGLE;
 }
 
 double Pterodactyl::getRate() {
@@ -60,6 +60,10 @@ void Pterodactyl::setOutputRange() {
 	}
 }
 
+float Pterodactyl::getPIDTarget() {
+	return pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE;
+}
+
 void Pterodactyl::PIDWrite(float f) {
 	float neutralSpeed = 0.3 - (8.0e-7 * pow(getAngle() + 10, 2.63));
 	neutralSpeed *= SCALING;
@@ -78,10 +82,20 @@ void Pterodactyl::PIDWrite(float f) {
 		// Going up
 		scaling = cos(getAngle() / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
 	}
-//	printf("Motor: %f\tCorrection: %f\tOutput: %f\tScale: %f\n", f,
-//			neutralSpeed, output, scaling);
-	angleMotors->Set(output * scaling);
-}
+
+	if (goingUp) {
+		float dScale = (pid->GetSetpoint() * 0.5) + 0.5;
+		pid->SetPID(PTERODACTYL_PID_UP* dScale);
+	} else {
+		float dScale = (pid->GetSetpoint() * 0.75) + 0.25;
+		pid->SetPID(PTERODACTYL_PID_DOWN*dScale);
+	}
+
+	//	printf("Motor: %f\tCorrection: %f\tOutput: %f\tScale: %f\n", f,
+				//			neutralSpeed, output, scaling);
+				//	printf("PID Values: %f,%f,%f\n", pid->GetP(), pid->GetI(), pid->GetD());
+				angleMotors->Set(output * scaling);
+			}
 
 float Pterodactyl::getAngleMotorSpeed() {
 	return angleMotors->Get();
@@ -96,16 +110,20 @@ void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 }
 
 void Pterodactyl::setTarget(float target) {
-	//realSetpoint = target / (double) PTERODACTYL_MAX_ANGLE;
+	if (pid->IsEnabled()) {
+		pid->Disable();
+	}
 	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
 	if (target > getAngle()) {
+		goingUp = true;
 		float dScale = (pid->GetSetpoint() * 0.5) + 0.5;
-		printf("DScaling At: %f\n", dScale);
+		printf("DScaling UP At: %f\n", dScale);
 		pid->SetPID(PTERODACTYL_PID_UP* dScale);
 	} else {
+		goingUp = false;
 		float dScale = (pid->GetSetpoint() * 0.75) + 0.25;
-		printf("DScaling At: %f\n", dScale);
-		pid ->SetPID(PTERODACTYL_PID_DOWN * dScale);
+		printf("DScaling DOWN At: %f\n", dScale);
+		pid->SetPID(PTERODACTYL_PID_DOWN*dScale);
 	}
 	pid->Reset();
 	if (!pid->IsEnabled()) {
@@ -126,6 +144,6 @@ void Pterodactyl::writeAngleMotorRaw(float f) {
 
 bool Pterodactyl::isPIDFinished() {
 	return fabs((pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle())
-			< PTERODACTYL_ANGLE_THRESHOLD;
+			< GET_DOUBLE(PTERODACTYL_ANGLE_THRESHOLD);
 }
 
