@@ -34,7 +34,7 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle() {
-	return pot->GetAngle(2.0 / 100.0) * PTERODACTYL_MAX_ANGLE;
+	return pot->GetAngle(2.5 / 100.0) * PTERODACTYL_MAX_ANGLE;
 }
 
 double Pterodactyl::getRate() {
@@ -53,10 +53,11 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 #define SCALING 0.75
 
 void Pterodactyl::setOutputRange() {
-	if (getAngle() < 25) {
+	float angle = getAngle();
+	if (angle < 25) {
 		pid->SetOutputRange(-.125 * SCALING, 1.0);
 	} else {
-		pid->SetOutputRange(-.4, getAngle() > 75 ? 0.5 : 1.0);
+		pid->SetOutputRange(-.4, angle > 75 ? 0.5 : 1.0);
 	}
 }
 
@@ -65,7 +66,9 @@ float Pterodactyl::getPIDTarget() {
 }
 
 void Pterodactyl::PIDWrite(float f) {
-	float neutralSpeed = 0.3 - (8.0e-7 * pow(getAngle() + 10, 2.63));
+	float angle = getAngle();
+
+	float neutralSpeed = 0.3 - (8.0e-7 * pow(angle + 10, 2.63));
 	neutralSpeed *= SCALING;
 	float output = f + neutralSpeed;
 	if (output < -1.0) {
@@ -77,10 +80,10 @@ void Pterodactyl::PIDWrite(float f) {
 	float scaling;
 	if (output < 1.0) {
 		// Going down
-		scaling = sin(getAngle() / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
+		scaling = sin(angle / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
 	} else {
 		// Going up
-		scaling = cos(getAngle() / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
+		scaling = cos(angle / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
 	}
 
 	if (goingUp) {
@@ -94,6 +97,7 @@ void Pterodactyl::PIDWrite(float f) {
 	//	printf("Motor: %f\tCorrection: %f\tOutput: %f\tScale: %f\n", f,
 				//			neutralSpeed, output, scaling);
 				//	printf("PID Values: %f,%f,%f\n", pid->GetP(), pid->GetI(), pid->GetD());
+
 				angleMotors->Set(output * scaling);
 			}
 
@@ -140,6 +144,10 @@ void Pterodactyl::stopPID() {
 
 void Pterodactyl::writeAngleMotorRaw(float f) {
 	angleMotors->Set(f);
+}
+
+double Pterodactyl::PIDGet() {
+	return getAngle();
 }
 
 bool Pterodactyl::isPIDFinished() {

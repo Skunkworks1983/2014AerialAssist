@@ -175,7 +175,7 @@ void MFCBot::WatchDog() {
 				}
 			}
 		}
-		if (CommandBase::shooter->isShooterMotorStalled() && CommandBase::shooter->getTurns() > 0.125) {
+		if (CommandBase::shooter->isShooterMotorStalled()/* && CommandBase::shooter->getTurns() > 0.125*/) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {
