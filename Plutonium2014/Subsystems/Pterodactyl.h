@@ -18,7 +18,6 @@ public:
 	};
 
 private:
-	bool goingUp;
 	DualLiveSpeed *angleMotors;
 	PIDController *pid;
 	AnalogPot *pot;

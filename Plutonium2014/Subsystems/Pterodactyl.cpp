@@ -5,6 +5,9 @@
 #include <math.h>
 #include "../Utils/Actuators/DualLiveSpeed.h"
 
+#define PTERODACTYL_PID 1.25,.018,1.25
+#define PTERODACTYL_ANGLE_THRESHOLD (1)
+
 Pterodactyl::Pterodactyl() :
 	Subsystem("Pterodactyl") {
 	angleMotors = new DualLiveSpeed(new Talon(PTERODACTYL_MOTOR_LEFT),
@@ -17,7 +20,7 @@ Pterodactyl::Pterodactyl() :
 
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 
-	pid = new PIDController(PTERODACTYL_PID_UP,pot,  this, 0.05f);
+	pid = new PIDController(PTERODACTYL_PID,pot,  this, 0.05f);
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
 	pid->SetAbsoluteTolerance(
@@ -34,7 +37,7 @@ void Pterodactyl::InitDefaultCommand() {
 }
 
 double Pterodactyl::getAngle() {
-	return pot->GetAngle(2.5 / 100.0) * PTERODACTYL_MAX_ANGLE;
+	return pot->GetAngle(0.0 / 100.0) * PTERODACTYL_MAX_ANGLE;
 }
 
 double Pterodactyl::getRate() {
@@ -50,14 +53,18 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 	}
 }
 
-#define SCALING 0.75
-
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 	if (angle < 25) {
-		pid->SetOutputRange(-.125 * SCALING, 1.0);
+		pid->SetOutputRange(-.25, 1.0);
 	} else {
-		pid->SetOutputRange(-.4, angle > 75 ? 0.5 : 1.0);
+		float speedUp = -0.25 * ((angle - 75.0) / 15.0) + 0.75;
+		if (speedUp > 1.0) {
+			speedUp = 1.0;
+		} else if (speedUp < 0.5) {
+			speedUp = 0.5;
+		}
+		pid->SetOutputRange(-.4, speedUp);
 	}
 }
 
@@ -66,40 +73,8 @@ float Pterodactyl::getPIDTarget() {
 }
 
 void Pterodactyl::PIDWrite(float f) {
-	float angle = getAngle();
-
-	float neutralSpeed = 0.3 - (8.0e-7 * pow(angle + 10, 2.63));
-	neutralSpeed *= SCALING;
-	float output = f + neutralSpeed;
-	if (output < -1.0) {
-		output = -1.0;
-	} else if (output > 1.0) {
-		output = 1.0;
-	}
-
-	float scaling;
-	if (output < 1.0) {
-		// Going down
-		scaling = sin(angle / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
-	} else {
-		// Going up
-		scaling = cos(angle / 125.0 * 3.141592 / 2.0) * 0.25 + 0.75;
-	}
-
-	if (goingUp) {
-		float dScale = (pid->GetSetpoint() * 0.5) + 0.5;
-		pid->SetPID(PTERODACTYL_PID_UP* dScale);
-	} else {
-		float dScale = (pid->GetSetpoint() * 0.75) + 0.25;
-		pid->SetPID(PTERODACTYL_PID_DOWN*dScale);
-	}
-
-	//	printf("Motor: %f\tCorrection: %f\tOutput: %f\tScale: %f\n", f,
-				//			neutralSpeed, output, scaling);
-				//	printf("PID Values: %f,%f,%f\n", pid->GetP(), pid->GetI(), pid->GetD());
-
-				angleMotors->Set(output * scaling);
-			}
+	angleMotors->Set(f);
+}
 
 float Pterodactyl::getAngleMotorSpeed() {
 	return angleMotors->Get();
@@ -118,17 +93,6 @@ void Pterodactyl::setTarget(float target) {
 		pid->Disable();
 	}
 	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
-	if (target > getAngle()) {
-		goingUp = true;
-		float dScale = (pid->GetSetpoint() * 0.5) + 0.5;
-		printf("DScaling UP At: %f\n", dScale);
-		pid->SetPID(PTERODACTYL_PID_UP* dScale);
-	} else {
-		goingUp = false;
-		float dScale = (pid->GetSetpoint() * 0.75) + 0.25;
-		printf("DScaling DOWN At: %f\n", dScale);
-		pid->SetPID(PTERODACTYL_PID_DOWN*dScale);
-	}
 	pid->Reset();
 	if (!pid->IsEnabled()) {
 		pid->Enable();
@@ -151,7 +115,8 @@ double Pterodactyl::PIDGet() {
 }
 
 bool Pterodactyl::isPIDFinished() {
-	return fabs((pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle())
+	return !pid->IsEnabled() || fabs(
+			(pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle())
 			< GET_DOUBLE(PTERODACTYL_ANGLE_THRESHOLD);
 }
 

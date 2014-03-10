@@ -13,9 +13,12 @@ FireShooter::FireShooter() :
 }
 
 void FireShooter::Initialize() {
-	if (CommandBase::pterodactyl->getPIDTarget() > 45
+	if ((CommandBase::pterodactyl->isPIDFinished()
+			|| CommandBase::pterodactyl->getPIDTarget() > 45)
 			&& CommandBase::pterodactyl->getAngle() > 45) {
 		Scheduler::GetInstance()->AddCommand(new FireShooterInternal());
+	} else {
+		printf("Ignoring Fire Shooter due to pterodactyl angle\n");
 	}
 }
 

@@ -11,6 +11,8 @@
 
 #include "../Commands/Shooter/DrawShooter.h"
 
+#define SHOOTER_FANCY_LETOUT 0 // Disable fancy letout because Ken
+
 Shooter::Shooter() :
 	Subsystem("Shooter") {
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
@@ -19,7 +21,7 @@ Shooter::Shooter() :
 			SHOOTER_MOTOR_STALL_SPEED, SHOOTER_MOTOR_STALL_TIME, -1);
 	wenchMotor->setPotSource(wenchPot);
 	wenchMotor->setName("Winch Motor");
-	
+
 	LiveWindow::GetInstance()->AddActuator("Shooter", "Wench Motor",
 			new DualLiveSpeed(wenchMotor));
 	LiveWindow::GetInstance()->AddSensor("Shooter", "Wench Potentiometer",
@@ -51,7 +53,7 @@ Shooter::Shooter() :
 	// Icky Icky.  This code is repeated
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
-	
+
 	pullBackSwitchPatternBuffer.lastState = Shooter::kUnlatched;
 	pullBackSwitchPatternBuffer.lastRequestedState = sLatch->Get();
 	if (getRawProximity()) {
@@ -69,11 +71,13 @@ Command *Shooter::createArmShooter() {
 	if (CommandBase::oi != NULL && CommandBase::oi->isShooterArmingPrevented()) {
 		return NULL;
 	}
+#if SHOOTER_FANCY_LETOUT
 	if (CommandBase::shooter != NULL
 			&& CommandBase::shooter->lastReleasePosition
 					> SHOOTER_WENCH_POT_REVERSE_ALLOW) {
 		return new ReadyShot(CommandBase::shooter->lastReleasePosition);
 	}
+#endif
 	return new DrawShooter();
 }
 
@@ -138,7 +142,17 @@ void Shooter::setWenchMotor(float speed) {
 }
 
 void Shooter::setSLatch(Shooter::LatchPosition state) {
+#if !SHOOTER_FANCY_LETOUT
+	if (lastReleasePosition == 0.0 && state == Shooter::kUnlatched) {
+		return;
+	}
+#endif
 	sLatch->Set(state);
+	if (state == Shooter::kUnlatched) {
+#if SHOOTER_FANCY_LETOUT
+		lastReleasePosition = 0.0;
+#endif
+	}
 }
 
 void Shooter::setWLatch(Shooter::LatchPosition state) {
