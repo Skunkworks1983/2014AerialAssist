@@ -1,10 +1,12 @@
 #include "RollerRoll.h"
+// Utils
 #include "../../Utils/Time.h"
 
 RollerRoll::RollerRoll(float speed) :
-	CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
+		CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
 	Requires(collector);
 	this->speed = speed;
+	this->timeWait = 0;
 }
 
 void RollerRoll::Initialize() {
@@ -28,11 +30,13 @@ bool RollerRoll::IsFinished() {
 void RollerRoll::End() {
 	collector->setRollerSpeed(0.0);
 	collector->setJawState(
-			collector->isBallDetected() ? Collector::kClosed : Collector::kOpen);
+			collector->isBallDetected() ?
+					Collector::kClosed : Collector::kOpen);
 }
 
 void RollerRoll::Interrupted() {
 	collector->setRollerSpeed(0.0);
 	collector->setJawState(
-			collector->isBallDetected() ? Collector::kClosed : Collector::kOpen);
+			collector->isBallDetected() ?
+					Collector::kClosed : Collector::kOpen);
 }

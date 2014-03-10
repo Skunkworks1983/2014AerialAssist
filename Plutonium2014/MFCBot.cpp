@@ -1,15 +1,19 @@
+#include "MFCBot.h"
+// CSTDLIB
+#include <math.h>
+// WPILib
 #include "WPILib.h"
 #include "Commands/Command.h"
-#include "MFCBot.h"
-#include <math.h>
-#include "CommandBase.h"
-#include "Utils/Actuators/SolenoidPair.h"
-#include "Robotmap.h"
+// Utils
+#include "Utils/Logger.h"
 #include "Utils/Actuators/StallableMotor.h"
+// Backend
+#include "CommandBase.h"
+#include "Robotmap.h"
 #include "Subsystems/Pterodactyl.h"
+// Commands
 #include "Commands/Shooter/Latches/WLatch.h"
 #include "Commands/Autonomous/Autonomous.h"
-#include "Subsystems/Pterodactyl.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;

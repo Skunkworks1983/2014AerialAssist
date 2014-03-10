@@ -1,15 +1,17 @@
 #include "FireShooter.h"
-#include "../../Subsystems/Shooter.h"
-#include "../../Robotmap.h"
-#include "../Collector/JawMove.h"
+
+// Utils
 #include "../../Utils/Commands/CommandStarter.h"
+#include "../../Utils/Logger.h"
+
+// Backend
+#include "../../Robotmap.h"
+
+// Commands
 #include "Raw/FireShooterInternal.h"
 
-#include "Latches/SLatch.h"
-#include "Latches/WLatch.h"
-
 FireShooter::FireShooter() :
-	CommandBase("FireShooter") {
+		CommandBase("FireShooter") {
 }
 
 void FireShooter::Initialize() {
@@ -18,7 +20,8 @@ void FireShooter::Initialize() {
 			&& CommandBase::pterodactyl->getAngle() > 45) {
 		Scheduler::GetInstance()->AddCommand(new FireShooterInternal());
 	} else {
-		Logger::log(Logger::kInfo, "Shooter-FireShooter", "Ignoring fire shooter due to pterodactyl angle!");
+		Logger::log(Logger::kInfo, "Shooter-FireShooter",
+				"Ignoring fire shooter due to pterodactyl angle!");
 	}
 }
 

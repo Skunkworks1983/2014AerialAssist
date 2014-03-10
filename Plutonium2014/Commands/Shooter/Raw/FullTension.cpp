@@ -1,8 +1,11 @@
 #include "FullTension.h"
-#include "../../../Robotmap.h"
+
+// Utils
 #include "../../../Utils/Time.h"
 #include "../../../Utils/Logger.h"
-#include <stdio.h>
+
+// Backend
+#include "../../../Robotmap.h"
 
 FullTension::FullTension() {
 	Requires(shooter);
@@ -41,6 +44,7 @@ bool FullTension::IsFinished() {
 void FullTension::End() {
 	Logger::log(Logger::kFiner, "Shooter-FullTension", "Ended full tension");
 	shooter->setWenchMotor(0);
+	shooter->checkDiagnostics();
 }
 
 void FullTension::Interrupted() {

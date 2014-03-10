@@ -1,12 +1,18 @@
-#include <math.h>
-#include "../../Utils/Math.h"
 #include "TurnDegree.h"
+// CSTDLIB
+#include <math.h>
+
+// Utils
+#include "../../Utils/Math.h"
+
+// Backend
 #include "../../Robotmap.h"
 
 TurnDegree::TurnDegree(float targetAngle) :
 	CommandBase(CommandBase::createNameFromFloat("TurnDegree", targetAngle)) {
 	Requires(driveBase);
 	this->targetAngle = targetAngle;
+	this->angleRemaining = 0;
 }
 
 void TurnDegree::Initialize() {

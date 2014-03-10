@@ -7,6 +7,7 @@ JawMove::JawMove(Collector::JawState state, float timeout) :
 	Requires(collector);
 	SetTimeout(timeout);
 	this->state = state;
+	this->killIt = false;
 }
 
 void JawMove::Initialize() {

@@ -1,7 +1,10 @@
 #include "DrawShooter.h"
+
+// Backend
 #include "../../Subsystems/Shooter.h"
 #include "../../Robotmap.h"
 
+// Commands
 #include "Latches/SLatch.h"
 #include "Latches/WLatch.h"
 #include "Raw/FullTension.h"

@@ -1,9 +1,12 @@
 #include "AngelChange.h"
-#include "../../Robotmap.h"
+// CSTDLIB
 #include <math.h>
 
+// Backend
+#include "../../Robotmap.h"
+
 AngelChange::AngelChange(float target) :
-	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
+		CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
 	Requires(pterodactyl);
 	this->target = target;
 	this->stability = 0;
@@ -13,14 +16,14 @@ AngelChange::AngelChange(float target) :
 
 void AngelChange::Initialize() {
 //	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
-		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-		tmpTarget = target;
-		if (tmpTarget < 45 && shooter->getTurns() > 0.25
-				&& !shooter->isReallyDrawnBack()) {
-			tmpTarget = 45;//Safeties  Collector shouldn't go down in this case
-		}
-		pterodactyl->setTarget(tmpTarget);
-		stability = 0;
+	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+	tmpTarget = target;
+	if (tmpTarget < 45 && shooter->getTurns() > 0.25
+			&& !shooter->isReallyDrawnBack()) {
+		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
+	}
+	pterodactyl->setTarget(tmpTarget);
+	stability = 0;
 //	} else {
 //		stability = 50;
 //	}
@@ -33,8 +36,8 @@ void AngelChange::Execute() {
 	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
 	// Let the PID run.
 
-	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
-			<= 0)) {
+	if (pterodactyl->isPIDFinished()
+			|| (target <= 0 && pterodactyl->getAngle() <= 0)) {
 		stability++;
 	} else {
 		stability = 0;

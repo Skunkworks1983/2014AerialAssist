@@ -1,11 +1,15 @@
 #include "Pass.h"
 
+// WPILib
+#include "Commands/WaitCommand.h"
+
+// Backend
+#include "../../Robotmap.h"
+
+// Commands
 #include "JawMove.h"
 #include "RollerRoll.h"
 #include "../Pterodactyl/AngelChange.h"
-#include "Commands/WaitCommand.h"
-#include "../../Robotmap.h"
-//#include "RobotMap.h"
 
 Pass::Pass(): 
 	CommandGroup("Pass") {

@@ -1,9 +1,13 @@
 #include "FireShooterInternal.h"
-#include "../../../Subsystems/Shooter.h"
-#include "../../../Robotmap.h"
-#include "../../Collector/JawMove.h"
+// Utils
 #include "../../../Utils/Commands/CommandStarter.h"
 
+// Backend
+#include "../../../Subsystems/Shooter.h"
+#include "../../../Robotmap.h"
+
+// Commands
+#include "../../Collector/JawMove.h"
 #include "../Latches/SLatch.h"
 #include "../Latches/WLatch.h"
 

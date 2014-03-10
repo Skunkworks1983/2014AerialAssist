@@ -68,11 +68,13 @@ public:
 	double getTurnRate();
 	
 	bool isReallyDrawnBack();
-	bool isAngle(float setpoint);
+
 #if SHOOTER_LIMITSWITCH
 	bool isLatchedByProximity();
 	bool getRawProximity();
 #endif
+
+	void checkDiagnostics();
 };
 
 #endif

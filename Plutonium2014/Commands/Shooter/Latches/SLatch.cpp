@@ -1,5 +1,10 @@
 #include "SLatch.h"
+
+// Utils
 #include "../../../Utils/Time.h"
+#include "../../../Utils/Logger.h"
+
+// Backend
 #include "../../../Robotmap.h"
 
 SLatch::SLatch(Shooter::LatchPosition isLocked) :
@@ -8,6 +13,7 @@ SLatch::SLatch(Shooter::LatchPosition isLocked) :
 	Requires(shooter);
 	this->isLocked = isLocked;
 	time = 0;
+	bTime = 0;
 }
 
 void SLatch::Initialize() {
@@ -24,6 +30,7 @@ bool SLatch::IsFinished() {
 		return true;
 	} else if (time >= SHOOTER_SLATCH_WAIT) {
 		// Shutting down the shooter
+		Logger::log(Logger::kDiagnostic, "Shooter-SLatch", "Time termination; sensor not seen");
 		return true;
 	}
 	return false;

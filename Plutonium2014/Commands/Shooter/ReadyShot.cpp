@@ -1,6 +1,9 @@
 #include "ReadyShot.h"
+
+// Backend
 #include "../../Robotmap.h"
 
+// Commands
 #include "DrawShooter.h"
 #include "PrepareShooter.h"
 

@@ -3,11 +3,6 @@
 
 #include "../../CommandBase.h"
 
-/**
- *
- *
- * @author ExampleAuthor
- */
 class Shift: public CommandBase {
 public:
 	enum ShiftStyle {

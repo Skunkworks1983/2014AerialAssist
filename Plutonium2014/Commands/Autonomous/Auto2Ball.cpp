@@ -1,13 +1,16 @@
+#include "Autonomous.h"
+// Backend
+#include "../../Robotmap.h"
+
+// Commands
 #include "../Pterodactyl/AngelChange.h"
 #include "../Automatic/AutoDriveDistance.h"
 #include "../Shooter/FireShooter.h"
 #include "../Shooter/DrawShooter.h"
 #include "../Shooter/ReadyShot.h"
 #include "../Shooter/PrepareShooter.h"
+#include "../Automatic/HotGoalWait.h"
 #include "../Collector/Collect.h"
-#include "Autonomous.h"
-
-#include "../../Robotmap.h"
 
 Autonomous *Autonomous::create2Ball(float distance){
 	Autonomous *cmd = new Autonomous("Autonomous-2Ball");

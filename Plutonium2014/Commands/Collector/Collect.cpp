@@ -1,10 +1,12 @@
 #include "Collect.h"
 
+// Backend
+#include "../../Robotmap.h"
+
+// Commands
 #include "JawMove.h"
 #include "RollerRoll.h"
 #include "../Pterodactyl/AngelChange.h"
-
-#include "../../Robotmap.h"
 
 Collect::Collect() :
 	CommandGroup("Collect") {

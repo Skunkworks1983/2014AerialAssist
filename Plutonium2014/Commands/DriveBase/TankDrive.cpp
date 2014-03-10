@@ -1,23 +1,23 @@
 #include "TankDrive.h"
-#include "WPILib.h"
-#include "Joystick.h"
+// CSTDLIB
 #include <math.h>
-#include "../../CommandBase.h"
+
+// WPILib
+#include "Joystick.h"
+
+// Backend
 #include "../../Robotmap.h"
+#include "../../CommandBase.h"
 
 TankDrive::TankDrive() :
-	CommandBase("TankDrive") {
-	// Use Requires() here to declare subsystem dependencies
-	// eg. Requires(chassis);
+		CommandBase("TankDrive") {
 	Requires(driveBase);
 }
 
-// Called just before this Command runs the first time
 void TankDrive::Initialize() {
 	driveBase->setSpeed(0, 0);
 }
 
-// Called repeatedly when this Command is scheduled to run
 void TankDrive::Execute() {
 	double left = oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
 	double right = oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
@@ -40,13 +40,11 @@ void TankDrive::Execute() {
 	driveBase->setSpeed(left, right);
 }
 
-// Make this return true when this Command no longer needs to run execute()
 bool TankDrive::IsFinished() {
 	//WHEN DOES THE PAIN END?!
 	return false;
 }
 
-// Called once after isFinished returns true
 void TankDrive::End() {
 	driveBase->setSpeed(0, 0);
 }

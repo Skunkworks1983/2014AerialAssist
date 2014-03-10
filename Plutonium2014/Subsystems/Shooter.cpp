@@ -8,6 +8,7 @@
 #include "../Utils/Actuators/DualLiveSpeed.h"
 #include "../Utils/Time.h"
 #include "WPILib.h"
+#include "../Utils/Logger.h"
 
 #include "../Commands/Shooter/DrawShooter.h"
 
@@ -219,14 +220,21 @@ bool Shooter::isReallyDrawnBack() {
 #endif
 }
 
-bool Shooter::isAngle(float setpoint) {
-	return setpoint == getTurns();
-}
-
 float Shooter::getWenchMotorSpeed() {
 	return wenchMotor->Get();
 }
 
 double Shooter::getTurnRate() {
 	return wenchPot->GetRate();
+}
+
+void Shooter::checkDiagnostics() {
+	if (pullBackSwitchLeft->Get() == isReallyDrawnBack()) {
+		Logger::log(Logger::kDiagnostic, "Shooter",
+				"Left proximity switch doesn't match saved state.");
+	}
+	if (pullBackSwitchRight->Get() == isReallyDrawnBack()) {
+		Logger::log(Logger::kDiagnostic, "Shooter",
+				"Right proximity switch doesn't match saved state.");
+	}
 }

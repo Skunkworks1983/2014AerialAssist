@@ -1,10 +1,12 @@
 #include "Catch.h"
 
+// Backend
+#include "../../Robotmap.h"
+
+// Commands
 #include "JawMove.h"
 #include "RollerRoll.h"
 #include "../Pterodactyl/AngelChange.h"
-
-#include "../../Robotmap.h"
 
 Catch::Catch(float angle): 
 	CommandGroup("Catch") {

@@ -1,10 +1,17 @@
 #include "ReleaseTension.h"
-#include "../../../Subsystems/Shooter.h"
-#include "../../../Robotmap.h"
+// CSTDLIB
 #include <math.h>
 
+// Utils
+#include "../../../Utils/Logger.h"
+
+// Backend
+#include "../../../Subsystems/Shooter.h"
+#include "../../../Robotmap.h"
+
 ReleaseTension::ReleaseTension(float setTurns) :
-	CommandBase(CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
+		CommandBase(
+				CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
 	Requires(shooter);
 	this->setTurns = setTurns;
 	this->isDone = false;
@@ -14,7 +21,8 @@ void ReleaseTension::Initialize() {
 	CommandBase::shooter->lastReleasePosition = setTurns;
 	isDone = true;
 	if (!shooter->isReallyDrawnBack()) {
-		Logger::log(Logger::kWarning, "Shooter-ReleaseTension", "Running release without draw!");
+		Logger::log(Logger::kWarning, "Shooter-ReleaseTension",
+				"Running release without draw!");
 		//isDone = false;
 	}
 }
