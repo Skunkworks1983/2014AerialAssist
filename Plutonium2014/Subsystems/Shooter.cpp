@@ -12,9 +12,8 @@
 #include "../Commands/Shooter/DrawShooter.h"
 
 #define SHOOTER_FANCY_LETOUT 0 // Disable fancy letout because Ken
-
 Shooter::Shooter() :
-	Subsystem("Shooter") {
+		Subsystem("Shooter") {
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
 	wenchPot->setVoltageToAngle(SHOOTER_POT_TO_DRAW_COEFF);
 	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH),
@@ -51,8 +50,8 @@ Shooter::Shooter() :
 	setSLatch(Shooter::kLatched);
 
 	// Icky Icky.  This code is repeated
-	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
-			: Shooter::kUnlatched;
+	sLatchPatternBuffer.lastState =
+			!sLatchSensor->Get() ? Shooter::kLatched : Shooter::kUnlatched;
 
 	pullBackSwitchPatternBuffer.lastState = Shooter::kUnlatched;
 	pullBackSwitchPatternBuffer.lastRequestedState = sLatch->Get();
@@ -68,13 +67,14 @@ Command *Shooter::createCreateArmShooter() {
 }
 
 Command *Shooter::createArmShooter() {
-	if (CommandBase::oi != NULL && CommandBase::oi->isShooterArmingPrevented()) {
+	if (CommandBase::oi != NULL
+			&& CommandBase::oi->isShooterArmingPrevented()) {
 		return NULL;
 	}
 #if SHOOTER_FANCY_LETOUT
 	if (CommandBase::shooter != NULL
 			&& CommandBase::shooter->lastReleasePosition
-					> SHOOTER_WENCH_POT_REVERSE_ALLOW) {
+			> SHOOTER_WENCH_POT_REVERSE_ALLOW) {
 		return new ReadyShot(CommandBase::shooter->lastReleasePosition);
 	}
 #endif
@@ -114,7 +114,8 @@ bool Shooter::getRawProximity() {
 			} else {
 				pullBackSwitchPatternBuffer.lastState = false;
 			}
-			printf("Cleared prox pattern buffer recentchange\n");
+			Logger::log(Logger::kFinest, "Shooter",
+					"Cleared proximity pattern buffer due to a recent change");
 		}
 	}
 	if (sLatch->Get() != pullBackSwitchPatternBuffer.lastRequestedState) {
@@ -127,7 +128,8 @@ bool Shooter::getRawProximity() {
 		} else {
 			pullBackSwitchPatternBuffer.lastState = false;
 		}
-		printf("Cleared prox pattern buffer internal\n");
+		Logger::log(Logger::kFinest, "Shooter",
+				"Cleared proximity pattern buffer internally");
 	}
 	return state;
 }
@@ -160,12 +162,15 @@ void Shooter::setWLatch(Shooter::LatchPosition state) {
 }
 
 Shooter::LatchPosition Shooter::getRawSLatch() {
-	Shooter::LatchPosition pos = !sLatchSensor->Get() ? Shooter::kLatched
-			: Shooter::kUnlatched;
+	Shooter::LatchPosition pos =
+			!sLatchSensor->Get() ? Shooter::kLatched : Shooter::kUnlatched;
 	if (sLatchPatternBuffer.lastState != pos) {
 		// Something happened
-		printf("SLatched changed from %d to %d\n",
-				sLatchPatternBuffer.lastState, pos);
+		Logger::log(Logger::kFinest, "Shooter",
+				"Shooter latch changed from %s to %s",
+				sLatchPatternBuffer.lastState == Shooter::kLatched ?
+						"Latched" : "Unlatched",
+				pos == Shooter::kLatched ? "Latched" : "Unlatched");
 		if (pos) {
 			sLatchPatternBuffer.lastRisingEdge = getCurrentMillis();
 		} else {
@@ -175,7 +180,8 @@ Shooter::LatchPosition Shooter::getRawSLatch() {
 				> getCurrentMillis()) {
 			sLatchPatternBuffer.lastFallingEdge = -1;
 			sLatchPatternBuffer.lastRisingEdge = -1;
-			printf("Cleared pattern buffer recentchange\n");
+			Logger::log(Logger::kFinest, "Shooter",
+					"Cleared shooter latch pattern buffer due to a recent change");
 		}
 	}
 	if (sLatch->Get() != sLatchPatternBuffer.lastRequestedState) {
@@ -183,7 +189,8 @@ Shooter::LatchPosition Shooter::getRawSLatch() {
 		sLatchPatternBuffer.lastFallingEdge = -1;
 		sLatchPatternBuffer.lastRisingEdge = -1;
 		sLatchPatternBuffer.lastRequestedState = sLatch->Get();
-		printf("Cleared pattern buffer internal\n");
+		Logger::log(Logger::kFinest, "Shooter",
+				"Cleared shooter latch pattern buffer internally");
 	}
 	sLatchPatternBuffer.lastState = pos;
 	return pos;
@@ -195,8 +202,8 @@ bool Shooter::isLatchedByPattern() {
 			&& (sLatchPatternBuffer.lastRisingEdge > 0)
 			&& (sLatchPatternBuffer.lastFallingEdge
 					< sLatchPatternBuffer.lastRisingEdge)
-			&& sLatchPatternBuffer.lastRisingEdge
-					+ SHOOTER_SLATCH_PATTERN_DELAY < getCurrentMillis();
+			&& sLatchPatternBuffer.lastRisingEdge + SHOOTER_SLATCH_PATTERN_DELAY
+					< getCurrentMillis();
 }
 
 Shooter::LatchPosition Shooter::getWLatch() {
@@ -206,7 +213,7 @@ Shooter::LatchPosition Shooter::getWLatch() {
 bool Shooter::isReallyDrawnBack() {
 #if SHOOTER_LIMITSWITCH
 	return (isLatchedByProximity() || (getTurns() <= SHOOTER_WENCH_POT_BACK)
-			|| isLatchedByPattern());
+	|| isLatchedByPattern());
 #else
 	return (getTurns() <= SHOOTER_WENCH_POT_BACK) || isLatchedByPattern();
 #endif

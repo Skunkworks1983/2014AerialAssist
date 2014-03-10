@@ -7,6 +7,7 @@ AngelChange::AngelChange(float target) :
 	Requires(pterodactyl);
 	this->target = target;
 	this->stability = 0;
+	this->tmpTarget = 0;
 	SetInterruptible(true);
 }
 
@@ -59,7 +60,6 @@ void AngelChange::End() {
 }
 
 void AngelChange::Interrupted() {
-	printf("Interrupting angels\n");
 	pterodactyl->stopPID();
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
 }

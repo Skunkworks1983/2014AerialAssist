@@ -2,7 +2,6 @@
 #include "../../../Subsystems/Shooter.h"
 #include "../../../Robotmap.h"
 #include <math.h>
-int ReleaseTension::runCount = 0;
 
 ReleaseTension::ReleaseTension(float setTurns) :
 	CommandBase(CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
@@ -15,7 +14,7 @@ void ReleaseTension::Initialize() {
 	CommandBase::shooter->lastReleasePosition = setTurns;
 	isDone = true;
 	if (!shooter->isReallyDrawnBack()) {
-		printf("Warning: Run release without draw.\n");
+		Logger::log(Logger::kWarning, "Shooter-ReleaseTension", "Running release without draw!");
 		//isDone = false;
 	}
 }

@@ -18,6 +18,5 @@ void ReadyShot::End() {
 }
 
 void ReadyShot::Interrupted() {
-	printf("Kill me now\n");
 }
 

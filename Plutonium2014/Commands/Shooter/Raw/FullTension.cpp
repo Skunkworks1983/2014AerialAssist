@@ -1,6 +1,7 @@
 #include "FullTension.h"
 #include "../../../Robotmap.h"
 #include "../../../Utils/Time.h"
+#include "../../../Utils/Logger.h"
 #include <stdio.h>
 
 FullTension::FullTension() {
@@ -24,25 +25,25 @@ void FullTension::Execute() {
 bool FullTension::IsFinished() {
 	bool state = shooter->isReallyDrawnBack();
 	if (shooter->isLatchedByPattern()) {
-		printf("Pattern stop\n");
+		Logger::log(Logger::kInfo, "Shooter-FullTension", "Pattern stop");
 	}
 #if SHOOTER_LIMITSWITCH
 	if (shooter->isLatchedByProximity()) {
-		printf("Proximity stop\n");
+		Logger::log(Logger::kInfo, "Shooter-FullTension", "Proximity stop");
 	}
 #endif
 	if (shooter->getTurns() <= SHOOTER_WENCH_POT_BACK){
-		printf("Pot stop\n");
+		Logger::log(Logger::kInfo, "Shooter-FullTension", "Potentiometer stop");
 	}
 	return state;
 }
 
 void FullTension::End() {
-	printf("Ended Full Tension!\n");
+	Logger::log(Logger::kFiner, "Shooter-FullTension", "Ended full tension");
 	shooter->setWenchMotor(0);
 }
 
 void FullTension::Interrupted() {
-	printf("Interrupted Full Tension!\n");
+	Logger::log(Logger::kFiner, "Shooter-FullTension", "Interrupted full tension");
 	shooter->setWenchMotor(0);
 }
