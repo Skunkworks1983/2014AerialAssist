@@ -1,5 +1,8 @@
 package com.pi.robot.robot;
 
+import java.awt.Color;
+import java.io.IOException;
+
 import com.pi.math.Quaternion;
 import com.pi.math.TransMatrix;
 import com.pi.math.Vector3D;
@@ -7,6 +10,9 @@ import com.pi.robot.Skeleton;
 import com.pi.robot.mesh.FloatBufferColor;
 import com.pi.robot.mesh.Mesh;
 import com.pi.robot.mesh.MeshVertex;
+import com.pi.robot.overlay.TextOverlay;
+import com.pi.robot.overlay.TimedMessage;
+import com.pi.robot.overlay.TextOverlay.Corner;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.tables.ITable;
@@ -24,6 +30,7 @@ public class RobotStateManager {
 			1f, 0f, 0f, 0.125f);
 
 	private Skeleton sk;
+	private ConsoleListener listener;
 
 	public Changeable<Alliance> alliance = new Changeable<Alliance>(
 			Alliance.INVALID);
@@ -52,9 +59,48 @@ public class RobotStateManager {
 	private float currentJawsAngle = 0;
 	private ITable table;
 
-	public RobotStateManager(Skeleton sk) {
+	public RobotStateManager(Skeleton sk, final TextOverlay textOverlay) {
 		this.sk = sk;
 		table = NetworkTable.getTable("Robot");
+		textOverlay.setCornerSize(Corner.UP_RIGHT, 5);
+		try {
+			listener = new ConsoleListener(1983);
+			new Thread(new Runnable() {
+				StringBuffer buffer = new StringBuffer();
+
+				public void textCallback(String s) {
+					if (s.toLowerCase().contains("watchdog")) {
+						textOverlay.addMessage(Corner.UP_LEFT,
+								new TimedMessage(s).setColor(Color.RED));
+					} else {
+						textOverlay.addMessage(Corner.UP_RIGHT,
+								new TimedMessage(s, 1000));
+					}
+					System.out.println(s);
+				}
+
+				public void run() {
+					while (true) {
+						try {
+							buffer.append(listener.read());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						int idx;
+						while ((idx = buffer.indexOf("\n")) > 0) {
+							textCallback(buffer.substring(0, idx));
+							buffer.delete(0, idx + 1);
+						}
+						try {
+							Thread.sleep(100L);
+						} catch (InterruptedException e) {
+						}
+					}
+				}
+			}).start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void colorAlliance(FloatBufferColor color) {
@@ -164,7 +210,7 @@ public class RobotStateManager {
 		sk.getBone(PTERODACTYL_ID).slerp(new Quaternion(0f, (float) 0f, 0f),
 				new Quaternion(0.0f, (float) 1.0f, 0.0f),
 				(float) (Math.PI / 1.75) - currentPterodactylAngle);
-		float diffA = Math.signum(pterodactylAngle - currentPterodactylAngle) * 0.1f;
+		float diffA = Math.signum(pterodactylAngle - currentPterodactylAngle) * 0.05f;
 		float diffB = pterodactylAngle - currentPterodactylAngle;
 		currentPterodactylAngle += Math.abs(diffA) < Math.abs(diffB) ? diffA
 				: diffB;

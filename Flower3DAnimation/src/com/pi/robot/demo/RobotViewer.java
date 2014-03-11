@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -22,6 +23,8 @@ public class RobotViewer {
 
 	private TextOverlay textOverlay = new TextOverlay();
 	int width = 768, height = 768;
+	int mode;
+	boolean isToggleWireframe;
 
 	public RobotViewer() throws LWJGLException, IOException {
 		NetworkTable.setTeam(1983);
@@ -30,7 +33,7 @@ public class RobotViewer {
 
 		Skeleton sk = new Skeleton(new File("model/mesh.skl"));
 		sk.calculate();
-		RobotStateManager robot = new RobotStateManager(sk);
+		RobotStateManager robot = new RobotStateManager(sk, textOverlay);
 
 		init();
 
@@ -54,7 +57,15 @@ public class RobotViewer {
 			GL11.glTranslatef(0, -25, 0);
 			Lighting.apply();
 
+			if (mode == 1) {
+				GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+			} else if (mode == 2) {
+				GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+			} else {
+				GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_POINT);
+			}
 			drawBone(sk.getRootBone());
+			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 
 			overlay();
 
@@ -62,6 +73,17 @@ public class RobotViewer {
 			Display.sync(60);
 			robot.update();
 			Display.setTitle("Robot");
+			if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+				if (!isToggleWireframe) {
+					mode++;
+					if (mode > 2) {
+						mode = 0;
+					}
+				}
+				isToggleWireframe = true;
+			} else {
+				isToggleWireframe = false;
+			}
 		}
 
 		unloadBone(sk.getRootBone());

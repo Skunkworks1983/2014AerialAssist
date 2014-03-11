@@ -109,6 +109,7 @@ public class Skeleton {
 							i++;
 						}
 						if (b.mesh.getIndicies() != null) {
+							System.out.println("Regen buffer for: " + file.getName());
 							b.mesh.generateBuffers();
 						}
 					}

@@ -85,7 +85,7 @@ public class Mesh {
 			}
 			indexBuffer = (IntBuffer) indexBuffer.flip();
 
-			System.out.println("Generated buffers for mesh: ");
+			/*System.out.println("Generated buffers for mesh: ");
 			System.out.println("Vertex:\t" + (vertexBuffer.limit() * 4 / 1024)
 					+ "kb");
 			System.out.println("Normal:\t" + (normalBuffer.limit() * 4 / 1024)
@@ -95,7 +95,7 @@ public class Mesh {
 						+ (colorBuffer.limit() * 4 / 1024) + "kb");
 			}
 			System.out.println("Index:\t" + (indexBuffer.limit() * 4 / 1024)
-					+ "kb");
+					+ "kb");*/
 		}
 	}
 
