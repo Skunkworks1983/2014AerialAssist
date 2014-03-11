@@ -19,6 +19,10 @@ void Pneumatics::setState(bool state) {
 	relay->Set(state ? Relay::kForward : Relay::kOff);
 }
 
+bool Pneumatics::isCompressorOn() {
+	return relay->Get() == Relay::kForward;
+}
+
 bool Pneumatics::isBelowPressure() {
 	return !pressureSwitch->Get();
 }

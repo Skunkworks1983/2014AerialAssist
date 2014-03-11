@@ -22,6 +22,7 @@ public:
 	void InitDefaultCommand();
 	void setState(bool state);
 	bool isBelowPressure();
+	bool isCompressorOn();
 };
 
 #endif

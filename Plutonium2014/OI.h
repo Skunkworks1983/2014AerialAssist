@@ -13,6 +13,7 @@ private:
 	Joystick *joystickLeft;
 	Joystick *joystickRight;
 
+	CompositeButton *collectButton;
 	JoystickButton *shiftButton;
 
 	DigitalIOButton *catch1;
@@ -44,7 +45,9 @@ public:
 	Joystick *getJoystickRight();
 	bool isShooterArmingPrevented();
 	void registerButtonListeners();
-	float getScale();
+
+	float getAngleAdjustment();
+	float getPowerAdjustment();
 };
 
 #endif

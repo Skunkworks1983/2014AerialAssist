@@ -11,7 +11,7 @@
 
 class AnalogPot;
 class DualLiveSpeed;
-class Pterodactyl: public Subsystem {
+class Pterodactyl: public Subsystem, public PIDOutput, public PIDSource {
 public:
 	enum BrakeState {
 		kActive = true, kDeactive = false
@@ -40,9 +40,13 @@ public:
 
 	void setTarget(float target);
 	void setOutputRange();
-	void resetPID();
 	void stopPID();
 	bool isPIDFinished();
+
+	float getPIDTarget();
+	virtual void PIDWrite(float f);
+	virtual double PIDGet();
+	void writeAngleMotorRaw(float f);
 };
 
 #endif

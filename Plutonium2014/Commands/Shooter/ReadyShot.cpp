@@ -1,6 +1,9 @@
 #include "ReadyShot.h"
+
+// Backend
 #include "../../Robotmap.h"
 
+// Commands
 #include "DrawShooter.h"
 #include "PrepareShooter.h"
 
@@ -18,6 +21,5 @@ void ReadyShot::End() {
 }
 
 void ReadyShot::Interrupted() {
-	printf("Kill me now\n");
 }
 

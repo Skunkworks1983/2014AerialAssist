@@ -1,18 +1,25 @@
+#include "MFCBot.h"
+// CSTDLIB
+#include <math.h>
+// WPILib
 #include "WPILib.h"
 #include "Commands/Command.h"
-#include "MFCBot.h"
-#include "CommandBase.h"
-#include "Utils/Actuators/SolenoidPair.h"
-#include "Robotmap.h"
+// Utils
+#include "Utils/Logger.h"
 #include "Utils/Actuators/StallableMotor.h"
+// Backend
+#include "CommandBase.h"
+#include "Robotmap.h"
 #include "Subsystems/Pterodactyl.h"
+// Commands
 #include "Commands/Shooter/Latches/WLatch.h"
 #include "Commands/Autonomous/Autonomous.h"
-#include "Subsystems/Pterodactyl.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
 	dont = 0;
+	robotState = NULL;
+	chooser = NULL;
 }
 
 MFCBot::~MFCBot() {
@@ -49,19 +56,20 @@ void MFCBot::AutonomousInit() {
 }
 
 void MFCBot::AutonomousPeriodic() {
-	Scheduler::GetInstance()->Run();
-	WatchDog();
-	if (dont++ > 10) {
-		printf("Encoder Left: %f, Encoder Right: %f \n",
-				CommandBase::driveBase->getLeftEncoder()->GetDistance(),
-				CommandBase::driveBase->getRightEncoder()->GetDistance());
-		dont = 0;
-	}
+	/*Scheduler::GetInstance()->Run();
+	 WatchDog();
+	 if (dont++ > 10) {
+	 printf("Encoder Left: %f, Encoder Right: %f \n",
+	 CommandBase::driveBase->getLeftEncoder()->GetDistance(),
+	 CommandBase::driveBase->getRightEncoder()->GetDistance());
+	 dont = 0;
+	 }*/
 }
 
 void MFCBot::TeleopInit() {
 	Scheduler::GetInstance()->RemoveAll();
-	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
+	robotState->PutNumber("alliance",
+			DriverStation::GetInstance()->GetAlliance());
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -69,40 +77,55 @@ void MFCBot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	WatchDog();
 	StallableMotor::updateControllers();
-	{
-		robotState->PutBoolean("jawsClosed",
-				CommandBase::collector->getJawState());
-		robotState->PutNumber("pterodactylAngle",
-				CommandBase::pterodactyl->getAngle());
-		robotState->PutBoolean("hasBall",
-				CommandBase::collector->isBallDetected());
-		robotState->PutNumber(
-				"collectorMotorState",
-				CommandBase::collector->isPIDEnabled() ? (CommandBase::collector->isRollerStalled() ? 2
-						: 1)
-						: 0);
-		robotState->PutBoolean("shooterWinchStalled",
-				CommandBase::shooter->isShooterMotorStalled());
-		robotState->PutNumber("shooterStrap", CommandBase::shooter->getTurns());
-		robotState->PutBoolean("shooterLatched", CommandBase::shooter->isReallyDrawnBack());
-
-		SmartDashboard::PutNumber("Winch rate",
-				CommandBase::shooter->getTurnRate());
-		SmartDashboard::PutNumber("Winch position",
-				CommandBase::shooter->getTurns());
-
-		SmartDashboard::PutNumber("pteroangle",
-				CommandBase::pterodactyl->getAngle());
-		SmartDashboard::PutBoolean("Shooter Pattern Latched",
-				CommandBase::shooter->isLatchedByPattern());
-		SmartDashboard::PutBoolean("Shooter Promixity Latched",
-				CommandBase::shooter->isLatchedByProximity());
-		SmartDashboard::PutBoolean("Shooter Winch Latch",
-				CommandBase::shooter->getWLatch());
-		SmartDashboard::PutBoolean("Shooter Motor Stalled",
-				CommandBase::shooter->isShooterMotorStalled());
-	}
 	if (dont++ > 10) {
+		{
+			robotState->PutBoolean("jawsClosed",
+					CommandBase::collector->getJawState());
+			robotState->PutNumber("pterodactylAngle",
+					CommandBase::pterodactyl->getAngle());
+			robotState->PutBoolean("hasBall",
+					CommandBase::collector->isBallDetected());
+			robotState->PutNumber("collectorMotorState",
+					CommandBase::collector->isPIDEnabled() ?
+							(CommandBase::collector->isRollerStalled() ? 2 : 1) :
+							0);
+			robotState->PutBoolean("shooterWinchStalled",
+					CommandBase::shooter->isShooterMotorStalled());
+			robotState->PutNumber("shooterStrap",
+					CommandBase::shooter->getTurns());
+			robotState->PutBoolean("shooterLatched",
+					CommandBase::shooter->isReallyDrawnBack());
+			robotState->PutNumber("compressorState",
+					CommandBase::pneumatics->isCompressorOn() ? 1 : 0);
+			robotState->PutNumber("driveLeftState",
+					fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
+			robotState->PutNumber("driveRightState",
+					fabs(CommandBase::driveBase->getMotorSpeed()) > 0 ? 1 : 0);
+		}
+		{
+			SmartDashboard::PutNumber("Winch rate",
+					CommandBase::shooter->getTurnRate());
+			SmartDashboard::PutNumber("Winch position",
+					CommandBase::shooter->getTurns());
+
+			SmartDashboard::PutNumber("pteroangle",
+					CommandBase::pterodactyl->getAngle());
+			SmartDashboard::PutNumber("pterorate",
+					CommandBase::pterodactyl->getRate());
+			SmartDashboard::PutBoolean("Shooter Pattern Latched",
+					CommandBase::shooter->isLatchedByPattern());
+			SmartDashboard::PutBoolean("Shooter Promixity Latched",
+					CommandBase::shooter->isLatchedByProximity());
+			SmartDashboard::PutBoolean("Shooter Winch Latch",
+					CommandBase::shooter->getWLatch());
+			SmartDashboard::PutBoolean("Shooter Motor Stalled",
+					CommandBase::shooter->isShooterMotorStalled());
+
+			SmartDashboard::PutNumber("ShooterOUT",
+					CommandBase::oi->getPowerAdjustment());
+			SmartDashboard::PutNumber("AngleOUT",
+					CommandBase::oi->getAngleAdjustment());
+		}
 		dont = 0;
 	}
 }
@@ -126,40 +149,36 @@ void MFCBot::TestPeriodic() {
 
 void MFCBot::WatchDog() {
 	if (CommandBase::shooter != NULL) {
-		if (CommandBase::shooter->getWenchMotorSpeed() < 0
-				&& CommandBase::shooter->getTurns()
-						> SHOOTER_WENCH_POT_FULL_OUT) {
+		if (CommandBase::shooter->getWenchMotorSpeed()
+				< 0&& CommandBase::shooter->getTurns()
+				> SHOOTER_WENCH_POT_FULL_OUT) {CommandBase::shooter->setWenchMotor(0.0);
+		Logger::log(Logger::kWarning, "Watchdog","Shooter motor over released!");
+	}
+	if (CommandBase::shooter->getWenchMotorSpeed() < 0
+			&& CommandBase::shooter->getWLatch() == Shooter::kLatched) {
+		CommandBase::shooter->setWenchMotor(0.0);
+		Logger::log(Logger::kWarning, "Watchdog","Shooter motor released without pawl disengaged!");
+	}
+	if (CommandBase::shooter->getWenchMotorSpeed() > 0) {
+		if (CommandBase::shooter->getTurns() < 0) {
 			CommandBase::shooter->setWenchMotor(0.0);
-			printf("Watchdog: Shooter motor overeleased!\n");
+			Logger::log(Logger::kWarning, "Watchdog","Shooter motor overdrawn sensed by potentiometer!");
 		}
-		if (CommandBase::shooter->getWenchMotorSpeed() < 0
-				&& CommandBase::shooter->getWLatch() == Shooter::kLatched) {
-			CommandBase::shooter->setWenchMotor(0.0);
-			printf(
-					"Watchdog: Shooter motor released without pawl disengaged!\n");
-		}
-		if (CommandBase::shooter->getWenchMotorSpeed() > 0) {
-			if (CommandBase::shooter->getTurns() < 0) {
-				CommandBase::shooter->setWenchMotor(0.0);
-				printf("Watchdog: Shooter motor overdrawn: POT FILTER!\n");
-			}
-			if (CommandBase::shooter->getTurns()
-					< SHOOTER_WENCH_POT_REVERSE_ALLOW) {
+		if (CommandBase::shooter->getTurns()
+				< SHOOTER_WENCH_POT_REVERSE_ALLOW) {
 #if SHOOTER_LIMITSWITCH
 				if (CommandBase::shooter->isLatchedByProximity()) {
 					CommandBase::shooter->setWenchMotor(0.0);
-					printf(
-							"Watchdog: Shooter motor overdrawn: PULLBACK FILTER!\n");
+					Logger::log(Logger::kWarning, "Watchdog","Shooter motor overdrawn sensed by proximity switch!");
 				}
 #endif
 				if (CommandBase::shooter->isLatchedByPattern()) {
 					CommandBase::shooter->setWenchMotor(0.0);
-					printf(
-							"Watchdog: Shooter motor overdrawn: SHOOTER LATCH FILTER!\n");
+					Logger::log(Logger::kWarning, "Watchdog","Shooter motor overdrawn sensed by latch pattern!");
 				}
 			}
 		}
-		if (CommandBase::shooter->isShooterMotorStalled()) {
+		if (CommandBase::shooter->isShooterMotorStalled()/* && CommandBase::shooter->getTurns() > 0.125*/) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {
@@ -175,5 +194,6 @@ void MFCBot::WatchDog() {
 	}
 }
 
-START_ROBOT_CLASS( MFCBot);
+START_ROBOT_CLASS(MFCBot)
+;
 

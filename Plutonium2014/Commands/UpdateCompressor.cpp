@@ -1,4 +1,5 @@
 #include "UpdateCompressor.h"
+#include <math.h>
 
 UpdateCompressor::UpdateCompressor() :
 	CommandBase("UpdateCompressor") {
@@ -11,7 +12,15 @@ void UpdateCompressor::Initialize() {
 
 void UpdateCompressor::Execute() {
 	if (ticksSinceUpdate > 10) {
-		pneumatics->setState(pneumatics->isBelowPressure());
+		bool state = pneumatics->isBelowPressure();
+		if (shooter->getWenchMotorSpeed() > 0.0
+				&& !shooter->isReallyDrawnBack()) {
+			state = false;
+		}
+		if (fabs(pterodactyl->getAngleMotorSpeed()) > 0.0) {
+			state = false;
+		}
+		pneumatics->setState(state);
 		ticksSinceUpdate = 0;
 	}
 	++ticksSinceUpdate;

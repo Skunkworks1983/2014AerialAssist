@@ -1,6 +1,8 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
+#define COMPETITION_BOT 1
+
 // ===============
 // = Preferences =
 // ===============
@@ -69,7 +71,13 @@
 #define SHOOTER_WENCH_MOTOR_FULL_RELEASE (-1.00)
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE (0.1)
 
+#if COMPETITION_BOT
+// .225 = FULL BACK (0)
+// 1.622 = FULL OUT (1.1)
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.177165
+#else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.22
+#endif
 
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms during which any changes are discarded*/
 
@@ -81,7 +89,7 @@
 #define SHOOTER_WLATCH_UNLOCK_DRIVE 100 /*RUN MOTOR TIME TO UNLOCK IN MS*/
 #define SHOOTER_WENCH_MOTOR_FORCE_UNLATCH (1.0)
 
-#define SHOOTER_WENCH_POT_FULL_OUT (1.25)
+#define SHOOTER_WENCH_POT_FULL_OUT (1.5)
 
 // ===============
 // == Collector ==
@@ -124,18 +132,16 @@
 // =================
 // == Pterodactyl ==
 // =================
-#define PTERODACTYL_PID_DOWN_0 1.0,0.2,15.0 
-#define PTERODACTYL_PID_UP_60 2.0, 0.075, 7.0
-#define PTERODACTYL_PID_UP_90 2.0, 0.075, 4.0
+// See Pterodactyl.cpp for PID defines
+
 #define PTERODACTYL_POT (1)
-#define PTERODACTYL_ANGLE_THRESHOLD (3)
 #define PTERODACTYL_MOTOR_LEFT TOP_SIDECAR,9 /*T9*/
 #define PTERODACTYL_MOTOR_RIGHT TOP_SIDECAR,8 /*T8*/
 #define PTERODACTYL_BRAKE_ACTIVE TOP_SIDECAR,2
 #define PTERODACTYL_MIN_ANGLE (0)
 #define PTERODACTYL_MAX_ANGLE (90.0)
 
-#define PTERODACTYL_POT_VOLTAGE_TO_ANGLE_COEFF (0), (56.845/PTERODACTYL_MAX_ANGLE), (-62.489/PTERODACTYL_MAX_ANGLE)
+#define PTERODACTYL_POT_VOLTAGE_TO_ANGLE_COEFF (0), (56.845/PTERODACTYL_MAX_ANGLE), (-62.5/PTERODACTYL_MAX_ANGLE)
 
 #define PTERODACTYL_POT_RATE_ZERO_THRESHOLD (-1)
 

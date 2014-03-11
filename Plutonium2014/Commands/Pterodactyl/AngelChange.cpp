@@ -1,51 +1,59 @@
 #include "AngelChange.h"
-#include "../../Robotmap.h"
+// CSTDLIB
 #include <math.h>
 
+// Backend
+#include "../../Robotmap.h"
+
 AngelChange::AngelChange(float target) :
-	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
+		CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
 	Requires(pterodactyl);
 	this->target = target;
 	this->stability = 0;
+	this->tmpTarget = 0;
 	SetInterruptible(true);
 }
 
 void AngelChange::Initialize() {
-	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
-		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-		pterodactyl->setTarget(target);
+//	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
+	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+	tmpTarget = target;
+	if (tmpTarget < 45 && shooter->getTurns() > 0.25
+			&& !shooter->isReallyDrawnBack()) {
+		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}
+	pterodactyl->setTarget(tmpTarget);
 	stability = 0;
-	lastPosition = pterodactyl->getAngle(); 
+//	} else {
+//		stability = 50;
+//	}
 }
 
 void AngelChange::Execute() {
 	pterodactyl->setOutputRange();
-	
-	if (lastPosition > target && pterodactyl->getAngle() < target) {
-		// Maybe? pterodactyl->resetPID();
-	}
-	lastPosition = pterodactyl->getAngle(); 
-	
+
 	SmartDashboard::PutNumber("pteroangle", pterodactyl->getAngle());
 	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
 	// Let the PID run.
-}
 
-bool AngelChange::IsFinished() {
-	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
-			<= 0)) {
-		if (stability++ == 5) {
-			pterodactyl->setBrakeState(Pterodactyl::kActive);
-		}
+	if (pterodactyl->isPIDFinished()
+			|| (target <= 0 && pterodactyl->getAngle() <= 0)) {
+		stability++;
 	} else {
-		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 		stability = 0;
+	}
+	if (tmpTarget == 45 && target < 45 && shooter->isReallyDrawnBack()) {
+		tmpTarget = target;
+		pterodactyl->setTarget(tmpTarget);
 	}
 	if (target <= 0 && pterodactyl->getAngle() < 10) {
 		pterodactyl->stopPID();
+		pterodactyl->writeAngleMotorRaw(0.0);
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 	}
+}
+
+bool AngelChange::IsFinished() {
 	return stability > 15;
 }
 
@@ -55,7 +63,6 @@ void AngelChange::End() {
 }
 
 void AngelChange::Interrupted() {
-	printf("Interrupting angels\n");
 	pterodactyl->stopPID();
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
 }

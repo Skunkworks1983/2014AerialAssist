@@ -21,6 +21,7 @@
 #include "Commands/Collector/Catch.h"
 #include "Commands/Shooter/ReadyShot.h"
 
+#include <math.h>
 
 #define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
 
@@ -29,6 +30,7 @@ OI::OI() {
 	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
 	// Process operator interface input here.
 	shiftButton = new JoystickButton(joystickLeft, 1);
+	collectButton = new CompositeButton(new JoystickButton(joystickRight, 1),NULL,CompositeButton::kNOT);
 
 	catch1 = new DigitalIOButton(1);
 	catch2 = new DigitalIOButton(3);
@@ -43,28 +45,35 @@ OI::OI() {
 
 	fire = new DigitalIOButton(2);
 	revCollector = new DigitalIOButton(9);
-	jawToggle = new OverridableButton(new DigitalIOButton(12),new DigitalIOButton(11), false);
+	jawToggle = new OverridableButton(new DigitalIOButton(12),
+			new DigitalIOButton(11), false);
 	preventShooterArming = new DigitalIOButton(10);
 	manAngleOvr = new DigitalIOButton(16);
-	
-	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.115-OI_ANALOG_TRESHOLD, 1.115+OI_ANALOG_TRESHOLD);
-	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 1.677-OI_ANALOG_TRESHOLD, 1.677+OI_ANALOG_TRESHOLD);
-	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT, 3.342-OI_ANALOG_TRESHOLD, 3.342+OI_ANALOG_TRESHOLD);
+
+	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
+	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
+	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
 }
 void OI::registerButtonListeners() {
 	// Drivebase
-	shiftButton->WhenPressed(new Shift(Shift::kToggle));
+	shiftButton->WhenPressed(new Shift(Shift::kHigh));
+	shiftButton->WhenReleased(new Shift(Shift::kLow));
 
 	// Pterodactyl Angle
-	angleFloor->WhenPressed(new AngelChange(0));
-	angleLow->WhenPressed(new AngelChange(30));//75));
-	angleMed->WhenPressed(new AngelChange(60));//90));
-	angleHigh->WhenPressed(new AngelChange(90));//100));
-	angleCarry->WhenPressed(new AngelChange(100));//95));
-	
+	angleFloor->WhenPressed(new AngelChange(-1.25));
+	angleLow->WhenPressed(new AngelChange(75));//75));
+	angleMed->WhenPressed(new AngelChange(89));//90));
+	angleHigh->WhenPressed(new AngelChange(100));//100));
+	angleCarry->WhenPressed(new AngelChange(95));//95));
+
 	// Collector rollers
-	revCollector->WhenPressed(new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
+	revCollector->WhenPressed(new Pass());
+	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	START_STOP_COMMAND(collect, new Collect());
+	START_STOP_COMMAND(collectButton, new Collect());
 
 	// Jaw Operations
 	pass->WhenPressed(new Pass());
@@ -95,4 +104,14 @@ Joystick *OI::getJoystickRight() {
 
 bool OI::isShooterArmingPrevented() {
 	return !preventShooterArming->Get();
+}
+
+float OI::getAngleAdjustment() {
+	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(3);
+	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
+}
+
+float OI::getPowerAdjustment() {
+	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(1);
+	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
 }

@@ -10,12 +10,14 @@
  * DAVEEDq	
  */
 
-class FireShooter: public CommandGroup {
+class FireShooter: public CommandBase {
 public:
 	FireShooter();
 	virtual void Initialize();
 	virtual void End();
 	virtual void Interrupted();
+	virtual void Execute();
+	virtual bool IsFinished();
 };
 
 #endif

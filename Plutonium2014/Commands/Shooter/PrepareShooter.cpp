@@ -1,7 +1,10 @@
 #include "PrepareShooter.h"
+
+// Backend
 #include "../../Subsystems/Shooter.h"
 #include "../../Robotmap.h"
 
+// Commands
 #include "Latches/WLatch.h"
 #include "Raw/ReleaseTension.h"
 
@@ -17,6 +20,5 @@ void PrepareShooter::Initialize() {
 }
 
 void PrepareShooter::End() {
-	//CommandBase::shooter->setPrepared(true);
 }
 
