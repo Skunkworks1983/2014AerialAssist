@@ -33,8 +33,6 @@ void ReleaseTension::Execute() {
 	} else {
 		shooter->setWenchMotor(-SHOOTER_WENCH_MOTOR_FULL_RELEASE);
 	}
-	SmartDashboard::PutNumber("Current Winch", shooter->getTurns());
-	SmartDashboard::PutNumber("Current Winch Target", setTurns);
 }
 
 bool ReleaseTension::IsFinished() {
@@ -43,9 +41,11 @@ bool ReleaseTension::IsFinished() {
 }
 
 void ReleaseTension::End() {
+	shooter->lastReleasePosition = setTurns;
 	shooter->setWenchMotor(0);
 }
 
 void ReleaseTension::Interrupted() {
+	shooter->lastReleasePosition = setTurns;
 	shooter->setWenchMotor(0);
 }

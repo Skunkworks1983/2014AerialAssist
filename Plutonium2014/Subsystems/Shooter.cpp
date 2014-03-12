@@ -60,7 +60,7 @@ Shooter::Shooter() :
 		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
 	}
 
-	lastReleasePosition = 0.0;
+	lastReleasePosition = 0;
 }
 
 Command *Shooter::createCreateArmShooter() {
@@ -145,14 +145,9 @@ void Shooter::setWenchMotor(float speed) {
 }
 
 void Shooter::setSLatch(Shooter::LatchPosition state) {
-#if !SHOOTER_FANCY_LETOUT
-	if (lastReleasePosition == 0.0 && state == Shooter::kUnlatched) {
-		return;
-	}
-#endif
 	sLatch->Set(state);
 	if (state == Shooter::kUnlatched) {
-#if SHOOTER_FANCY_LETOUT
+#if !SHOOTER_FANCY_LETOUT
 		lastReleasePosition = 0.0;
 #endif
 	}

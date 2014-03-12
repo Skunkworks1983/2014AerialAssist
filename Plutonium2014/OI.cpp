@@ -65,8 +65,8 @@ void OI::registerButtonListeners() {
 	// Pterodactyl Angle
 	angleFloor->WhenPressed(new AngelChange(-1.25));
 	angleLow->WhenPressed(new AngelChange(75));//75));
-	angleMed->WhenPressed(new AngelChange(89));//90));
-	angleHigh->WhenPressed(new AngelChange(100));//100));
+	angleMed->WhenPressed(new AngelChange(87.5));//90));
+	angleHigh->WhenPressed(new AngelChange(89.5));//100));
 	angleCarry->WhenPressed(new AngelChange(95));//95));
 
 	// Collector rollers
