@@ -27,9 +27,9 @@ public class RobotViewer {
 	boolean isToggleWireframe;
 
 	public RobotViewer() throws LWJGLException, IOException {
-		NetworkTable.setTeam(1983);
+		/*NetworkTable.setTeam(1983);
 		NetworkTable.setClientMode();
-		NetworkTable.initialize();
+		NetworkTable.initialize();*/
 
 		Skeleton sk = new Skeleton(new File("model/mesh.skl"));
 		sk.calculate();

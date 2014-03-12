@@ -108,10 +108,10 @@ public class Skeleton {
 							b.mesh.apply(m);
 							i++;
 						}
-						if (b.mesh.getIndicies() != null) {
-							System.out.println("Regen buffer for: " + file.getName());
+						//if (b.mesh.getIndicies() != null) {
+						//	System.out.println("Regen buffer for: " + file.getName());
 							b.mesh.generateBuffers();
-						}
+						//}
 					}
 					b.calculate();
 					bones.put(id, b);

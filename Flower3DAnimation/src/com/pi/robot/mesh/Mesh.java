@@ -22,8 +22,8 @@ import com.pi.math.Vector3D;
 import com.pi.robot.robot.RobotStateManager;
 
 public class Mesh {
-	private List<MeshVertex> verticies;
-	private List<Integer> indicies;
+	// private List<MeshVertex> verticies;
+	// private List<Integer> indicies;
 	private int polygonSize;
 
 	public FloatBufferColor defaultColor;
@@ -34,13 +34,10 @@ public class Mesh {
 	private FloatBuffer colorBuffer;
 	private IntBuffer bufferObjects;
 
-	public Mesh(List<MeshVertex> verts, List<Integer> indz, int polygonSize) {
-		this.verticies = verts;
-		this.indicies = indz;
+	public Mesh(List<MeshVertex> verticies, List<Integer> indicies,
+			int polygonSize) {
 		this.polygonSize = polygonSize;
-	}
 
-	public void generateBuffers() {
 		if (indicies != null) {
 			// Gen buffers
 			indexBuffer = BufferUtils.createIntBuffer(indicies.size());
@@ -85,18 +82,21 @@ public class Mesh {
 			}
 			indexBuffer = (IntBuffer) indexBuffer.flip();
 
-			/*System.out.println("Generated buffers for mesh: ");
-			System.out.println("Vertex:\t" + (vertexBuffer.limit() * 4 / 1024)
-					+ "kb");
-			System.out.println("Normal:\t" + (normalBuffer.limit() * 4 / 1024)
-					+ "kb");
-			if (colorBuffer != null) {
-				System.out.println("Color:\t"
-						+ (colorBuffer.limit() * 4 / 1024) + "kb");
-			}
-			System.out.println("Index:\t" + (indexBuffer.limit() * 4 / 1024)
-					+ "kb");*/
+			/*
+			 * System.out.println("Generated buffers for mesh: ");
+			 * System.out.println("Vertex:\t" + (vertexBuffer.limit() * 4 /
+			 * 1024) + "kb"); System.out.println("Normal:\t" +
+			 * (normalBuffer.limit() * 4 / 1024) + "kb"); if (colorBuffer !=
+			 * null) { System.out.println("Color:\t" + (colorBuffer.limit() * 4
+			 * / 1024) + "kb"); } System.out.println("Index:\t" +
+			 * (indexBuffer.limit() * 4 / 1024) + "kb");
+			 */
+		} else {
+			throw new RuntimeException("Kill me");
 		}
+	}
+
+	public void generateBuffers() {
 	}
 
 	public void loadToGPU() {
@@ -139,7 +139,7 @@ public class Mesh {
 				new FileOutputStream(f)));
 		dOut.writeBoolean(indexBuffer != null);
 		dOut.writeInt(polygonSize);
-		dOut.writeInt(verticies.size());
+		dOut.writeInt(vertexBuffer.limit());
 
 		dOut.writeBoolean(defaultColor != null);
 		if (defaultColor != null) {
@@ -151,36 +151,36 @@ public class Mesh {
 		}
 
 		int perc = 0;
-		for (int i = 0; i < verticies.size(); i++) {
-			int pp = (int) (100 * i / (float) verticies.size());
+		for (int i = 0; i < vertexBuffer.limit() / 3.0; i++) {
+			int pp = (int) (100 * i / (float) (vertexBuffer.limit() / 3.0));
 			if (pp > perc) {
 				System.out.print("\r" + pp);
 				perc = pp;
 			}
-			MeshVertex mV = verticies.get(i);
-			dOut.writeFloat(mV.getPosition().x);
-			dOut.writeFloat(mV.getPosition().y);
-			dOut.writeFloat(mV.getPosition().z);
+			int head = i * 3;
+			dOut.writeFloat(vertexBuffer.get(head));
+			dOut.writeFloat(vertexBuffer.get(head + 1));
+			dOut.writeFloat(vertexBuffer.get(head + 2));
 
-			dOut.writeFloat(mV.getNormal().x);
-			dOut.writeFloat(mV.getNormal().y);
-			dOut.writeFloat(mV.getNormal().z);
+			dOut.writeFloat(normalBuffer.get(head));
+			dOut.writeFloat(normalBuffer.get(head + 1));
+			dOut.writeFloat(normalBuffer.get(head + 2));
 
-			dOut.writeBoolean(mV.getColor() != null);
-			if (mV.getColor() != null) {
-				FloatBuffer buffer = mV.getColor().getBuffer();
-				dOut.writeByte((byte) (buffer.get() * 255));
-				dOut.writeByte((byte) (buffer.get() * 255));
-				dOut.writeByte((byte) (buffer.get() * 255));
-				dOut.writeByte((byte) (buffer.get() * 255));
+			dOut.writeBoolean(colorBuffer != null);
+			if (colorBuffer != null) {
+				int color = i * 4;
+				dOut.writeFloat(colorBuffer.get(color));
+				dOut.writeFloat(colorBuffer.get(color + 1));
+				dOut.writeFloat(colorBuffer.get(color + 2));
+				dOut.writeFloat(colorBuffer.get(color + 3));
 			}
 		}
-		if (indicies == null) {
+		if (indexBuffer == null) {
 			dOut.writeInt(0);
 		} else {
-			dOut.writeInt(indicies.size());
-			for (int i = 0; i < indicies.size(); i++) {
-				dOut.writeInt(indicies.get(i).intValue());
+			dOut.writeInt(indexBuffer.limit());
+			for (int i = 0; i < indexBuffer.limit(); i++) {
+				dOut.writeInt(indexBuffer.get(i));
 			}
 		}
 		dOut.close();
@@ -243,20 +243,14 @@ public class Mesh {
 		return m;
 	}
 
-	public void add(Mesh m) {
-		if (m.polygonSize != polygonSize) {
-			throw new RuntimeException("BAD POLYGON SIZE");
-		}
-		verticies.addAll(m.verticies);
-	}
-
-	public List<MeshVertex> getVerticies() {
-		return verticies;
-	}
-
-	public List<Integer> getIndicies() {
-		return indicies;
-	}
+	/*
+	 * public void add(Mesh m) { if (m.polygonSize != polygonSize) { throw new
+	 * RuntimeException("BAD POLYGON SIZE"); } verticies.addAll(m.verticies); }
+	 * 
+	 * public List<MeshVertex> getVerticies() { return verticies; }
+	 * 
+	 * public List<Integer> getIndicies() { return indicies; }
+	 */
 
 	public int getPolygonSize() {
 		return polygonSize;
@@ -264,9 +258,20 @@ public class Mesh {
 
 	public void apply(TransMatrix m) {
 		TransMatrix normalz = new TransMatrix(m).setTranslation(0, 0, 0);
-		for (MeshVertex v : verticies) {
-			v.position = m.multiply(v.getPosition());
-			v.normal = normalz.multiply(v.getNormal());
+		for (int i = 0; i < vertexBuffer.limit() / 3.0; i++) {
+			int head = i * 3;
+			Vector3D pos = new Vector3D(vertexBuffer.get(head),
+					vertexBuffer.get(head + 1), vertexBuffer.get(head + 2));
+			Vector3D norm = new Vector3D(normalBuffer.get(head),
+					normalBuffer.get(head + 1), normalBuffer.get(head + 2));
+			pos = m.multiply(pos);
+			norm = normalz.multiply(norm);
+			vertexBuffer.put(head, pos.x);
+			vertexBuffer.put(head + 1, pos.y);
+			vertexBuffer.put(head + 2, pos.z);
+			normalBuffer.put(head, norm.x);
+			normalBuffer.put(head + 1, norm.y);
+			normalBuffer.put(head + 2, norm.z);
 		}
 	}
 
@@ -315,29 +320,6 @@ public class Mesh {
 			}
 			GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 			GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-		} else { // TODO Colors
-			GL11.glBegin(getGLType());
-			if (getIndicies() != null) {
-				for (int i : getIndicies()) {
-					GL11.glTexCoord2f(getVerticies().get(i).getTextureUV()[0],
-							getVerticies().get(i).getTextureUV()[1]);
-					GL11.glNormal3f(getVerticies().get(i).getNormal().x,
-							getVerticies().get(i).getNormal().y, getVerticies()
-									.get(i).getNormal().z);
-					GL11.glVertex3f(verticies.get(i).getPosition().x, verticies
-							.get(i).getPosition().y, verticies.get(i)
-							.getPosition().z);
-				}
-			} else {
-				for (MeshVertex v : verticies) {
-					GL11.glTexCoord2f(v.getTextureUV()[0], v.getTextureUV()[1]);
-					GL11.glNormal3f(v.getNormal().x, v.getNormal().y,
-							v.getNormal().z);
-					GL11.glVertex3f(v.getPosition().x, v.getPosition().y,
-							v.getPosition().z);
-				}
-			}
-			GL11.glEnd();
 		}
 	}
 

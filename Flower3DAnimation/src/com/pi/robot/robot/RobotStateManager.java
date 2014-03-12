@@ -105,11 +105,11 @@ public class RobotStateManager {
 
 	private void colorAlliance(FloatBufferColor color) {
 		if (sk.getBone(BALL_ID) != null) {
-			for (MeshVertex vv : sk.getBone(BALL_ID).mesh.getVerticies()) {
+			/*for (MeshVertex vv : sk.getBone(BALL_ID).mesh.getVerticies()) {
 				vv.setColor(color);
 			}
 			sk.getBone(BALL_ID).mesh.generateBuffers();
-			sk.getBone(BALL_ID).mesh.loadToGPU();
+			sk.getBone(BALL_ID).mesh.loadToGPU();*/
 		}
 	}
 
@@ -119,7 +119,7 @@ public class RobotStateManager {
 		min.subtract(base);
 		max.subtract(base);
 		if (mesh != null) {
-			for (MeshVertex vv : mesh.getVerticies()) {
+			/*for (MeshVertex vv : mesh.getVerticies()) {
 				Vector3D test = vv.getPosition().clone().subtract(base);
 				if (bleh != null) {
 					test = bleh.multiply(test);
@@ -128,7 +128,7 @@ public class RobotStateManager {
 					vv.setColor(motorColor);
 				}
 			}
-			mesh.generateBuffers();
+			mesh.generateBuffers();*/
 			mesh.loadToGPU();
 		}
 	}

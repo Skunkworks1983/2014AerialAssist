@@ -129,7 +129,7 @@ public class Bone {
 		if (mesh == null) {
 			return;
 		}
-		if (mesh.getIndicies() != null && !vboCreated) {
+		if (/*mesh.getIndicies() != null && */!vboCreated) {
 			mesh.loadToGPU();
 			vboCreated = true;
 		}
