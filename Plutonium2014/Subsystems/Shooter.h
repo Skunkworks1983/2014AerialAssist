@@ -34,17 +34,18 @@ private:
 
 	SolenoidPair *wLatch;
 	SolenoidPair *sLatch;
-	
+
 #if SHOOTER_LIMITSWITCH
 	DigitalInput *pullBackSwitchLeft;
 	DigitalInput *pullBackSwitchRight;
 	DigitalEdgeWatcher pullBackSwitchPatternBuffer;
 #endif
-	
+
 	DigitalInput *sLatchSensor;
 	DigitalInput *wLatchSensor;
 
 	DigitalEdgeWatcher sLatchPatternBuffer;
+
 public:
 	double lastReleasePosition;
 	
@@ -53,7 +54,7 @@ public:
 
 	static Command *createArmShooter();
 	static Command *createCreateArmShooter();
-	
+
 	void setWenchMotor(float speed);
 	float getWenchMotorSpeed();
 
@@ -66,7 +67,7 @@ public:
 
 	double getTurns();
 	double getTurnRate();
-	
+
 	bool isReallyDrawnBack();
 
 #if SHOOTER_LIMITSWITCH

@@ -12,6 +12,9 @@
 #define GET_BOOL(x) (Preferences::GetInstance()->GetBoolean(#x, x))
 #define GET_INT(x) (Preferences::GetInstance()->GetInt(#x, x))
 
+#define SMARTDASH_VERBOSITY 15
+#define ROBOT_VISUALIZATION true
+
 // ================
 // ==  Sidecars  ==
 // ================
@@ -54,7 +57,7 @@
 #if SHOOTER_LIMITSWITCH
 #define SHOOTER_LIMITSWITCH_LEFT_PULLBACK_CHECK TOP_SIDECAR,6
 #define SHOOTER_LIMITSWITCH_RIGHT_PULLBACK_CHECK TOP_SIDECAR,7
-#define SHOOTER_LIMITSWITCH_DELAY (500) /* Milliseconds to delay proximity reaction */
+#define SHOOTER_LIMITSWITCH_DELAY (100000) /* Milliseconds to delay proximity reaction */
 #endif
 
 #define SHOOTER_WENCH_ENCODER 8,9
@@ -74,7 +77,7 @@
 #if COMPETITION_BOT
 // .225 = FULL BACK (0)
 // 1.622 = FULL OUT (1.1)
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.177165
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.121212
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.22
 #endif

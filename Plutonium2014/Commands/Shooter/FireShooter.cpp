@@ -11,12 +11,13 @@
 #include "Raw/FireShooterInternal.h"
 
 FireShooter::FireShooter() :
-		CommandBase("FireShooter") {
+	CommandBase("FireShooter") {
 }
 
 void FireShooter::Initialize() {
-	if ((CommandBase::pterodactyl->isPIDFinished()
-			|| CommandBase::pterodactyl->getPIDTarget() > 45)
+	if (CommandBase::shooter->lastReleasePosition > 0.0
+			&& (CommandBase::pterodactyl->isPIDFinished()
+					|| CommandBase::pterodactyl->getPIDTarget() > 45)
 			&& CommandBase::pterodactyl->getAngle() > 45) {
 		Scheduler::GetInstance()->AddCommand(new FireShooterInternal());
 	} else {
