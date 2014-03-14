@@ -7,6 +7,7 @@ class DigitalIOButton;
 class CompositeButton;
 class Button;
 class AnalogRangeIOButton;
+class Command;
 
 class OI {
 private:
@@ -17,7 +18,7 @@ private:
 	JoystickButton *shiftButton;
 
 	DigitalIOButton *catch1;
-	DigitalIOButton *catch2;
+	DigitalIOButton *resetShooter;
 	DigitalIOButton *collect;
 	DigitalIOButton *pass;
 
@@ -48,6 +49,9 @@ public:
 
 	float getAngleAdjustment();
 	float getPowerAdjustment();
+	
+	static Command *createPower();
+	static Command *createAngle();
 };
 
 #endif

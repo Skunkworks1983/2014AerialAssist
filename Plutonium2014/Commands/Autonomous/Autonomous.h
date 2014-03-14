@@ -9,6 +9,8 @@ public:
 	static Autonomous *create2Ball(float distance);
 	static Autonomous *createAutoBall(int ballCount, float distance);
 	static Autonomous *createJustDrive(float distance);
+	
+	static Autonomous *createDerpy();
 public:
 	Autonomous();
 	Autonomous(char *style);

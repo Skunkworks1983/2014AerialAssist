@@ -17,9 +17,10 @@ void UpdateCompressor::Execute() {
 				&& !shooter->isReallyDrawnBack()) {
 			state = false;
 		}
-		if (fabs(pterodactyl->getAngleMotorSpeed()) > 0.0) {
-			state = false;
-		}
+		SmartDashboard::PutBoolean("Compressor", state);
+//		if (!pterodactyl->isPIDFinished()) {
+//			state = false;
+//		}
 		pneumatics->setState(state);
 		ticksSinceUpdate = 0;
 	}

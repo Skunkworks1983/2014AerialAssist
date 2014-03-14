@@ -47,8 +47,8 @@ void AngelChange::Execute() {
 		pterodactyl->setTarget(tmpTarget);
 	}
 	if (target <= 0 && pterodactyl->getAngle() < 10) {
-		pterodactyl->stopPID();
-		pterodactyl->writeAngleMotorRaw(0.0);
+		//pterodactyl->stopPID();
+		//pterodactyl->writeAngleMotorRaw(0.0);
 		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 	}
 }
@@ -58,11 +58,11 @@ bool AngelChange::IsFinished() {
 }
 
 void AngelChange::End() {
-	pterodactyl->stopPID();
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
+	pterodactyl->stopPID();
 }
 
 void AngelChange::Interrupted() {
-	pterodactyl->stopPID();
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
+	pterodactyl->stopPID();
 }

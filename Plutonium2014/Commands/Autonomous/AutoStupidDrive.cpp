@@ -1,29 +1,22 @@
-#ifndef AUTO_STUPID_DRIVE_CPP
-#define AUTO_STUPID_DRIVE_CPP
+#include "AutoStupidDrive.h"
 
-// Backend
-#include "../../CommandBase.h"
-
-class AutoStupidDrive : public CommandBase {
-public:
-	AutoStupidDrive(double timeout) {
-		Requires(driveBase);
-		SetTimeout(timeout);
-	}
-	virtual void Initialize() {
-	}
-	virtual void Execute() {
-		driveBase->setSpeed(0.25, 0.25);
-	}
-	virtual bool IsFinished() {
-		return IsTimedOut();
-	}
-	virtual void End() {
-		driveBase->setSpeed(0, 0);
-	}
-	virtual void Interrupted() {
-		driveBase->setSpeed(0, 0);
-	}
-};
-
-#endif
+AutoStupidDrive::AutoStupidDrive(double timeout, float speed) {
+	Requires(driveBase);
+	SetTimeout(timeout);
+	this->speed = speed;
+}
+void AutoStupidDrive::Initialize() {
+	printf("Stupid drive\n");
+}
+void AutoStupidDrive::Execute() {
+	driveBase->setSpeed(speed, speed);
+}
+bool AutoStupidDrive::IsFinished() {
+	return IsTimedOut();
+}
+void AutoStupidDrive::End() {
+	driveBase->setSpeed(0, 0);
+}
+void AutoStupidDrive::Interrupted() {
+	driveBase->setSpeed(0, 0);
+}

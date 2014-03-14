@@ -16,10 +16,13 @@
 #include "Commands/Shooter/DrawShooter.h"
 #include "Commands/Shooter/PrepareShooter.h"
 #include "Commands/Shooter/FireShooter.h"
+#include "Commands/Shooter/ResetShooter.h"
 #include "Commands/Collector/Collect.h"
 #include "Commands/Collector/Pass.h"
 #include "Commands/Collector/Catch.h"
 #include "Commands/Shooter/ReadyShot.h"
+
+#include "Commands/Command.h"
 
 #include <math.h>
 
@@ -33,7 +36,7 @@ OI::OI() {
 	collectButton = new CompositeButton(new JoystickButton(joystickRight, 1),NULL,CompositeButton::kNOT);
 
 	catch1 = new DigitalIOButton(1);
-	catch2 = new DigitalIOButton(3);
+	resetShooter = new DigitalIOButton(3);
 	collect = new DigitalIOButton(5);
 	pass = new DigitalIOButton(7);
 
@@ -78,7 +81,6 @@ void OI::registerButtonListeners() {
 	// Jaw Operations
 	pass->WhenPressed(new Pass());
 	catch1->WhenPressed(new Catch(90));
-	catch2->WhenPressed(new Catch(30));
 
 	// Shooter operations
 	fire->WhenReleased(new FireShooter());
@@ -91,7 +93,14 @@ void OI::registerButtonListeners() {
 
 	// Jaw Override
 	jawToggle->WhenPressed(new JawMove(Collector::kClosed));
-	jawToggle->WhenReleased(new JawMove(Collector::kOpen));
+	jawToggle->WhenReleased(new JawMove(Collector::kOpen));\
+	
+	resetShooter->WhenPressed(new ResetShooter());
+
+	SmartDashboard::PutNumber("targetangle", 10);
+	SmartDashboard::PutData("go target", new CommandStarter(OI::createAngle));
+	SmartDashboard::PutNumber("targetpower", 1);
+	SmartDashboard::PutData("go power target", new CommandStarter(OI::createPower));
 }
 
 Joystick *OI::getJoystickLeft() {
@@ -114,4 +123,11 @@ float OI::getAngleAdjustment() {
 float OI::getPowerAdjustment() {
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(1);
 	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
+}
+
+Command * OI::createAngle() {
+	return new AngelChange(SmartDashboard::GetNumber("targetangle"));
+}
+Command * OI::createPower() {
+	return new ReadyShot(SmartDashboard::GetNumber("targetpower"));
 }

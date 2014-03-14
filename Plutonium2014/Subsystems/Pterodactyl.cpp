@@ -5,7 +5,9 @@
 #include <math.h>
 #include "../Utils/Actuators/DualLiveSpeed.h"
 
-#define PTERODACTYL_PID 1.25,.018,1.25
+#define PTERODACTYL_P 0.75
+#define PTERODACTYL_I .011
+#define PTERODACTYL_D .050
 #define PTERODACTYL_ANGLE_THRESHOLD (1)
 
 Pterodactyl::Pterodactyl() :
@@ -20,13 +22,13 @@ Pterodactyl::Pterodactyl() :
 
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 
-	pid = new PIDController(PTERODACTYL_PID,pot,  this, 0.05f);
+	pid = new PIDController(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
 	pid->SetAbsoluteTolerance(
-			PTERODACTYL_ANGLE_THRESHOLD / (double) PTERODACTYL_MAX_ANGLE);
+	PTERODACTYL_ANGLE_THRESHOLD / (double) PTERODACTYL_MAX_ANGLE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "PID Controller", pid);
-	SmartDashboard::PutData("Pterodactyl PID", pid);
+	SmartDashboard::PutData("Pterodactylz PID", pid);
 
 	brake = new Relay(PTERODACTYL_BRAKE_ACTIVE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);
@@ -46,7 +48,7 @@ double Pterodactyl::getRate() {
 
 void Pterodactyl::setAngleMotorSpeed(float speed) {
 	if (((speed > 0 && getAngle() < PTERODACTYL_MAX_ANGLE) || (speed < 0
-			&& getAngle() > PTERODACTYL_MIN_ANGLE))) {
+			&& getAngle() >PTERODACTYL_MIN_ANGLE))) {
 		angleMotors->Set(speed);
 	} else {
 		angleMotors->Set(0);
@@ -56,15 +58,15 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 	if (angle < 25) {
-		pid->SetOutputRange(-.25, 1.0);
+		pid->SetOutputRange(-.25, 0.75);
 	} else {
-		float speedUp = -0.25 * ((angle - 75.0) / 15.0) + 0.75;
+		float speedUp = -0.25 * ((angle - 75.0) / 25.0) + 0.6;
 		if (speedUp > 1.0) {
 			speedUp = 1.0;
-		} else if (speedUp < 0.5) {
-			speedUp = 0.5;
+		} else if (speedUp < 0.4) {
+			speedUp = 0.4;
 		}
-		pid->SetOutputRange(-.4, speedUp);
+		pid->SetOutputRange(-.75, 0.75);
 	}
 }
 
@@ -94,6 +96,13 @@ void Pterodactyl::setTarget(float target) {
 	}
 	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
 	pid->Reset();
+	float iScale = 1.0;
+	if (target <= 75) {
+		iScale = 1.1;
+	} else if (target>=90) {
+		iScale = 0.9;
+	}
+	pid->SetPID(PTERODACTYL_P, PTERODACTYL_I * iScale, PTERODACTYL_D);
 	if (!pid->IsEnabled()) {
 		pid->Enable();
 	}
@@ -115,8 +124,7 @@ double Pterodactyl::PIDGet() {
 }
 
 bool Pterodactyl::isPIDFinished() {
-	return !pid->IsEnabled() || fabs(
-			(pid->GetSetpoint() * PTERODACTYL_MAX_ANGLE) - getAngle())
-			< GET_DOUBLE(PTERODACTYL_ANGLE_THRESHOLD);
+	return !pid->IsEnabled() || fabs( (pid->GetSetpoint()
+			* PTERODACTYL_MAX_ANGLE) - getAngle()) < GET_DOUBLE(PTERODACTYL_ANGLE_THRESHOLD);
 }
 

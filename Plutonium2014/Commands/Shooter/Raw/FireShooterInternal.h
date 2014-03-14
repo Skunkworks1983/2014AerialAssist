@@ -12,7 +12,7 @@
 
 class FireShooterInternal: public CommandGroup {
 public:
-	FireShooterInternal();
+	FireShooterInternal(bool autoArm = true);
 	virtual void Initialize();
 	virtual void End();
 	virtual void Interrupted();
