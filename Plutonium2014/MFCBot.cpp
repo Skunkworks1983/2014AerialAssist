@@ -14,8 +14,8 @@
 // Commands
 #include "Commands/Shooter/Latches/WLatch.h"
 #include "Commands/Autonomous/Autonomous.h"
-
-#include "Commands/Autonomous/AutoStupidDrive.cpp"
+#include "Commands/Shooter/PrepareShooter.h"
+#include "Commands/Autonomous/AutoStupidDrive.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -40,9 +40,10 @@ void MFCBot::createAutonomi() {
 	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
 	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
 	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
-	
-	chooser->AddObject("Stupid Drive", new AutoStupidDrive(5.0));
-	SmartDashboard::PutData("Autonomous Modes", chooser);
+
+	chooser->AddObject("Stupid Drive", new AutoStupidDrive(3.0,-.25));
+	chooser->AddObject("This (Stupid Auto)", Autonomous::createDerpy());
+	SmartDashboard::PutData("Auto Modes", chooser);
 }
 
 void MFCBot::RobotInit() {
@@ -50,7 +51,7 @@ void MFCBot::RobotInit() {
 	lw = LiveWindow::GetInstance();
 	CommandBase::oi->registerButtonListeners();
 	createAutonomi();
-	
+
 	SmartDashboard::PutData("Log Level", Logger::createLogLevelChooser());
 
 	robotState = NetworkTable::GetTable("Robot");
@@ -58,23 +59,24 @@ void MFCBot::RobotInit() {
 
 void MFCBot::AutonomousInit() {
 	Scheduler::GetInstance()->RemoveAll();
-	((Command*) chooser->GetSelected())->Start();
+	Command *cmd = ((Command*) chooser->GetSelected());
+	if (cmd!=NULL) {
+		cmd->Start();
+		printf("Starting AUTO: %s\n", cmd->GetName().c_str());
+	}
+	Logger::log(Logger::kInfo, "Main", "Autonomous Init");
 }
 
 void MFCBot::AutonomousPeriodic() {
-	/*Scheduler::GetInstance()->Run();
-	 WatchDog();
-	 if (dont++ > 10) {
-	 printf("Encoder Left: %f, Encoder Right: %f \n",
-	 CommandBase::driveBase->getLeftEncoder()->GetDistance(),
-	 CommandBase::driveBase->getRightEncoder()->GetDistance());
-	 dont = 0;
-	 }*/
+	Scheduler::GetInstance()->Run();
+	WatchDog();
+	StallableMotor::updateControllers();
 }
 
 void MFCBot::TeleopInit() {
 	Scheduler::GetInstance()->RemoveAll();
 	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
+	Logger::log(Logger::kInfo, "Main", "Teleop Init");
 }
 
 void MFCBot::TeleopPeriodic() {
@@ -115,6 +117,8 @@ void MFCBot::TeleopPeriodic() {
 			SmartDashboard::PutBoolean("Shooter Ready",
 					CommandBase::shooter->isReallyDrawnBack()
 							&& CommandBase::shooter->lastReleasePosition > 0.0);
+			SmartDashboard::PutBoolean("Pterodactyl Ready",
+					CommandBase::pterodactyl->isPIDFinished());
 		}
 		if (verbosity & 2) {
 			SmartDashboard::PutNumber("Winch position",
@@ -130,6 +134,8 @@ void MFCBot::TeleopPeriodic() {
 					CommandBase::pterodactyl->getRate());
 		}
 		if (verbosity & 8) {
+			SmartDashboard::PutBoolean("Shooter Raw Promixity",
+					CommandBase::shooter->getRawProximity());
 			SmartDashboard::PutBoolean("Shooter Pattern Latched",
 					CommandBase::shooter->isLatchedByPattern());
 			SmartDashboard::PutBoolean("Shooter Promixity Latched",
@@ -145,6 +151,10 @@ void MFCBot::TeleopPeriodic() {
 
 void MFCBot::DisabledInit() {
 	Scheduler::GetInstance()->RemoveAll();
+
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Opening");
+	DriverStationLCD::GetInstance()->UpdateLCD();
 }
 
 void MFCBot::TestInit() {
@@ -197,7 +207,9 @@ void MFCBot::WatchDog() {
 				}
 			}
 		}
-		if (CommandBase::shooter->isShooterMotorStalled()/* && CommandBase::shooter->getTurns() > 0.125*/) {
+		if (CommandBase::shooter->isShooterMotorStalled()
+				&& CommandBase::shooter->getWenchMotorSpeed()>0
+				&& CommandBase::shooter->getTurns() > 0.125) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {
@@ -212,5 +224,6 @@ void MFCBot::WatchDog() {
 	}
 }
 
-START_ROBOT_CLASS(MFCBot);
+START_ROBOT_CLASS(MFCBot)
+;
 

@@ -18,9 +18,9 @@ void JawMove::Initialize() {
 }
 
 void JawMove::Execute() {
-	if (shooter->isReallyDrawnBack()) {
+	//if (shooter->isReallyDrawnBack()) {
 		collector->setJawState(state);
-	}
+	//}
 }
 
 bool JawMove::IsFinished() {

@@ -76,6 +76,8 @@ public:
 #endif
 
 	void checkDiagnostics();
+	
+	void resetShooter();
 };
 
 #endif

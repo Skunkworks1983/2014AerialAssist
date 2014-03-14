@@ -18,7 +18,6 @@ ReleaseTension::ReleaseTension(float setTurns) :
 }
 
 void ReleaseTension::Initialize() {
-	CommandBase::shooter->lastReleasePosition = setTurns;
 	isDone = true;
 	if (!shooter->isReallyDrawnBack()) {
 		Logger::log(Logger::kWarning, "Shooter-ReleaseTension",
@@ -28,16 +27,21 @@ void ReleaseTension::Initialize() {
 }
 
 void ReleaseTension::Execute() {
+	float speed = SHOOTER_WENCH_MOTOR_FULL_RELEASE;
+	if (fabs(shooter->getTurns() - setTurns)
+				< SHOOTER_WENCH_PAYOUT_TOLERANCE_NEAR) {
+		speed = SHOOTER_WENCH_MOTOR_FULL_RELEASE_NEAR;
+	}
 	if (shooter->getTurns() <= setTurns) {
-		shooter->setWenchMotor(SHOOTER_WENCH_MOTOR_FULL_RELEASE);
+		shooter->setWenchMotor(speed);
 	} else {
-		shooter->setWenchMotor(-SHOOTER_WENCH_MOTOR_FULL_RELEASE);
+		shooter->setWenchMotor(-speed);
 	}
 }
 
 bool ReleaseTension::IsFinished() {
 	return (fabs(shooter->getTurns() - setTurns)
-			< SHOOTER_WENCH_PAYOUT_TOLERANCE) || !isDone;
+			< SHOOTER_WENCH_PAYOUT_TOLERANCE);
 }
 
 void ReleaseTension::End() {
