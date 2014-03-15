@@ -14,10 +14,10 @@ class StallableMotor;
  *
  * @author Ross Bajocich
  */
-class Collector: public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
+class Collector : public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
 public:
 	enum JawState {
-		kOpen=false, kClosed=true
+		kOpen=false, kClosed=true,kSketchy=-1
 	};
 private:
 	SolenoidPair *jawController;
@@ -25,7 +25,7 @@ private:
 	PIDController *rollerPIDController;
 	Encoder *rollerClawEncoder;
 	StallableMotor *rollerMotor;
-	
+
 public:
 	Collector();
 	void InitDefaultCommand();
@@ -41,7 +41,7 @@ public:
 
 	bool isPIDEnabled();
 	bool isRollerStalled();
-	
+
 	bool isBallDetected();
 };
 

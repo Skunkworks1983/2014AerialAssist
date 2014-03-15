@@ -16,10 +16,9 @@ FireShooterInternal::FireShooterInternal(bool autoArm) :
 	CommandGroup("FireShooterInternal") {
 	AddSequential(new DiscBrake(Pterodactyl::kActive));
 	AddSequential(new WLatch(Shooter::kLatched));
-	Command *jawMove = new JawMove(Collector::kOpen, 1.5);
+	Command *jawMove = new JawMove(Collector::kOpen, 0.50);
 	AddSequential(jawMove);
 	AddSequential(new SLatch(Shooter::kUnlatched));
-	AddSequential(new WaitCommand(1.5));
 	if (autoArm) {
 		AddSequential(new CommandStarter(Shooter::createCreateArmShooter));
 	}

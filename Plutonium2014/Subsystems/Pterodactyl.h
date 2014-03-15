@@ -39,6 +39,7 @@ public:
 	void setBrakeState(BrakeState state);
 
 	void setTarget(float target);
+	double getTarget();
 	void setOutputRange();
 	void stopPID();
 	bool isPIDFinished();

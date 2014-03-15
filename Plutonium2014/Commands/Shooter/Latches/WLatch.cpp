@@ -22,7 +22,6 @@ void WLatch::Initialize() {
 		bTime = 0;
 	}
 	shooter->setWLatch(state);
-	printf("Start WLATCH\n");
 }
 
 void WLatch::Execute() {

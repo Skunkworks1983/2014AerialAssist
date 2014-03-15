@@ -11,6 +11,7 @@ AngelChange::AngelChange(float target) :
 	this->target = target;
 	this->stability = 0;
 	this->tmpTarget = 0;
+	SetTimeout(4);
 	SetInterruptible(true);
 }
 
@@ -54,7 +55,7 @@ void AngelChange::Execute() {
 }
 
 bool AngelChange::IsFinished() {
-	return stability > 15;
+	return stability > 8 || IsTimedOut();
 }
 
 void AngelChange::End() {

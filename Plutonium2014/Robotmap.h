@@ -49,7 +49,7 @@
 #define SHOOTER_PNEUMATIC_S_LATCH 5,6 /*L12 TBD*/
 #define SHOOTER_S_LATCH_SENSOR TOP_SIDECAR,2 /*T2*/
 #define SHOOTER_W_LATCH_SENSOR TOP_SIDECAR,1 /*T1*/
-#define SHOOTER_SLATCH_PATTERN_DELAY (100) /* Milliseconds to delay proximity reaction */
+#define SHOOTER_SLATCH_PATTERN_DELAY (100) /* Milliseconds to delay slatch reaction */
 #define SHOOTER_MOTOR_STALL_SPEED (0.05)
 #define SHOOTER_MOTOR_STALL_TIME (500)
 

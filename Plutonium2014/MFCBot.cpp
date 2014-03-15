@@ -30,19 +30,19 @@ MFCBot::~MFCBot() {
 
 void MFCBot::createAutonomi() {
 	chooser = new SendableChooser();
-	chooser->AddDefault("Blank", new Autonomous());
-	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
-	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
-			-10));
-	chooser->AddObject("Two Ball", Autonomous::createAutoBall(2, 0));
-	chooser->AddObject("Two Ball, Drive Back", Autonomous::createAutoBall(2,
-			-10));
-	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
-	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
-	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
+	chooser->AddDefault("This (Stupid Auto)", Autonomous::createDerpy());
+	chooser->AddObject("Blank", new Autonomous());
+//	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
+//	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
+//			-10));
+//	chooser->AddObject("Two Ball", Autonomous::createAutoBall(2, 0));
+//	chooser->AddObject("Two Ball, Drive Back", Autonomous::createAutoBall(2,
+//			-10));
+//	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
+//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
+//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
 	chooser->AddObject("Stupid Drive", new AutoStupidDrive(3.0,-.25));
-	chooser->AddObject("This (Stupid Auto)", Autonomous::createDerpy());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }
 
@@ -134,6 +134,8 @@ void MFCBot::TeleopPeriodic() {
 					CommandBase::pterodactyl->getRate());
 		}
 		if (verbosity & 8) {
+			SmartDashboard::PutBoolean("Shooter Raw Latch",
+					CommandBase::shooter->getRawSLatch());
 			SmartDashboard::PutBoolean("Shooter Raw Promixity",
 					CommandBase::shooter->getRawProximity());
 			SmartDashboard::PutBoolean("Shooter Pattern Latched",
@@ -153,7 +155,7 @@ void MFCBot::DisabledInit() {
 	Scheduler::GetInstance()->RemoveAll();
 
 	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);
-	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Opening");
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Saturday");
 	DriverStationLCD::GetInstance()->UpdateLCD();
 }
 

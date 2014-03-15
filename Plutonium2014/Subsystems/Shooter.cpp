@@ -74,7 +74,10 @@ Command *Shooter::createArmShooter() {
 		return new ReadyShot(CommandBase::shooter->lastReleasePosition);
 	}
 #endif
-	return new DrawShooter();
+	CommandGroup *group = new CommandGroup("DrawSeq");
+	group->AddSequential(new WaitCommand(1.5));
+	group->AddSequential(new DrawShooter());
+	return group;
 }
 
 bool Shooter::isShooterMotorStalled() {
@@ -110,8 +113,8 @@ bool Shooter::getRawProximity() {
 			} else {
 				pullBackSwitchPatternBuffer.lastState = false;
 			}
-			Logger::log(Logger::kFinest, "Shooter",
-					"Cleared proximity pattern buffer due to a recent change");
+//			Logger::log(Logger::kFinest, "Shooter",
+//					"Cleared proximity pattern buffer due to a recent change");
 		}
 	}
 	if (sLatch->Get() != pullBackSwitchPatternBuffer.lastRequestedState) {
@@ -124,8 +127,8 @@ bool Shooter::getRawProximity() {
 		} else {
 			pullBackSwitchPatternBuffer.lastState = false;
 		}
-		Logger::log(Logger::kFinest, "Shooter",
-				"Cleared proximity pattern buffer internally");
+//		Logger::log(Logger::kFinest, "Shooter",
+//				"Cleared proximity pattern buffer internally");
 	}
 	return state;
 }
@@ -146,6 +149,16 @@ void Shooter::setSLatch(Shooter::LatchPosition state) {
 		lastReleasePosition = 0.0;
 #endif
 	}
+	
+	int sLatchState = state;
+	if (sLatchState != sLatchPatternBuffer.lastRequestedState) {
+		sLatchPatternBuffer.solenoidChangeTime = getCurrentMillis();
+		sLatchPatternBuffer.lastFallingEdge = -1;
+		sLatchPatternBuffer.lastRisingEdge = -1;
+		sLatchPatternBuffer.lastRequestedState = sLatchState;
+		Logger::log(Logger::kFinest, "Shooter",
+				"Cleared shooter latch pattern buffer internally");
+	}
 }
 
 void Shooter::setWLatch(Shooter::LatchPosition state) {
@@ -155,7 +168,7 @@ void Shooter::setWLatch(Shooter::LatchPosition state) {
 Shooter::LatchPosition Shooter::getRawSLatch() {
 	Shooter::LatchPosition pos = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
-	if (sLatchPatternBuffer.lastState != pos && getTurns() > 0.25) {
+	if (sLatchPatternBuffer.lastState != pos && getTurns() < 0.25) {
 		// Something happened
 		Logger::log(Logger::kFinest, "Shooter",
 				"Shooter latch changed from %s to %s",
@@ -174,14 +187,6 @@ Shooter::LatchPosition Shooter::getRawSLatch() {
 			Logger::log(Logger::kFinest, "Shooter",
 					"Cleared shooter latch pattern buffer due to a recent change");
 		}
-	}
-	if (sLatch->Get() != sLatchPatternBuffer.lastRequestedState) {
-		sLatchPatternBuffer.solenoidChangeTime = getCurrentMillis();
-		sLatchPatternBuffer.lastFallingEdge = -1;
-		sLatchPatternBuffer.lastRisingEdge = -1;
-		sLatchPatternBuffer.lastRequestedState = sLatch->Get();
-		Logger::log(Logger::kFinest, "Shooter",
-				"Cleared shooter latch pattern buffer internally");
 	}
 	sLatchPatternBuffer.lastState = pos;
 	return pos;
