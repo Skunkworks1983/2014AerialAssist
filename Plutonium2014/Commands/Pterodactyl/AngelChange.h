@@ -14,7 +14,7 @@ private:
 	int stability;
 	float tmpTarget;
 public:
-	AngelChange(float target);
+	AngelChange(float target, float timeout = 10.0);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

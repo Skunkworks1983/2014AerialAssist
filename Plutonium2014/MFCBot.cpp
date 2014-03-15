@@ -32,15 +32,15 @@ void MFCBot::createAutonomi() {
 	chooser = new SendableChooser();
 	chooser->AddDefault("This (Stupid Auto)", Autonomous::createDerpy());
 	chooser->AddObject("Blank", new Autonomous());
-//	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
-//	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
-//			-10));
-//	chooser->AddObject("Two Ball", Autonomous::createAutoBall(2, 0));
-//	chooser->AddObject("Two Ball, Drive Back", Autonomous::createAutoBall(2,
-//			-10));
-//	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
-//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
-//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
+	//	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
+	//	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
+	//			-10));
+	//	chooser->AddObject("Two Ball", Autonomous::createAutoBall(2, 0));
+	//	chooser->AddObject("Two Ball, Drive Back", Autonomous::createAutoBall(2,
+	//			-10));
+	//	chooser->AddObject("Three Ball", Autonomous::createAutoBall(3, 0));
+	//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
+	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
 	chooser->AddObject("Stupid Drive", new AutoStupidDrive(3.0,-.25));
 	SmartDashboard::PutData("Auto Modes", chooser);
@@ -118,7 +118,7 @@ void MFCBot::TeleopPeriodic() {
 					CommandBase::shooter->isReallyDrawnBack()
 							&& CommandBase::shooter->lastReleasePosition > 0.0);
 			SmartDashboard::PutBoolean("Pterodactyl Ready",
-					CommandBase::pterodactyl->isPIDFinished());
+					CommandBase::pterodactyl->isPIDFinished(true));
 		}
 		if (verbosity & 2) {
 			SmartDashboard::PutNumber("Winch position",

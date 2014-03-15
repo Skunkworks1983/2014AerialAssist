@@ -34,6 +34,10 @@ Collector::Collector() :
 	jawController = new SolenoidPair(COLLECTOR_JAW_SOLENOID_A,
 			COLLECTOR_JAW_SOLENOID_B);
 	LiveWindow::GetInstance()->AddActuator("Collector", "Jaw Controller", jawController);
+	
+	setJawState(Collector::kClosed);
+	rollerPIDController->Disable();
+	rollerMotor->Set(0);
 }
 
 void Collector::InitDefaultCommand() {
