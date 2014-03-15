@@ -18,7 +18,10 @@ SLatch::SLatch(Shooter::LatchPosition isLocked) :
 
 void SLatch::Initialize() {
 	if (isLocked == Shooter::kUnlatched) {
-		Logger::log(Logger::kInfo, "Shooter", "Unlatched [Angle: %f,\tPower: %f]", pterodactyl->getAngle(), shooter->getTurns());
+		Logger::log(Logger::kInfo, "Shooter",
+				"Unlatched [Angle: %f (%f),\tPower: %f(%f)]",
+				pterodactyl->getAngle(), pterodactyl->getTarget(),
+				shooter->getTurns(), shooter->lastReleasePosition);
 	}
 	shooter->setSLatch(isLocked);
 	bTime = getCurrentMillis();
@@ -33,7 +36,8 @@ bool SLatch::IsFinished() {
 		return true;
 	} else if (time >= SHOOTER_SLATCH_WAIT) {
 		// Shutting down the shooter
-		Logger::log(Logger::kDiagnostic, "Shooter-SLatch", "Time termination; sensor not seen");
+		Logger::log(Logger::kDiagnostic, "Shooter-SLatch",
+				"Time termination; sensor not seen");
 		return true;
 	}
 	return false;

@@ -21,8 +21,13 @@ void FireShooter::Initialize() {
 			&& CommandBase::pterodactyl->getAngle() > 45) {
 		Scheduler::GetInstance()->AddCommand(new FireShooterInternal());
 	} else {
-		Logger::log(Logger::kInfo, "Shooter-FireShooter",
-				"Ignoring fire shooter due to pterodactyl angle!");
+		if (CommandBase::shooter->lastReleasePosition > 0.0) {
+			Logger::log(Logger::kInfo, "Shooter-FireShooter",
+					"Ignoring fire shooter due to pterodactyl angle!");
+		} else {
+			Logger::log(Logger::kInfo, "Shooter-FireShooter",
+					"Ignoring fire shooter due to unprepared!");
+		}
 	}
 }
 

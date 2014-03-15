@@ -13,12 +13,13 @@ JawMove::JawMove(Collector::JawState state, float timeout) :
 void JawMove::Initialize() {
 	killIt = false;
 	if (collector->getJawState() == state) {
-		killIt = true;
+		//killIt = true; NO SKETCHY
 	}
+	collector->setJawState(state);
 }
 
 void JawMove::Execute() {
-	//if (shooter->isReallyDrawnBack()) {
+	//if (shooter->isReallyDrawnBack()) { NO SKETCHY
 		collector->setJawState(state);
 	//}
 }

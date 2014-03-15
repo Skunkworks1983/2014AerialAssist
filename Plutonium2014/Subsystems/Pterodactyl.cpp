@@ -6,7 +6,7 @@
 #include "../Utils/Actuators/DualLiveSpeed.h"
 
 #define PTERODACTYL_P 0.75
-#define PTERODACTYL_I .011
+#define PTERODACTYL_I .0105
 #define PTERODACTYL_D .050
 #define PTERODACTYL_ANGLE_THRESHOLD (1)
 
@@ -60,12 +60,12 @@ void Pterodactyl::setOutputRange() {
 	if (angle < 25) {
 		pid->SetOutputRange(-.25, 0.75);
 	} else {
-		float speedUp = -0.25 * ((angle - 75.0) / 25.0) + 0.6;
-		if (speedUp > 1.0) {
-			speedUp = 1.0;
-		} else if (speedUp < 0.4) {
-			speedUp = 0.4;
-		}
+		//		float speedUp = -0.25 * ((angle - 75.0) / 25.0) + 0.6;
+		//		if (speedUp > 1.0) {
+		//			speedUp = 1.0;
+		//		} else if (speedUp < 0.4) {
+		//			speedUp = 0.4;
+		//		}
 		pid->SetOutputRange(-.75, 0.75);
 	}
 }
@@ -91,21 +91,21 @@ void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 }
 
 void Pterodactyl::setTarget(float target) {
-	if (pid->IsEnabled()) {
-		pid->Disable();
-	}
-	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
 	pid->Reset();
-	float iScale = 1.0;
-	if (target <= 75) {
-		iScale = 1.1;
-	} else if (target>=90) {
-		iScale = 0.9;
+	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
+	float error = fabs(target - getAngle()) / (double) 80.0;
+	float iScale = (error / 2.0) + 0.5;
+	if (target < getAngle()) {
+		iScale = (iScale / 2.0) + 0.5;
 	}
 	pid->SetPID(PTERODACTYL_P, PTERODACTYL_I * iScale, PTERODACTYL_D);
 	if (!pid->IsEnabled()) {
 		pid->Enable();
 	}
+}
+
+double Pterodactyl::getTarget() {
+	return pid->GetSetpoint() * (double) PTERODACTYL_MAX_ANGLE;
 }
 
 void Pterodactyl::stopPID() {
