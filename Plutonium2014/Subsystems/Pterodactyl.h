@@ -42,7 +42,7 @@ public:
 	double getTarget();
 	void setOutputRange();
 	void stopPID();
-	bool isPIDFinished();
+	bool isPIDFinished(bool ignorePID = false);
 
 	float getPIDTarget();
 	virtual void PIDWrite(float f);

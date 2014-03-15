@@ -44,8 +44,6 @@ Shooter::Shooter() :
 	wLatchSensor = new DigitalInput(SHOOTER_W_LATCH_SENSOR);
 	LiveWindow::GetInstance()->AddSensor("Shooter", "Winch Latch Sensor", wLatchSensor);
 
-	setSLatch(Shooter::kLatched);
-
 	// Icky Icky.  This code is repeated
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
@@ -57,6 +55,9 @@ Shooter::Shooter() :
 	}
 
 	lastReleasePosition = 0;
+	
+	setSLatch(Shooter::kLatched);
+	wenchMotor->Set(0);
 }
 
 Command *Shooter::createCreateArmShooter() {

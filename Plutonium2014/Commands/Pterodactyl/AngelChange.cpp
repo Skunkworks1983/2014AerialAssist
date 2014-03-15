@@ -5,13 +5,13 @@
 // Backend
 #include "../../Robotmap.h"
 
-AngelChange::AngelChange(float target) :
+AngelChange::AngelChange(float target, float timeout) :
 		CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
 	Requires(pterodactyl);
 	this->target = target;
 	this->stability = 0;
 	this->tmpTarget = 0;
-	SetTimeout(4);
+	SetTimeout(timeout);
 	SetInterruptible(true);
 }
 
@@ -55,7 +55,7 @@ void AngelChange::Execute() {
 }
 
 bool AngelChange::IsFinished() {
-	return stability > 8 || IsTimedOut();
+	return stability > 15 || IsTimedOut();
 }
 
 void AngelChange::End() {

@@ -32,6 +32,10 @@ Pterodactyl::Pterodactyl() :
 
 	brake = new Relay(PTERODACTYL_BRAKE_ACTIVE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);
+	
+	setBrakeState(Pterodactyl::kActive);
+	setAngleMotorSpeed(0);
+	pid->Disable();
 }
 
 void Pterodactyl::InitDefaultCommand() {
@@ -123,8 +127,9 @@ double Pterodactyl::PIDGet() {
 	return getAngle();
 }
 
-bool Pterodactyl::isPIDFinished() {
-	return !pid->IsEnabled() || fabs( (pid->GetSetpoint()
-			* PTERODACTYL_MAX_ANGLE) - getAngle()) < GET_DOUBLE(PTERODACTYL_ANGLE_THRESHOLD);
+bool Pterodactyl::isPIDFinished(bool ignorePIDState) {
+	return (!ignorePIDState && !pid->IsEnabled()) || fabs( (pid->GetSetpoint()
+			* PTERODACTYL_MAX_ANGLE) - getAngle())
+			< PTERODACTYL_ANGLE_THRESHOLD;
 }
 

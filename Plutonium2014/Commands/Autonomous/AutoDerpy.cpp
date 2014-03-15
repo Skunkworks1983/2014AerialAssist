@@ -19,8 +19,8 @@ Autonomous *Autonomous::createDerpy() {
 	CommandGroup *prepare = new CommandGroup("CHILD");
 
 	prepare->AddParallel(new PrepareShooter(SHOOTER_POWER_TURNS_2));
-	prepare->AddSequential(new AngelChange(0));
-	prepare->AddSequential(new AngelChange(89.5));
+	prepare->AddSequential(new AngelChange(0,4));
+	prepare->AddSequential(new AngelChange(89.5,4));
 //	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
