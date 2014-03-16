@@ -19,8 +19,8 @@ Autonomous *Autonomous::createDerpy() {
 	CommandGroup *prepare = new CommandGroup("CHILD");
 
 	prepare->AddParallel(new PrepareShooter(SHOOTER_POWER_TURNS_2));
-	prepare->AddSequential(new AngelChange(0,4));
-	prepare->AddSequential(new AngelChange(89.5,4));
+	prepare->AddSequential(new AngelChange(0,2));
+	prepare->AddSequential(new AngelChange(89.5,3));
 //	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
@@ -30,7 +30,7 @@ Autonomous *Autonomous::createDerpy() {
 	// Fire Shooter Internal
 	cmd->AddSequential(new DiscBrake(Pterodactyl::kActive));
 	cmd->AddSequential(new WLatch(Shooter::kLatched));
-	cmd->AddSequential(new JawMove(Collector::kOpen, 1));
+	cmd->AddSequential(new JawMove(Collector::kOpen, 0.75));
 	cmd->AddSequential(new SLatch(Shooter::kUnlatched));
 	cmd->AddSequential(new WaitCommand(1.5));
 

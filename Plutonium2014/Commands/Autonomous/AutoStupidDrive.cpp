@@ -7,6 +7,7 @@ AutoStupidDrive::AutoStupidDrive(double timeout, float speed) {
 }
 void AutoStupidDrive::Initialize() {
 	printf("Stupid drive\n");
+	driveBase->setDriveGear(DriveBase::kHigh);
 }
 void AutoStupidDrive::Execute() {
 	driveBase->setSpeed(speed, speed);
