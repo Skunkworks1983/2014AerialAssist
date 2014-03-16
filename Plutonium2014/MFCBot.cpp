@@ -132,6 +132,8 @@ void MFCBot::TeleopPeriodic() {
 					CommandBase::shooter->getTurnRate());
 			SmartDashboard::PutNumber("pterorate",
 					CommandBase::pterodactyl->getRate());
+			SmartDashboard::PutNumber("Collect Rate",
+					CommandBase::collector->getRollerSpeed());
 		}
 		if (verbosity & 8) {
 			SmartDashboard::PutBoolean("Shooter Raw Latch",

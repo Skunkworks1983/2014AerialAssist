@@ -31,6 +31,8 @@ DriveBase::DriveBase() :
 
 	shifter = new SolenoidPair(DRIVE_SHIFT_HIGH, DRIVE_SHIFT_LOW);
 	LiveWindow::GetInstance()->AddActuator("Drive Base", "Shifter", shifter);
+	
+	setDriveGear(DriveBase::kHigh);
 }
 
 void DriveBase::InitDefaultCommand() {
