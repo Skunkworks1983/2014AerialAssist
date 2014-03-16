@@ -29,9 +29,9 @@ public class Mesh {
 	public FloatBufferColor defaultColor;
 
 	private IntBuffer indexBuffer;
-	private FloatBuffer vertexBuffer;
+	public FloatBuffer vertexBuffer;
 	private FloatBuffer normalBuffer;
-	private FloatBuffer colorBuffer;
+	public FloatBuffer colorBuffer;
 	private IntBuffer bufferObjects;
 
 	public Mesh(List<MeshVertex> verticies, List<Integer> indicies,
@@ -139,7 +139,7 @@ public class Mesh {
 				new FileOutputStream(f)));
 		dOut.writeBoolean(indexBuffer != null);
 		dOut.writeInt(polygonSize);
-		dOut.writeInt(vertexBuffer.limit());
+		dOut.writeInt(vertexBuffer.limit() / 3);
 
 		dOut.writeBoolean(defaultColor != null);
 		if (defaultColor != null) {
@@ -169,10 +169,10 @@ public class Mesh {
 			dOut.writeBoolean(colorBuffer != null);
 			if (colorBuffer != null) {
 				int color = i * 4;
-				dOut.writeFloat(colorBuffer.get(color));
-				dOut.writeFloat(colorBuffer.get(color + 1));
-				dOut.writeFloat(colorBuffer.get(color + 2));
-				dOut.writeFloat(colorBuffer.get(color + 3));
+				dOut.writeByte((int) (colorBuffer.get(color) * 255f));
+				dOut.writeByte((int) (colorBuffer.get(color + 1) * 255f));
+				dOut.writeByte((int) (colorBuffer.get(color + 2) * 255f));
+				dOut.writeByte((int) (colorBuffer.get(color + 3) * 255f));
 			}
 		}
 		if (indexBuffer == null) {

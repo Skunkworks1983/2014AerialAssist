@@ -2,20 +2,23 @@ package com.pi.robot.robot;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
 
 import com.pi.math.Quaternion;
 import com.pi.math.TransMatrix;
 import com.pi.math.Vector3D;
+import com.pi.robot.Bone;
 import com.pi.robot.Skeleton;
+import com.pi.robot.demo.DemoMode;
 import com.pi.robot.mesh.FloatBufferColor;
 import com.pi.robot.mesh.Mesh;
-import com.pi.robot.mesh.MeshVertex;
 import com.pi.robot.overlay.TextOverlay;
-import com.pi.robot.overlay.TimedMessage;
 import com.pi.robot.overlay.TextOverlay.Corner;
+import com.pi.robot.overlay.TimedMessage;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.tables.ITable;
 
 public class RobotStateManager {
 	public static final int BALL_ID = 5;
@@ -57,11 +60,12 @@ public class RobotStateManager {
 	private float currentPterodactylAngle = 0;
 	private float targetJawsAngle = 0;
 	private float currentJawsAngle = 0;
-	private ITable table;
+	private NetworkTable table;
 
 	public RobotStateManager(Skeleton sk, final TextOverlay textOverlay) {
 		this.sk = sk;
 		table = NetworkTable.getTable("Robot");
+		DemoMode.startDemoMode(table, sk);
 		textOverlay.setCornerSize(Corner.UP_RIGHT, 5);
 		try {
 			listener = new ConsoleListener(1983);
@@ -105,11 +109,22 @@ public class RobotStateManager {
 
 	private void colorAlliance(FloatBufferColor color) {
 		if (sk.getBone(BALL_ID) != null) {
-			/*for (MeshVertex vv : sk.getBone(BALL_ID).mesh.getVerticies()) {
-				vv.setColor(color);
+			Bone bone = sk.getBone(BALL_ID);
+			Mesh mesh = bone.mesh;
+			FloatBuffer vBuff = mesh.vertexBuffer;
+			if (mesh.colorBuffer == null) {
+				mesh.colorBuffer = BufferUtils
+						.createFloatBuffer(vBuff.limit() * 4);
 			}
-			sk.getBone(BALL_ID).mesh.generateBuffers();
-			sk.getBone(BALL_ID).mesh.loadToGPU();*/
+			FloatBuffer cBuff = mesh.colorBuffer;
+			for (int i = 0; i < vBuff.limit() / 3; i++) {
+				int c = i * 4;
+				cBuff.put(c, color.getBuffer().get(0));
+				cBuff.put(c + 1, color.getBuffer().get(1));
+				cBuff.put(c + 2, color.getBuffer().get(2));
+				cBuff.put(c + 3, color.getBuffer().get(3));
+			}
+			mesh.loadToGPU();
 		}
 	}
 
@@ -119,16 +134,23 @@ public class RobotStateManager {
 		min.subtract(base);
 		max.subtract(base);
 		if (mesh != null) {
-			/*for (MeshVertex vv : mesh.getVerticies()) {
-				Vector3D test = vv.getPosition().clone().subtract(base);
+			FloatBuffer vBuff = mesh.vertexBuffer;
+			FloatBuffer cBuff = mesh.colorBuffer;
+			for (int i = 0; i < vBuff.limit() / 3; i++) {
+				int v = i * 3;
+				int c = i * 4;
+				Vector3D test = new Vector3D(vBuff.get(v), vBuff.get(v + 1),
+						vBuff.get(v + 2)).subtract(base);
 				if (bleh != null) {
 					test = bleh.multiply(test);
 				}
 				if (test.inside(min, max)) {
-					vv.setColor(motorColor);
+					cBuff.put(c, motorColor.getBuffer().get(0));
+					cBuff.put(c + 1, motorColor.getBuffer().get(1));
+					cBuff.put(c + 2, motorColor.getBuffer().get(2));
+					cBuff.put(c + 3, motorColor.getBuffer().get(3));
 				}
 			}
-			mesh.generateBuffers();*/
 			mesh.loadToGPU();
 		}
 	}

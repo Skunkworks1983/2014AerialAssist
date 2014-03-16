@@ -23,13 +23,17 @@ public class RobotViewer {
 
 	private TextOverlay textOverlay = new TextOverlay();
 	int width = 768, height = 768;
-	int mode;
+	int mode = 2;
 	boolean isToggleWireframe;
 
 	public RobotViewer() throws LWJGLException, IOException {
-		/*NetworkTable.setTeam(1983);
-		NetworkTable.setClientMode();
-		NetworkTable.initialize();*/
+		/*
+		 * NetworkTable.setTeam(1983); NetworkTable.setClientMode();
+		 * NetworkTable.initialize();
+		 */
+		NetworkTable.setTeam(1983);
+		NetworkTable.setServerMode();
+		NetworkTable.initialize();
 
 		Skeleton sk = new Skeleton(new File("model/mesh.skl"));
 		sk.calculate();

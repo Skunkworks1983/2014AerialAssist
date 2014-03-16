@@ -34,6 +34,8 @@ public class Bone {
 	public Mesh mesh;
 	public Map<Vector3D, NotificationBubble> notifications = new HashMap<Vector3D, NotificationBubble>();
 
+	public Vector3D additional = new Vector3D();
+
 	public Bone(Vector3D pos) {
 		this(new Vector3D(), pos);
 	}
@@ -77,6 +79,10 @@ public class Bone {
 	}
 
 	public void calculate() {
+		if (transformLocked) {
+			transformRequest = true;
+			return;
+		}
 		calcRotation = baseRotation.clone().multiply(bonusRotation);
 		if (parent != null) {
 			Vector3D parentOffset = new Vector3D(0, 0, parent.length).add(base);
@@ -121,6 +127,8 @@ public class Bone {
 	}
 
 	boolean vboCreated = false;
+	private boolean transformLocked;
+	private boolean transformRequest;
 
 	public void draw() {
 		if (!visible) {
@@ -129,7 +137,10 @@ public class Bone {
 		if (mesh == null) {
 			return;
 		}
-		if (/*mesh.getIndicies() != null && */!vboCreated) {
+		if (transformRequest && !transformLocked) {
+			calculate();
+		}
+		if (/* mesh.getIndicies() != null && */!vboCreated) {
 			mesh.loadToGPU();
 			vboCreated = true;
 		}
@@ -138,10 +149,15 @@ public class Bone {
 		GL11.glPushMatrix();
 		GL11.glMultMatrix(localToWorld.toBuffer(BufferUtils
 				.createFloatBuffer(16)));
+		GL11.glTranslatef(additional.x, additional.y, additional.z);
 		mesh.draw();
 		for (NotificationBubble bb : notifications.values()) {
 			bb.render();
 		}
 		GL11.glPopMatrix();
+	}
+
+	public void lockTransform(boolean state) {
+		transformLocked = state;
 	}
 }
