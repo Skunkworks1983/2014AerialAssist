@@ -102,19 +102,19 @@ public class DemoMode {
 						table.putNumber("driveRightState", 0);
 						movePtero(table, 75);
 						table.putBoolean("jawsClosed", false);
-						Thread.sleep(500);
+						Thread.sleep(100L);
 						if (ball != null) {
 							ball.lockTransform(true);
 						}
-						Thread.sleep(250L);
+						Thread.sleep(400L);
 						table.putBoolean("shooterLatched", false);
 						tweenBall(sk, new Vector3D(100f, 0f, 0f), 10f);
 						table.putBoolean("hasBall", false);
-						Thread.sleep(500L);
+						Thread.sleep(750L);
 						if (ball != null) {
 							ball.lockTransform(false);
 						}
-						Thread.sleep(500L);
+						Thread.sleep(250L);
 					} catch (Exception e) {
 					}
 				}

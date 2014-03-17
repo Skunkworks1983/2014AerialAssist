@@ -202,9 +202,18 @@ public class RobotStateManager {
 		if (sk.getBone(JAWS_ID) == null) {
 			return;
 		}
+		if (sk.getBone(BALL_ID) == null) {
+			return;
+		}
 
 		if (jawsClosed) {
-			targetJawsAngle = hasBall ? (float) Math.PI / 8f
+			float adj = -(float) Math
+					.sin((20.0f - sk.getBone(BALL_ID).additional.x) / 20.0f
+							* Math.PI)
+					* ((float) Math.PI * 0.1f);
+			targetJawsAngle = hasBall
+					&& sk.getBone(BALL_ID).additional.x < 20.0f ? (float) (Math.PI / 8f)
+					- adj
 					: (float) Math.PI / 10f;
 		} else {
 			targetJawsAngle = (float) Math.PI / 5f;
