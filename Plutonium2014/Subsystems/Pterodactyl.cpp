@@ -62,9 +62,9 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 	if (target>40) {
-		double i = 2.3287*pow(2.71, -.067*target);
+		double i = 2.3287*pow(2.71, -.065*target);
 		double p = 1615.3*pow(target, -1.578);
-		double d = 97.34*pow(target, -0.883);
+		double d = 97.34*pow(target, -0.85);
 		d /= 2.0;
 		pid->SetPID(p, i, d);
 	} else {
