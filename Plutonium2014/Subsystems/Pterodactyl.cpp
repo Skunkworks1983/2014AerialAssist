@@ -5,10 +5,10 @@
 #include <math.h>
 #include "../Utils/Actuators/DualLiveSpeed.h"
 
-#define PTERODACTYL_P 0.75
+#define PTERODACTYL_P .75
 #define PTERODACTYL_I .0105
-#define PTERODACTYL_D .050
-#define PTERODACTYL_ANGLE_THRESHOLD (1)
+#define PTERODACTYL_D 1.0
+#define PTERODACTYL_ANGLE_THRESHOLD (3)
 
 Pterodactyl::Pterodactyl() :
 	Subsystem("Pterodactyl") {
@@ -32,7 +32,7 @@ Pterodactyl::Pterodactyl() :
 
 	brake = new Relay(PTERODACTYL_BRAKE_ACTIVE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);
-	
+
 	setBrakeState(Pterodactyl::kActive);
 	setAngleMotorSpeed(0);
 	pid->Disable();
@@ -61,15 +61,18 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
+	if (target>40) {
+		double i = 2.3287*pow(2.71, -.067*target);
+		double p = 1615.3*pow(target, -1.578);
+		double d = 97.34*pow(target, -0.883);
+		d /= 2.0;
+		pid->SetPID(p, i, d);
+	} else {
+		pid->SetPID(PTERODACTYL_P,PTERODACTYL_I, PTERODACTYL_D);
+	}
 	if (angle < 25) {
 		pid->SetOutputRange(-.25, 0.75);
 	} else {
-		//		float speedUp = -0.25 * ((angle - 75.0) / 25.0) + 0.6;
-		//		if (speedUp > 1.0) {
-		//			speedUp = 1.0;
-		//		} else if (speedUp < 0.4) {
-		//			speedUp = 0.4;
-		//		}
 		pid->SetOutputRange(-.75, 0.75);
 	}
 }
@@ -96,20 +99,22 @@ void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 
 void Pterodactyl::setTarget(float target) {
 	pid->Reset();
-	pid->SetSetpoint(target / (double) PTERODACTYL_MAX_ANGLE);
-	float error = fabs(target - getAngle()) / (double) 80.0;
-	float iScale = (error / 2.0) + 0.5;
-	if (target < getAngle()) {
-		iScale = (iScale / 2.0) + 0.5;
-	}
-	pid->SetPID(PTERODACTYL_P, PTERODACTYL_I * iScale, PTERODACTYL_D);
+	this->target = target;
+	// PID values get updated here
+	setOutputRange();
+
+	pid->SetSetpoint((target+1) / (double) PTERODACTYL_MAX_ANGLE);
+
+	// PID values get updated here (again because multithreading)
+	setOutputRange();
+
 	if (!pid->IsEnabled()) {
 		pid->Enable();
 	}
 }
 
 double Pterodactyl::getTarget() {
-	return pid->GetSetpoint() * (double) PTERODACTYL_MAX_ANGLE;
+	return (pid->GetSetpoint() * (double) PTERODACTYL_MAX_ANGLE)-1.0;
 }
 
 void Pterodactyl::stopPID() {
@@ -128,8 +133,7 @@ double Pterodactyl::PIDGet() {
 }
 
 bool Pterodactyl::isPIDFinished(bool ignorePIDState) {
-	return (!ignorePIDState && !pid->IsEnabled()) || fabs( (pid->GetSetpoint()
-			* PTERODACTYL_MAX_ANGLE) - getAngle())
-			< PTERODACTYL_ANGLE_THRESHOLD;
+	return (!ignorePIDState && !pid->IsEnabled()) || fabs(getTarget()
+			-getAngle()) < PTERODACTYL_ANGLE_THRESHOLD;
 }
 

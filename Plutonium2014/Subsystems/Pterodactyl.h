@@ -18,6 +18,7 @@ public:
 	};
 
 private:
+	float target;
 	DualLiveSpeed *angleMotors;
 	PIDController *pid;
 	AnalogPot *pot;
