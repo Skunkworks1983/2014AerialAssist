@@ -8,8 +8,10 @@
 class MFCBot: public IterativeRobot {
 private:
 	int dont;
+	int trueTicks;
 	void createAutonomi();
 	ITable *robotState;
+	Relay *thingy;
 public:
 	MFCBot();
 	

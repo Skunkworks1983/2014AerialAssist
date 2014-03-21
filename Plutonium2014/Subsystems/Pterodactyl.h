@@ -18,6 +18,7 @@ public:
 	};
 
 private:
+	float initialError;
 	float target;
 	DualLiveSpeed *angleMotors;
 	PIDController *pid;

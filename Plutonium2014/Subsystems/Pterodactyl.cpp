@@ -62,10 +62,18 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 	if (target>40) {
-		double i = 2.3287*pow(2.71, -.065*target);
 		double p = 1615.3*pow(target, -1.578);
+		double i = 2.375*pow(2.71, -.064*target);
 		double d = 97.34*pow(target, -0.85);
 		d /= 2.0;
+		if (fabs(initialError) < 30) { // Extra corrections
+			float divider = fabs(initialError);
+			if (divider < 10) {
+				divider = 10;
+			}
+			p *= 25.0 / divider;
+			i *= 500.0 / (divider*divider);
+		}
 		pid->SetPID(p, i, d);
 	} else {
 		pid->SetPID(PTERODACTYL_P,PTERODACTYL_I, PTERODACTYL_D);
@@ -100,6 +108,8 @@ void Pterodactyl::setBrakeState(Pterodactyl::BrakeState state) {
 void Pterodactyl::setTarget(float target) {
 	pid->Reset();
 	this->target = target;
+	this->initialError = target - getAngle();
+
 	// PID values get updated here
 	setOutputRange();
 

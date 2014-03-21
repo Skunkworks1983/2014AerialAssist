@@ -22,6 +22,7 @@ MFCBot::MFCBot() {
 	dont = 0;
 	robotState = NULL;
 	chooser = NULL;
+	thingy = new Relay(2, 1);
 }
 
 MFCBot::~MFCBot() {
@@ -84,6 +85,14 @@ void MFCBot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 	WatchDog();
 	StallableMotor::updateControllers();
+
+	if (CommandBase::pterodactyl->isPIDFinished(true)) {
+		trueTicks++;
+	} else {
+		trueTicks = 0;
+	}
+	thingy->Set(trueTicks>15 ? Relay::kForward : Relay::kOff);
+
 	if (dont++> 10) {
 		int verbosity= GET_INT(SMARTDASH_VERBOSITY);
 		if (GET_BOOL(ROBOT_VISUALIZATION)) {

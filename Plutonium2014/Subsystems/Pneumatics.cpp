@@ -25,6 +25,7 @@ bool Pneumatics::isCompressorOn() {
 
 bool Pneumatics::isBelowPressure() {
 	return !pressureSwitch->Get();
+	
 }
 
 // Put methods for controlling this subsystem
