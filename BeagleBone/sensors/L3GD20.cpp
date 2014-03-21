@@ -8,11 +8,15 @@
 #include "L3GD20.h"
 #include <stdio.h>
 #include <math.h>
+#include <unistd.h>
 
 L3GD20::L3GD20() :
 		I2C(L3GD20_ADDR) {
 	res = DPS_2000;
 	scalingValue = 0;
+	naturalX = 0;
+	naturalY = 0;
+	naturalZ = 0;
 }
 
 L3GD20::~L3GD20() {
@@ -37,6 +41,20 @@ void L3GD20::calibrate(Resolution res) {
 		scalingValue = (float) (2000.0 / 32768.0);
 		break;
 	}
+	naturalX = 0;
+	naturalY = 0;
+	naturalZ = 0;
+	int counts = 100;
+	for (int i = 0; i < counts; i++) {
+		naturalX += getXRate();
+		naturalY += getYRate();
+		naturalZ += getZRate();
+		usleep(10);
+	}
+	naturalX /= (float) counts;
+	naturalY /= (float) counts;
+	naturalZ /= (float) counts;
+	printf("Natural GYRO: %5.5f %5.5f %5.5f\n", naturalX, naturalY, naturalZ);
 }
 
 float L3GD20::getRate(int lowAddr, int highAddr) {

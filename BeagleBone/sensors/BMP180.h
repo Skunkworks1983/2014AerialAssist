@@ -8,9 +8,9 @@
 #ifndef BMP180_H_
 #define BMP180_H_
 
-#include "I2C.h"
+#include "internal/I2C.h"
 
-class BMP180: private I2C {
+class BMP180: public I2C {
 private:
 	static const unsigned char BMP085_OVERSAMPLING_SETTING = 3;
 

@@ -140,7 +140,7 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 #endif
 }
 
-int main(int argc, char** argv) {
+int mainz(int argc, char** argv) {
 #if !(HEADLESS)
 	cv::namedWindow(windowName);
 	cv::namedWindow(windowName2);
