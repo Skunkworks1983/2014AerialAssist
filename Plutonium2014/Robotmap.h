@@ -1,7 +1,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#define COMPETITION_BOT 1
+#define COMPETITION_BOT 0
 
 // ===============
 // = Preferences =
@@ -81,7 +81,7 @@
 // 1.622 = FULL OUT (1.1)
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.100000
 #else
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 1.0, -2.22
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.100000
 #endif
 
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms during which any changes are discarded*/

@@ -62,11 +62,11 @@ OI::OI() {
 }
 void OI::registerButtonListeners() {
 	// Drivebase
-	shiftButton->WhenPressed(new Shift(Shift::kHigh));
-	shiftButton->WhenReleased(new Shift(Shift::kLow));
+	shiftButton->WhenPressed(new Shift(Shift::kLow));
+	shiftButton->WhenReleased(new Shift(Shift::kHigh));
 
 	// Pterodactyl Angle
-	angleFloor->WhenPressed(new AngelChange(-1.25));
+	angleFloor->WhenPressed(new AngelChange(0));
 	angleLow->WhenPressed(new AngelChange(75));//75));
 	angleMed->WhenPressed(new AngelChange(84));//90));
 	angleHigh->WhenPressed(new AngelChange(89.5));//100));
@@ -93,8 +93,8 @@ void OI::registerButtonListeners() {
 
 	// Jaw Override
 	jawToggle->WhenPressed(new JawMove(Collector::kClosed));
-	jawToggle->WhenReleased(new JawMove(Collector::kOpen));\
-	
+	jawToggle->WhenReleased(new JawMove(Collector::kOpen));
+
 	resetShooter->WhenPressed(new ResetShooter());
 
 	SmartDashboard::PutNumber("targetangle", 10);

@@ -21,7 +21,7 @@ private:
 	SolenoidPair *shifter;
 public:
 	enum DriveGear {
-		kLow = false, kHigh = true
+		kLow = true, kHigh = false
 	};
 
 	DriveBase();

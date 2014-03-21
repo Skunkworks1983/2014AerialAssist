@@ -222,7 +222,7 @@ void MFCBot::WatchDog() {
 		}
 		if (CommandBase::shooter->isShooterMotorStalled()
 				&& CommandBase::shooter->getWenchMotorSpeed()>0
-				&& CommandBase::shooter->getTurns() > 0.125) {
+				&& CommandBase::shooter->getTurns() > 0.125 && CommandBase::shooter->getWLatch() != Shooter::kLatched) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {

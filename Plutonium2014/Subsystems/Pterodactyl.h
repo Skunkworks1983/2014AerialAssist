@@ -11,6 +11,7 @@
 
 class AnalogPot;
 class DualLiveSpeed;
+class PID1983Controller;
 class Pterodactyl: public Subsystem, public PIDOutput, public PIDSource {
 public:
 	enum BrakeState {
@@ -21,7 +22,7 @@ private:
 	float initialError;
 	float target;
 	DualLiveSpeed *angleMotors;
-	PIDController *pid;
+	PID1983Controller *pid;
 	AnalogPot *pot;
 	Relay *brake;
 public:
