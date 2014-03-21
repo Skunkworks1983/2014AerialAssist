@@ -6,28 +6,27 @@
 #include "../../Robotmap.h"
 
 AngelChange::AngelChange(float target, float timeout) :
-		CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
+	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
 	Requires(pterodactyl);
 	this->target = target;
 	this->stability = 0;
 	this->tmpTarget = 0;
-	SetTimeout(timeout);
+	//SetTimeout(timeout);
 	SetInterruptible(true);
 }
 
 void AngelChange::Initialize() {
-//	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
+	//	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
 	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 	tmpTarget = target;
-	if (tmpTarget < 45 && shooter->getTurns() > 0.25
-			&& !shooter->isReallyDrawnBack()) {
-		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
+	if (tmpTarget < 45 && shooter->getTurns() > 0.25 && !shooter->isReallyDrawnBack()) {
+		//tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}
 	pterodactyl->setTarget(tmpTarget);
 	stability = 0;
-//	} else {
-//		stability = 50;
-//	}
+	//	} else {
+	//		stability = 50;
+	//	}
 }
 
 void AngelChange::Execute() {
@@ -35,10 +34,12 @@ void AngelChange::Execute() {
 
 	SmartDashboard::PutNumber("pteroangle", pterodactyl->getAngle());
 	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
+	SmartDashboard::PutNumber("Pteroerror", pterodactyl->getAngle()
+			-pterodactyl->getTarget());
 	// Let the PID run.
 
-	if (pterodactyl->isPIDFinished()
-			|| (target <= 0 && pterodactyl->getAngle() <= 0)) {
+	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
+			<= 0)) {
 		stability++;
 	} else {
 		stability = 0;
@@ -55,7 +56,7 @@ void AngelChange::Execute() {
 }
 
 bool AngelChange::IsFinished() {
-	return stability > 15 || IsTimedOut();
+	return stability > 13;// || IsTimedOut();
 }
 
 void AngelChange::End() {
