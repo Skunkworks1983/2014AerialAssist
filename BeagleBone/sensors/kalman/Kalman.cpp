@@ -98,6 +98,121 @@ void FreeIMU::init(bool fastmode) {
 void FreeIMU::init(int acc_addr, bool fastmode) {
 	// zero gyro
 	zeroGyro();
+
+	// place quaternion.  10 times since I couldn't get it working quite right
+	for (int i = 0; i < 10; i++) {
+		acc->select();
+		float ax = acc->getX();
+		float ay = acc->getY();
+		float az = acc->getZ();
+
+		mag->select();
+		float mx = mag->getX();
+		float my = mag->getY();
+		float mz = mag->getZ();
+
+		float recipNorm;
+		float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
+		float halfex = 0.0f, halfey = 0.0f, halfez = 0.0f;
+		float qa, qb, qc;
+
+		float errorCount = 0;
+
+		// Auxiliary variables to avoid repeated arithmetic
+		q0q0 = q0 * q0;
+		q0q1 = q0 * q1;
+		q0q2 = q0 * q2;
+		q0q3 = q0 * q3;
+		q1q1 = q1 * q1;
+		q1q2 = q1 * q2;
+		q1q3 = q1 * q3;
+		q2q2 = q2 * q2;
+		q2q3 = q2 * q3;
+		q3q3 = q3 * q3;
+
+		// Use magnetometer measurement only when valid (avoids NaN in magnetometer normalization)
+		if ((mx != 0.0f) && (my != 0.0f) && (mz != 0.0f)) {
+			float hx, hy, bx, bz;
+			float halfwx, halfwy, halfwz;
+
+			// Normalize magnetometer measurement
+			recipNorm = invSqrt(mx * mx + my * my + mz * mz);
+			mx *= recipNorm;
+			my *= recipNorm;
+			mz *= recipNorm;
+
+			// Reference direction of Earth's magnetic field
+			hx = 2.0f
+					* (mx * (0.5f - q2q2 - q3q3) + my * (q1q2 - q0q3)
+							+ mz * (q1q3 + q0q2));
+			hy = 2.0f
+					* (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3)
+							+ mz * (q2q3 - q0q1));
+			bx = sqrt(hx * hx + hy * hy);
+			bz = 2.0f
+					* (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1)
+							+ mz * (0.5f - q1q1 - q2q2));
+
+			// Estimated direction of magnetic field
+			halfwx = bx * (0.5f - q2q2 - q3q3) + bz * (q1q3 - q0q2);
+			halfwy = bx * (q1q2 - q0q3) + bz * (q0q1 + q2q3);
+			halfwz = bx * (q0q2 + q1q3) + bz * (0.5f - q1q1 - q2q2);
+
+			// Error is sum of cross product between estimated direction and measured direction of field vectors
+			halfex = (my * halfwz - mz * halfwy);
+			halfey = (mz * halfwx - mx * halfwz);
+			halfez = (mx * halfwy - my * halfwx);
+			errorCount++;
+		}
+
+		// Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalization)
+		if ((ax != 0.0f) && (ay != 0.0f) && (az != 0.0f)) {
+			float halfvx, halfvy, halfvz;
+
+			// Normalize accelerometer measurement
+			recipNorm = invSqrt(ax * ax + ay * ay + az * az);
+			ax *= recipNorm;
+			ay *= recipNorm;
+			az *= recipNorm;
+
+			// Estimated direction of gravity
+			halfvx = q1q3 - q0q2;
+			halfvy = q0q1 + q2q3;
+			halfvz = q0q0 - 0.5f + q3q3;
+
+			// Error is sum of cross product between estimated direction and measured direction of field vectors
+			halfex += (ay * halfvz - az * halfvy);
+			halfey += (az * halfvx - ax * halfvz);
+			halfez += (ax * halfvy - ay * halfvx);
+			errorCount++;
+		}
+
+		// Apply feedback only when valid data has been gathered from the accelerometer or magnetometer
+		if (halfex != 0.0f && halfey != 0.0f && halfez != 0.0f) {
+			float gx = halfex / errorCount;
+			float gy = halfey / errorCount;
+			float gz = halfez / errorCount;
+			if (i > 3) {
+				gx /= (float) (i - 3);
+				gy /= (float) (i - 3);
+				gz /= (float) (i - 3);
+			}
+			qa = q0;
+			qb = q1;
+			qc = q2;
+			q0 += (-qb * gx - qc * gy - q3 * gz);
+			q1 += (qa * gx + qc * gz - q3 * gy);
+			q2 += (qa * gy - qb * gz + q3 * gx);
+			q3 += (qa * gz + qb * gy - qc * gx);
+		}
+
+		// Normalize quaternion
+		recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+		q0 *= recipNorm;
+		q1 *= recipNorm;
+		q2 *= recipNorm;
+		q3 *= recipNorm;
+	}
 }
 
 /**
@@ -282,7 +397,7 @@ void FreeIMU::AHRSupdate(float gx, float gy, float gz, float ax, float ay,
 	q2 += (qa * gy - qb * gz + q3 * gx);
 	q3 += (qa * gz + qb * gy - qc * gx);
 
-// Normalise quaternion
+// Normalize quaternion
 	recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
 	q0 *= recipNorm;
 	q1 *= recipNorm;
@@ -304,13 +419,15 @@ void FreeIMU::getQ(float * q) {
 	gettimeofday(&tv, NULL);
 
 	now = tv.tv_usec + (tv.tv_sec - startSeconds) * 1000000;
-	sampleFreq = 1.0 / ((now - lastUpdate) / 1000000.0);
-	lastUpdate = now;
+	if (lastUpdate > 0) {
+		sampleFreq = 1.0 / ((now - lastUpdate) / 1000000.0);
 
 // gyro values are expressed in deg/sec, the * M_PI/180 will convert it to radians/sec
-	AHRSupdate(val[3] * M_PI / 180.0, val[4] * M_PI / 180.0,
-			val[5] * M_PI / 180.0, val[0], val[1], val[2], val[6], val[7],
-			val[8]);
+		AHRSupdate(val[3] * M_PI / 180.0, val[4] * M_PI / 180.0,
+				val[5] * M_PI / 180.0, val[0], val[1], val[2], val[6], val[7],
+				val[8]);
+	}
+	lastUpdate = now;
 
 	q[0] = q0;
 	q[1] = q1;

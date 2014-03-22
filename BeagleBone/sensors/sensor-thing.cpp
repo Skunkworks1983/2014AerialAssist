@@ -45,10 +45,10 @@ int main(int argc, char **argv) {
 	printf("Pressure\t%0.2f hPa\n", ((double) pressure) / 100);
 	printf("Altitude\t%0.1f Feet\n", ((double) altitude) * 3.280839895);
 
-	float ypr[3];
+	float q[4];
 	while (1) {
-		imu->getYawPitchRoll(ypr);
-		printf("Output: %5.5f %5.5f %5.5f\n", ypr[0], ypr[1], ypr[2]);
+		imu->getQ(q);
+		printf("Q: %5.5f %5.5f %5.5f %5.5f\n", q[0], q[1], q[2], q[3]);
 //		{
 //			float x = mag->getX();
 //			float y = mag->getY();
