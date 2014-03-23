@@ -26,9 +26,11 @@ Pterodactyl::Pterodactyl() :
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 #if PID_EQUATION_METHOD
 	pid = new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
+	pid->m_maximumITerm = 0.5;
 #else
 	pid
 	= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f / 4.0f);
+	pid->m_maximumITerm = 0.150;
 #endif
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
@@ -43,8 +45,6 @@ Pterodactyl::Pterodactyl() :
 	setBrakeState(Pterodactyl::kActive);
 	setAngleMotorSpeed(0);
 	pid->Disable();
-
-	SmartDashboard::PutNumber("ptero_maxITerm", .150);
 }
 
 void Pterodactyl::InitDefaultCommand() {
@@ -97,8 +97,6 @@ void Pterodactyl::setOutputRange() {
 		d = .05;
 	}
 	pid->SetPID(p, i, d);
-#else
-	pid->m_maximumITerm = SmartDashboard::GetNumber("ptero_maxITerm");
 #endif
 	if (initialError> 0) {
 		if (angle < 25) {
