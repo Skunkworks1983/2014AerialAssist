@@ -20,7 +20,7 @@ void AngelChange::Initialize() {
 	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
 	tmpTarget = target;
 	if (tmpTarget < 45 && shooter->getTurns() > 0.25 && !shooter->isReallyDrawnBack()) {
-		//tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
+		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}
 	pterodactyl->setTarget(tmpTarget);
 	stability = 0;

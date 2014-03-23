@@ -7,6 +7,7 @@
 #include "Subsystems/Pterodactyl.h"
 #include "Subsystems/Shooter.h"
 #include "Subsystems/Pneumatics.h"
+#include "Subsystems/BeagleBone.h"
 #include "OI.h"
 
 
@@ -26,6 +27,7 @@ public:
 	static Pterodactyl *pterodactyl;
 	static Shooter *shooter;
 	static Pneumatics *pneumatics;
+	static BeagleBone *beaglebone;
 	static OI *oi;
 	
 	static char *createNameFromString(char *base, const char *arg);

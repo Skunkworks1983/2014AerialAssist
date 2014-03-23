@@ -48,14 +48,16 @@ Shooter::Shooter() :
 	sLatchPatternBuffer.lastState = !sLatchSensor->Get() ? Shooter::kLatched
 			: Shooter::kUnlatched;
 
-	pullBackSwitchPatternBuffer.lastRequestedState = !pullBackSwitchLeft->Get() || !pullBackSwitchRight->Get();
-	pullBackSwitchPatternBuffer.lastState = !pullBackSwitchPatternBuffer.lastRequestedState;
+	pullBackSwitchPatternBuffer.lastRequestedState = !pullBackSwitchLeft->Get()
+			|| !pullBackSwitchRight->Get();
+	pullBackSwitchPatternBuffer.lastState
+			= !pullBackSwitchPatternBuffer.lastRequestedState;
 	if (getRawProximity()) {
 		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
 	}
 
 	lastReleasePosition = 0;
-	
+
 	setSLatch(Shooter::kLatched);
 	wenchMotor->Set(0);
 }
@@ -114,8 +116,8 @@ bool Shooter::getRawProximity() {
 			} else {
 				pullBackSwitchPatternBuffer.lastState = false;
 			}
-//			Logger::log(Logger::kFinest, "Shooter",
-//					"Cleared proximity pattern buffer due to a recent change");
+			//			Logger::log(Logger::kFinest, "Shooter",
+			//					"Cleared proximity pattern buffer due to a recent change");
 		}
 	}
 	if (sLatch->Get() != pullBackSwitchPatternBuffer.lastRequestedState) {
@@ -128,8 +130,11 @@ bool Shooter::getRawProximity() {
 		} else {
 			pullBackSwitchPatternBuffer.lastState = false;
 		}
-//		Logger::log(Logger::kFinest, "Shooter",
-//				"Cleared proximity pattern buffer internally");
+		//		Logger::log(Logger::kFinest, "Shooter",
+		//				"Cleared proximity pattern buffer internally");
+	}
+	if (state && pullBackSwitchPatternBuffer.lastRisingEdge<0) {
+		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
 	}
 	return state;
 }
@@ -150,7 +155,7 @@ void Shooter::setSLatch(Shooter::LatchPosition state) {
 		lastReleasePosition = 0.0;
 #endif
 	}
-	
+
 	int sLatchState = state;
 	if (sLatchState != sLatchPatternBuffer.lastRequestedState) {
 		sLatchPatternBuffer.solenoidChangeTime = getCurrentMillis();
@@ -228,6 +233,9 @@ void Shooter::resetShooter() {
 	Logger::log(Logger::kInfo, "Shooter", "RESET ALL THE THINGS");
 	sLatchPatternBuffer.lastFallingEdge = -1;
 	sLatchPatternBuffer.lastRisingEdge = -1;
+	if (getRawProximity() && pullBackSwitchPatternBuffer.lastRisingEdge<0) {
+		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
+	}
 }
 
 void Shooter::checkDiagnostics() {

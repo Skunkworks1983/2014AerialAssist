@@ -91,9 +91,15 @@ void MFCBot::TeleopPeriodic() {
 	} else {
 		trueTicks = 0;
 	}
-	thingy->Set(trueTicks>15 ? Relay::kForward : Relay::kOff);
+	thingy->Set(trueTicks>20 ? Relay::kForward : Relay::kOff);
 
 	if (dont++> 10) {
+		if (CommandBase::beaglebone->Connected()
+				&& CommandBase::beaglebone->isGyroActive()) {
+			printf("YPR: %f,%f,%f\n", CommandBase::beaglebone->gyro.yaw,
+					CommandBase::beaglebone->gyro.pitch,
+					CommandBase::beaglebone->gyro.roll);
+		}
 		int verbosity= GET_INT(SMARTDASH_VERBOSITY);
 		if (GET_BOOL(ROBOT_VISUALIZATION)) {
 			robotState->PutBoolean("jawsClosed",
@@ -222,7 +228,8 @@ void MFCBot::WatchDog() {
 		}
 		if (CommandBase::shooter->isShooterMotorStalled()
 				&& CommandBase::shooter->getWenchMotorSpeed()>0
-				&& CommandBase::shooter->getTurns() > 0.125 && CommandBase::shooter->getWLatch() != Shooter::kLatched) {
+				&& CommandBase::shooter->getTurns() > 0.125
+				&& CommandBase::shooter->getWLatch() != Shooter::kLatched) {
 			Command *running = CommandBase::shooter->GetCurrentCommand();
 			if (running != NULL) {
 				if (running->GetName().compare("WLatch_Latched") != 0) {
