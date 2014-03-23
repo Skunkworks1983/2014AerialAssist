@@ -15,7 +15,7 @@
 #include "kalman/Kalman.h"
 #include <time.h>
 
-int main(int argc, char **argv) {
+int mainz(int argc, char **argv) {
 	BMP180 *bmp = new BMP180();
 	bmp->calibrate();
 

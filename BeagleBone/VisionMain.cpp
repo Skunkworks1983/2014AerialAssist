@@ -1,14 +1,25 @@
 #define SHAPE_FIT_HEURISTIC_SAMPLE_RATE 1
 #define SHAPE_FIT_HEURISTIC_MATCH_RATE 1
 
-#define HEADLESS 0
+#define HEADLESS 1
 #define ADAPTIVE 1
 #define DEBUG 0
 #define NETWORK 1
+#define SENSORS 1
+#define VISION 0
 #define NETWORK_BUFFER 512
 
 #if NETWORK
 #include "SocketServer.h"
+#endif
+
+#if SENSORS
+#include "sensors/internal/smbus.h"
+#include "sensors/BMP180.h"
+#include "sensors/L3GD20.h"
+#include "sensors/LSM303_ACC.h"
+#include "sensors/LSM303_MAG.h"
+#include "sensors/kalman/Kalman.h"
 #endif
 
 #include <string>
@@ -140,16 +151,45 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 #endif
 }
 
-int mainz(int argc, char** argv) {
+int main(int argc, char** argv) {
 #if !(HEADLESS)
 	cv::namedWindow(windowName);
 	cv::namedWindow(windowName2);
 #endif
 
+#if VISION
 	std::vector<MatchedShape> results;
 	size_t i;
 	cv::Mat temporaryMaterial;
 	ThreadedCapture threadedCapture(1);	//, atoi(argv[1]), atoi(argv[2]));
+	int lastFrame = milliTime();
+	int frames = 0;
+#endif
+
+#if SENSORS
+	BMP180 *bmp = new BMP180();
+	bmp->calibrate();
+
+	L3GD20 *gyro = new L3GD20();
+	gyro->calibrate();
+
+	LSM303_ACC *acc = new LSM303_ACC();
+	acc->setup();
+
+	LSM303_MAG *mag = new LSM303_MAG();
+	mag->setup();
+
+	FreeIMU *imu = new FreeIMU();
+	imu->gyro = gyro;
+	imu->baro = bmp;
+	imu->acc = acc;
+	imu->mag = mag;
+
+	sleep(1);
+	imu->init();
+
+	float ypr[3];
+#endif
 
 #if NETWORK
 	SocketServer *network = new SocketServer(NULL, NULL);
@@ -157,13 +197,21 @@ int mainz(int argc, char** argv) {
 	int bufferHead = 0;
 #endif
 
-	int lastFrame = milliTime();
-	int frames = 0;
 #if !(HEADLESS)
 	while (cv::waitKey(30) < 27) {
 #else
 		while (1) {
 #endif
+#if NETWORK
+			imu->getYawPitchRoll(ypr);
+			bufferHead += sprintf(buffer + bufferHead,
+					"%d/%d\t%d\t%f\t%f\t%f\t%f\n", 1337, 1337, 0, 0.0, ypr[0],
+					ypr[1], ypr[2]);
+			buffer[bufferHead] = 0;
+			network->SendData(buffer);
+			bufferHead = 0;
+#endif
+#if VISION
 		if (threadedCapture.hasCaptured()) {
 			threadedCapture.getCaptured(&temporaryMaterial);
 
@@ -204,6 +252,9 @@ int mainz(int argc, char** argv) {
 		} else {
 			usleep(1000);
 		}
+#else
+		usleep(5000);
+#endif
 	}
 #if !(HEADLESS)
 	cv::destroyAllWindows();
@@ -212,5 +263,7 @@ int mainz(int argc, char** argv) {
 	delete network;
 	free(buffer);
 #endif
+#if VISION
 	threadedCapture.stop();
+#endif
 }
