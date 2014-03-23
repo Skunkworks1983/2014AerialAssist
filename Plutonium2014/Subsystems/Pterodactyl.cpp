@@ -9,7 +9,7 @@
 #define PTERODACTYL_P 2.5
 #define PTERODACTYL_I .5
 #define PTERODACTYL_D 0.5
-#define PTERODACTYL_ANGLE_THRESHOLD (2.5)
+#define PTERODACTYL_ANGLE_THRESHOLD (2.0)
 
 #define PID_EQUATION_METHOD 1
 
@@ -25,11 +25,12 @@ Pterodactyl::Pterodactyl() :
 
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 #if PID_EQUATION_METHOD
-	pid
-			= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
+	pid = new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
+	pid->m_maximumITerm = 0.5;
 #else
 	pid
-			= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f / 4.0f);
+	= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f / 4.0f);
+	pid->m_maximumITerm = 0.150;
 #endif
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
@@ -44,8 +45,6 @@ Pterodactyl::Pterodactyl() :
 	setBrakeState(Pterodactyl::kActive);
 	setAngleMotorSpeed(0);
 	pid->Disable();
-
-	SmartDashboard::PutNumber("ptero_maxITerm", .150);
 }
 
 void Pterodactyl::InitDefaultCommand() {
@@ -74,17 +73,23 @@ void Pterodactyl::setOutputRange() {
 #if PID_EQUATION_METHOD
 	double p, i, d;
 	if (target>40) {
+		//		float volts = DriverStation::GetInstance()->GetBatteryVoltage(); TODO Can I make it adaptive?
 		p = 1615.3*pow(target, -1.578);
-		i = 2.3287*pow(2.71, -.065*target);
+		i = 2.0*pow(2.71, -.055*target);
 		d = 97.34*pow(target, -0.85);
 		d /= 2.0;
 		if (fabs(initialError) < 30) { // Extra corrections
 			float divider = fabs(initialError);
-			if (divider < 10) {
-				divider = 10;
+			if (divider <7.5) {
+				divider = 7.5;
 			}
-			p *= 25.0 / divider;
-			i *= 500.0 / (divider*divider);
+			if (initialError < 0) {
+				p *= 25.0 / divider;
+				i *= 125.0 / divider;
+			} else {
+				p *= 25.0 / divider;
+				i *= 250.0 / divider;
+			}
 		}
 	} else {
 		p = .75;
@@ -92,8 +97,6 @@ void Pterodactyl::setOutputRange() {
 		d = .05;
 	}
 	pid->SetPID(p, i, d);
-#else
-	pid->m_maximumITerm = SmartDashboard::GetNumber("ptero_maxITerm");
 #endif
 	if (initialError> 0) {
 		if (angle < 25) {
@@ -102,7 +105,7 @@ void Pterodactyl::setOutputRange() {
 			pid->SetOutputRange(-.75, 0.75);
 		}
 	} else {
-		pid->SetOutputRange(-.25, 0.75);
+		pid->SetOutputRange(-.35, 1.0);
 	}
 }
 

@@ -23,6 +23,7 @@
 #include "Commands/Shooter/ReadyShot.h"
 
 #include "Commands/Command.h"
+#include "Commands/Collector/Gulp.h"
 
 #include <math.h>
 
@@ -73,7 +74,7 @@ void OI::registerButtonListeners() {
 	angleCarry->WhenPressed(new AngelChange(95));//95));
 
 	// Collector rollers
-	revCollector->WhenPressed(new Pass());
+	revCollector->WhenPressed(new Gulp());
 	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	START_STOP_COMMAND(collect, new Collect());
 	START_STOP_COMMAND(collectButton, new Collect());
@@ -88,8 +89,8 @@ void OI::registerButtonListeners() {
 
 	// Strap operations
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
-	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2));
-	power3->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_3));
+	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
+	power3->WhenPressed(new ReadyShot(0.95, 88));
 
 	// Jaw Override
 	jawToggle->WhenPressed(new JawMove(Collector::kClosed));

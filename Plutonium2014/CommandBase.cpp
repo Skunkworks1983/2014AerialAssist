@@ -4,6 +4,7 @@
 #include "Subsystems/Pterodactyl.h"
 #include "Subsystems/Shooter.h"
 #include "Subsystems/Pneumatics.h"
+#include "Subsystems/BeagleBone.h"
 #include "Commands/Scheduler.h"
 
 CommandBase::CommandBase(const char *name) : Command(name) {
@@ -21,6 +22,8 @@ Shooter* CommandBase::shooter = NULL;
 Pneumatics* CommandBase::pneumatics = NULL;
 OI* CommandBase::oi = NULL;
 
+BeagleBone* CommandBase::beaglebone = NULL;
+
 void CommandBase::init() {
     // Create a single static instance of all of your subsystems. The following
 	// line should be repeated for each subsystem in the project.
@@ -30,6 +33,7 @@ void CommandBase::init() {
 	shooter = new Shooter();
 	pneumatics = new Pneumatics();
 	oi = new OI();
+	beaglebone = new BeagleBone();
 }
 
 char *CommandBase::createNameFromFloat(char *base, float target) {
