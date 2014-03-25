@@ -1,7 +1,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#define COMPETITION_BOT 0
+#define COMPETITION_BOT 1
 
 // ===============
 // = Preferences =
@@ -24,7 +24,7 @@
 // ================
 // == Pneumatics ==
 // ================
-#define COMPRESSOR_RELAY TOP_SIDECAR,3 /*S1*/
+#define COMPRESSOR_RELAY BOTTOM_SIDECAR,1 /*S1*/
 #define COMPRESSOR_PRESSURE_SENSOR BOTTOM_SIDECAR,2 /*BD1*/
 
 // ===============
@@ -78,7 +78,7 @@
 #if COMPETITION_BOT
 // .225 = FULL BACK (0)
 // 1.622 = FULL OUT (1.1)
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.100000
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.1125
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #endif
@@ -156,7 +156,7 @@
 #define OI_JOYSTICK_RIGHT (2)
 #define OI_JOYSTICK_DRIVE_DEADBAND (0.1)
 #define OI_JOYSTICK_SQUIRRLY_POWER (2.0)
-#define OI_ANALOG_TRESHOLD (0.2)
+#define OI_ANALOG_TRESHOLD (0.1)
 #define OI_SHOOTER_POWER_PORT (2)
 #define SHOOTER_POWER_TURNS_1 (0.5)
 #define SHOOTER_POWER_TURNS_2 (0.75)

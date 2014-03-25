@@ -15,7 +15,6 @@ ReadyShot::ReadyShot(float setTurns, float angle) :
 	}
 	AddSequential(new DrawShooter());
 	AddSequential(new PrepareShooter(setTurns));
-	SetInterruptible(false);
 }
 
 void ReadyShot::Initialize() {

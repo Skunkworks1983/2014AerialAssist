@@ -10,8 +10,7 @@
 #include "../../../Robotmap.h"
 
 ReleaseTension::ReleaseTension(float setTurns) :
-		CommandBase(
-				CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
+	CommandBase(CommandBase::createNameFromFloat("ReleaseTension", setTurns)) {
 	Requires(shooter);
 	this->setTurns = setTurns;
 	this->isDone = false;
@@ -27,9 +26,9 @@ void ReleaseTension::Initialize() {
 }
 
 void ReleaseTension::Execute() {
-	float speed = SHOOTER_WENCH_MOTOR_FULL_RELEASE;
+	float speed= SHOOTER_WENCH_MOTOR_FULL_RELEASE;
 	if (fabs(shooter->getTurns() - setTurns)
-				< SHOOTER_WENCH_PAYOUT_TOLERANCE_NEAR) {
+			< SHOOTER_WENCH_PAYOUT_TOLERANCE_NEAR) {
 		speed = SHOOTER_WENCH_MOTOR_FULL_RELEASE_NEAR;
 	}
 	if (shooter->getTurns() <= setTurns) {
@@ -40,8 +39,8 @@ void ReleaseTension::Execute() {
 }
 
 bool ReleaseTension::IsFinished() {
-	return (fabs(shooter->getTurns() - setTurns)
-			< SHOOTER_WENCH_PAYOUT_TOLERANCE);
+	return shooter->getTurns() <= setTurns && (fabs(shooter->getTurns()
+			- setTurns) < SHOOTER_WENCH_PAYOUT_TOLERANCE);
 }
 
 void ReleaseTension::End() {

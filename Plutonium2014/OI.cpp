@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-#define START_STOP_COMMAND(btnA, cmd) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command));}
+#define START_STOP_COMMAND(btnA, cmd, sleep) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command, sleep));}
 
 OI::OI() {
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
@@ -76,8 +76,8 @@ void OI::registerButtonListeners() {
 	// Collector rollers
 	revCollector->WhenPressed(new Gulp());
 	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
-	START_STOP_COMMAND(collect, new Collect());
-	START_STOP_COMMAND(collectButton, new Collect());
+	START_STOP_COMMAND(collect, new Collect(), 1);
+	START_STOP_COMMAND(collectButton, new Collect(), 1);
 
 	// Jaw Operations
 	pass->WhenPressed(new Pass());
@@ -88,9 +88,15 @@ void OI::registerButtonListeners() {
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
+#if COMPETITION_BOT
+	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
+	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
+	power3->WhenPressed(new ReadyShot(0.955,86.0));
+#else
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
 	power3->WhenPressed(new ReadyShot(0.95, 88));
+#endif
 
 	// Jaw Override
 	jawToggle->WhenPressed(new JawMove(Collector::kClosed));

@@ -14,7 +14,6 @@ DrawShooter::DrawShooter() :
 	AddSequential(new SLatch(Shooter::kLatched));
 	AddSequential(new WLatch(Shooter::kUnlatched));
 	AddSequential(new FullTension());
-	SetInterruptible(false);
 }
 
 void DrawShooter::Initialize() {
