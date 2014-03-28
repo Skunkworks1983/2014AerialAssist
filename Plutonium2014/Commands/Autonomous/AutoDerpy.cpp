@@ -18,19 +18,27 @@ Autonomous *Autonomous::createDerpy() {
 	CommandGroup *drive = new CommandGroup("Drive");
 	CommandGroup *prepare = new CommandGroup("CHILD");
 
-	prepare->AddParallel(new PrepareShooter(SHOOTER_POWER_TURNS_2));
-	prepare->AddSequential(new AngelChange(0,2));
-	prepare->AddSequential(new AngelChange(89.5,3));
-//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
+#if COMPETITION_BOT
+	prepare->AddParallel(new PrepareShooter(0.91));
+	prepare->AddSequential(new AngelChange(0,1));
+	prepare->AddSequential(new AngelChange(83.25,3));
+#else
+	prepare->AddParallel(new PrepareShooter(0.95));
+	prepare->AddSequential(new AngelChange(0,1));
+	prepare->AddSequential(new AngelChange(88,3));
+#endif
+	
+	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
-	drive->AddSequential(new AutoStupidDrive(3,-.375)); //All of these magic number need to be less magic
+	drive->AddSequential(new AutoStupidDrive(1.75,-.375)); //All of these magic number need to be less magic
 	cmd->AddSequential(drive);
+	cmd->AddSequential(new WaitCommand(3.0));
 
 	// Fire Shooter Internal
 	cmd->AddSequential(new DiscBrake(Pterodactyl::kActive));
 	cmd->AddSequential(new WLatch(Shooter::kLatched));
-	cmd->AddSequential(new JawMove(Collector::kOpen, 0.75));
+	cmd->AddSequential(new JawMove(Collector::kOpen, 0.5));
 	cmd->AddSequential(new SLatch(Shooter::kUnlatched));
 	cmd->AddSequential(new WaitCommand(1.5));
 

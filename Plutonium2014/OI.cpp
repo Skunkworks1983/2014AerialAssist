@@ -71,7 +71,11 @@ void OI::registerButtonListeners() {
 	angleLow->WhenPressed(new AngelChange(75));//75));
 	angleMed->WhenPressed(new AngelChange(84));//90));
 	angleHigh->WhenPressed(new AngelChange(89.5));//100));
-	angleCarry->WhenPressed(new AngelChange(95));//95));
+	
+	CommandGroup *startConfig = new CommandGroup();
+	startConfig->AddSequential(new AngelChange(111.5));
+	startConfig->AddParallel(new JawMove(Collector::kClosed));
+	angleCarry->WhenPressed(startConfig);
 
 	// Collector rollers
 	revCollector->WhenPressed(new Gulp());
@@ -91,7 +95,7 @@ void OI::registerButtonListeners() {
 #if COMPETITION_BOT
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
-	power3->WhenPressed(new ReadyShot(0.955,86.0));
+	power3->WhenPressed(new ReadyShot(0.91,83.25));
 #else
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));

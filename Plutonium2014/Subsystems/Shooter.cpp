@@ -18,7 +18,7 @@ Shooter::Shooter() :
 	wenchPot = new AnalogPot(SHOOTER_CAT_POT);
 	wenchPot->setVoltageToAngle(SHOOTER_POT_TO_DRAW_COEFF);
 	wenchMotor = new StallableMotor(new Talon(SHOOTER_MOTOR_WENCH),
-			SHOOTER_MOTOR_STALL_SPEED, SHOOTER_MOTOR_STALL_TIME, -1);
+			SHOOTER_MOTOR_STALL_SPEED, SHOOTER_MOTOR_STALL_TIME, 7500);
 	wenchMotor->setPotSource(wenchPot);
 	wenchMotor->setName("Winch Motor");
 
