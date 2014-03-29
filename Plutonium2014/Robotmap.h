@@ -49,7 +49,7 @@
 #define SHOOTER_PNEUMATIC_S_LATCH 5,6 /*L12 TBD*/
 #define SHOOTER_S_LATCH_SENSOR TOP_SIDECAR,2 /*T2*/
 #define SHOOTER_W_LATCH_SENSOR TOP_SIDECAR,1 /*T1*/
-#define SHOOTER_SLATCH_PATTERN_DELAY (100) /* Milliseconds to delay slatch reaction */
+#define SHOOTER_SLATCH_PATTERN_DELAY (0) /* Milliseconds to delay slatch reaction */
 #define SHOOTER_MOTOR_STALL_SPEED (0.05)
 #define SHOOTER_MOTOR_STALL_TIME (1500)
 
@@ -78,7 +78,7 @@
 #if COMPETITION_BOT
 // .225 = FULL BACK (0)
 // 1.622 = FULL OUT (1.1)
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.1125
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #endif
@@ -86,7 +86,7 @@
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms during which any changes are discarded*/
 
 #define SHOOTER_SLATCH_WAIT 500
-#define SHOOTER_WLATCH_WAIT 500
+#define SHOOTER_WLATCH_WAIT 750
 
 #define SHOOTER_WLATCH_LOCK_DRIVE 200 /*RUN MOTOR TIME TO LOCK IN MS*/
 #define SHOOTER_WENCH_MOTOR_FORCE_LATCH (-1.0)

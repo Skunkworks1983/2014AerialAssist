@@ -10,7 +10,10 @@ public:
 	static Autonomous *createAutoBall(int ballCount, float distance);
 	static Autonomous *createJustDrive(float distance);
 	
+	static Autonomous *createDerpyTwo();
 	static Autonomous *createDerpy();
+	
+	static CommandGroup *createAutoArm();
 public:
 	Autonomous();
 	Autonomous(char *style);

@@ -44,6 +44,7 @@ void MFCBot::createAutonomi() {
 	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
 	chooser->AddObject("Stupid Drive", new AutoStupidDrive(3.0,-.25));
+	chooser->AddObject("Stupid Auto Two", Autonomous::createDerpyTwo());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }
 
@@ -172,7 +173,7 @@ void MFCBot::DisabledInit() {
 	Scheduler::GetInstance()->RemoveAll();
 
 	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);
-	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Saturday");
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Auburn-FridayMorn");
 	DriverStationLCD::GetInstance()->UpdateLCD();
 }
 

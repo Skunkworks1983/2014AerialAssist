@@ -34,6 +34,7 @@ private:
 	Button *jawToggle;
 
 	DigitalIOButton *manAngleOvr;
+	DigitalIOButton *manPowerOvr;
 
 	AnalogRangeIOButton *power1;
 	AnalogRangeIOButton *power2;

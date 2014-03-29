@@ -3,7 +3,7 @@
 #include "../../Utils/Time.h"
 
 RollerRoll::RollerRoll(float speed) :
-		CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
+	CommandBase(CommandBase::createNameFromFloat("RollerRoll", speed)) {
 	Requires(collector);
 	this->speed = speed;
 	this->timeWait = 0;
@@ -12,31 +12,39 @@ RollerRoll::RollerRoll(float speed) :
 void RollerRoll::Initialize() {
 	collector->setRollerSpeed(speed);
 	this->timeWait = 0;
+	this->hasBall = collector->isBallDetected();
 }
 
 void RollerRoll::Execute() {
-	if (!collector->isBallDetected() && speed <= 0 && timeWait == 0) {
+	this->hasBall = collector->isBallDetected();
+	if (!hasBall && speed <= 0 && timeWait == 0) {
 		timeWait = getCurrentMillis();
 	}
-	SmartDashboard::PutNumber("RollerSpeed", collector->getRollerSpeed());
+	if (hasBall && speed > 0 && timeWait == 0) {
+		timeWait = getCurrentMillis();
+	}
 }
 
 bool RollerRoll::IsFinished() {
-	return (collector->isBallDetected() && speed >= 0)
-			|| ((!collector->isBallDetected() && speed <= 0)
-					&& (getCurrentMillis() - timeWait >= 1500));
+	this->hasBall = collector->isBallDetected();
+	if (hasBall && speed >= 0) {
+		return timeWait > 0 && getCurrentMillis() - timeWait >= 250;
+	} else if (!hasBall && speed <=0) {
+		return timeWait > 0 && getCurrentMillis() - timeWait >= 1500;
+	}
+	if (timeWait > 0 && getCurrentMillis() - timeWait >= 300 && !hasBall
+			&& speed>0) {
+		timeWait=0;
+	}
+	return false;
 }
 
 void RollerRoll::End() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(
-			collector->isBallDetected() ?
-					Collector::kClosed : Collector::kOpen);
+	collector->setJawState(speed < 0 ? Collector::kOpen : Collector::kClosed);
+	// Don't need collector->setJawState(hasBall ? Collector::kClosed : Collector::kOpen);
 }
 
 void RollerRoll::Interrupted() {
 	collector->setRollerSpeed(0.0);
-	collector->setJawState(
-			collector->isBallDetected() ?
-					Collector::kClosed : Collector::kOpen);
 }

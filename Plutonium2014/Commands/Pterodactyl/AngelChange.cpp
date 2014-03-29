@@ -18,7 +18,7 @@ AngelChange::AngelChange(float target, float timeout) :
 void AngelChange::Initialize() {
 	//	if ((fabs(target - pterodactyl->getAngle())) > PTERODACTYL_ANGLE_THRESHOLD) {
 	pterodactyl->setBrakeState(Pterodactyl::kDeactive);
-	tmpTarget = target;
+	tmpTarget = target<=0 ? -3 : target;
 	if (tmpTarget < 45 && shooter->getTurns() > 0.25 && !shooter->isReallyDrawnBack()) {
 		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}

@@ -1,5 +1,6 @@
 #include "OI.h"
 #include "Robotmap.h"
+#include "ShotTuning.h"
 #include "Buttons/Button.h"
 
 #include "Utils/Buttons/CompositeButton.h"
@@ -53,6 +54,7 @@ OI::OI() {
 			new DigitalIOButton(11), false);
 	preventShooterArming = new DigitalIOButton(10);
 	manAngleOvr = new DigitalIOButton(16);
+	manPowerOvr = new DigitalIOButton(14);
 
 	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
@@ -71,7 +73,7 @@ void OI::registerButtonListeners() {
 	angleLow->WhenPressed(new AngelChange(75));//75));
 	angleMed->WhenPressed(new AngelChange(84));//90));
 	angleHigh->WhenPressed(new AngelChange(89.5));//100));
-	
+
 	CommandGroup *startConfig = new CommandGroup();
 	startConfig->AddSequential(new AngelChange(111.5));
 	startConfig->AddParallel(new JawMove(Collector::kClosed));
@@ -95,7 +97,7 @@ void OI::registerButtonListeners() {
 #if COMPETITION_BOT
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
-	power3->WhenPressed(new ReadyShot(0.91,83.25));
+	power3->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
 #else
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
@@ -128,12 +130,14 @@ bool OI::isShooterArmingPrevented() {
 
 float OI::getAngleAdjustment() {
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(3);
-	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
+	return !manAngleOvr->Get() ? 0.56 - (0.3923 * log(4.0 - volts) + 0.3979)
+			: 0.0;
 }
 
 float OI::getPowerAdjustment() {
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(1);
-	return 0.56 - (0.3923 * log(4.0 - volts) + 0.3979);
+	return !manPowerOvr->Get() ? 0.56 - (0.3923 * log(4.0 - volts) + 0.3979)
+			: 0.0;
 }
 
 Command * OI::createAngle() {

@@ -12,6 +12,7 @@ class RollerRoll: public CommandBase {
 private:
 	float speed;
 	double timeWait;
+	bool hasBall;
 public:
 	RollerRoll(float speed);
 	virtual void Initialize();

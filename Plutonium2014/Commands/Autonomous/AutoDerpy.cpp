@@ -1,5 +1,6 @@
 // Commands
 #include "Autonomous.h"
+#include "../../ShotTuning.h"
 #include "../Pterodactyl/AngelChange.h"
 #include "../Automatic/AutoDriveDistance.h"
 #include "../Collector/JawMove.h"
@@ -18,22 +19,16 @@ Autonomous *Autonomous::createDerpy() {
 	CommandGroup *drive = new CommandGroup("Drive");
 	CommandGroup *prepare = new CommandGroup("CHILD");
 
-#if COMPETITION_BOT
-	prepare->AddParallel(new PrepareShooter(0.91));
+	prepare->AddParallel(new PrepareShooter(NEAR_SHOT_POWER));
 	prepare->AddSequential(new AngelChange(0,1));
-	prepare->AddSequential(new AngelChange(83.25,3));
-#else
-	prepare->AddParallel(new PrepareShooter(0.95));
-	prepare->AddSequential(new AngelChange(0,1));
-	prepare->AddSequential(new AngelChange(88,3));
-#endif
-	
+	prepare->AddSequential(new AngelChange(NEAR_SHOT_ANGLE,5));
+
 	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
-	drive->AddSequential(new AutoStupidDrive(1.75,-.375)); //All of these magic number need to be less magic
+	drive->AddSequential(new AutoStupidDrive(2.5,-.375)); //All of these magic number need to be less magic
 	cmd->AddSequential(drive);
-	cmd->AddSequential(new WaitCommand(3.0));
+	cmd->AddSequential(new WaitCommand(0.5));
 
 	// Fire Shooter Internal
 	cmd->AddSequential(new DiscBrake(Pterodactyl::kActive));

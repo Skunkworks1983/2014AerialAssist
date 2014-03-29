@@ -3,18 +3,17 @@
 
 #include "../../../CommandBase.h"
 
-
 /**
  *
  *
  * @author These are all david so I guess this is as well
  * DAVEED
  */
-class ReleaseTension: public CommandBase {
+class ReleaseTension : public CommandBase {
 private:
 	float setTurns;
 	bool isDone;
-
+	float tmpSetpoint;
 public:
 	ReleaseTension(float setTurns);
 	virtual void Initialize();
