@@ -4,6 +4,6 @@
 
 #if COMPETITION_BOT
 #define NEAR_SHOT_POWER 0.905
-#define NEAR_SHOT_ANGLE 83.25
+#define NEAR_SHOT_ANGLE 83.125
 #endif
 #endif

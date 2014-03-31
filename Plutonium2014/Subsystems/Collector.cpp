@@ -21,7 +21,7 @@ Collector::Collector() :
 			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED,500))->setEncoderSource(rollerClawEncoder);
 	rollerMotor->setName("Collector Motor");
 
-	rollerPIDController= new PIDController(1, .1, .01, rollerClawEncoder,
+	rollerPIDController= new PIDController(2, .2, .05, rollerClawEncoder,
 			rollerMotor, 0.05f);
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);

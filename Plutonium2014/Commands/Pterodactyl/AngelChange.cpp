@@ -2,8 +2,12 @@
 // CSTDLIB
 #include <math.h>
 
+#include "../../Utils/Time.h"
+
 // Backend
 #include "../../Robotmap.h"
+
+#define ASYNC_BRAKE 0
 
 AngelChange::AngelChange(float target, float timeout) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
@@ -22,49 +26,54 @@ void AngelChange::Initialize() {
 	if (tmpTarget < 45 && shooter->getTurns() > 0.25 && !shooter->isReallyDrawnBack()) {
 		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}
-	pterodactyl->setTarget(tmpTarget);
+	pterodactyl->setTarget(tmpTarget+(tmpTarget>0?0.5:0));
 	stability = 0;
 	//	} else {
 	//		stability = 50;
 	//	}
+	brakeEngagedTime = -1;
 }
 
 void AngelChange::Execute() {
 	pterodactyl->setOutputRange();
-
-	SmartDashboard::PutNumber("pteroangle", pterodactyl->getAngle());
-	SmartDashboard::PutNumber("pterorate", pterodactyl->getRate());
-	SmartDashboard::PutNumber("Pteroerror", pterodactyl->getAngle()
-			-pterodactyl->getTarget());
 	// Let the PID run.
 
-	if (pterodactyl->isPIDFinished() || (target <= 0 && pterodactyl->getAngle()
-			<= 0)) {
+	if (pterodactyl->isPIDFinished(true) || (target <= 0
+			&& pterodactyl->getAngle() <= 0)) {
 		stability++;
 	} else {
 		stability = 0;
 	}
 	if (tmpTarget == 45 && target < 45 && shooter->isReallyDrawnBack()) {
 		tmpTarget = target;
-		pterodactyl->setTarget(tmpTarget);
+		pterodactyl->setTarget(tmpTarget+(tmpTarget>0 ? 0.5 : 0));
 	}
-	if (target <= 0 && pterodactyl->getAngle() < 10) {
-		//pterodactyl->stopPID();
-		//pterodactyl->writeAngleMotorRaw(0.0);
-		pterodactyl->setBrakeState(Pterodactyl::kDeactive);
+#if ASYNC_BRAKE
+	if (stability > 13 && (tmpTarget != 45 || target>45)) {
+		brakeEngagedTime = getCurrentMillis();
+		if (target > 0) {
+			pterodactyl->setBrakeState(Pterodactyl::kActive);
+		}
 	}
+#endif
 }
 
 bool AngelChange::IsFinished() {
-	return stability > 13;// || IsTimedOut();
+#if ASYNC_BRAKE
+	return brakeEngagedTime > 0 && brakeEngagedTime + 100 < getCurrentMillis();// || IsTimedOut();
+#else
+	return stability>13;
+#endif
 }
 
 void AngelChange::End() {
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
+	pterodactyl->setTarget(tmpTarget);
 	pterodactyl->stopPID();
 }
 
 void AngelChange::Interrupted() {
 	pterodactyl->setBrakeState(Pterodactyl::kActive);
+	pterodactyl->setTarget(tmpTarget);
 	pterodactyl->stopPID();
 }

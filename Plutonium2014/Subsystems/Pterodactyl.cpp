@@ -9,7 +9,6 @@
 #define PTERODACTYL_P 2.5
 #define PTERODACTYL_I .5
 #define PTERODACTYL_D 0.5
-#define PTERODACTYL_ANGLE_THRESHOLD (2.0)
 
 #define PID_EQUATION_METHOD 1
 
@@ -26,11 +25,9 @@ Pterodactyl::Pterodactyl() :
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 #if PID_EQUATION_METHOD
 	pid = new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
-	pid->m_maximumITerm = 0.5;
 #else
 	pid
 	= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f / 4.0f);
-	pid->m_maximumITerm = 0.150;
 #endif
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
@@ -71,6 +68,7 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 #if PID_EQUATION_METHOD
+	pid->m_maximumITerm = 0.5;
 	double p, i, d;
 	if (target>40) {
 		//		float volts = DriverStation::GetInstance()->GetBatteryVoltage(); TODO Can I make it adaptive?
@@ -92,15 +90,22 @@ void Pterodactyl::setOutputRange() {
 				i *= 125.0 / divider;
 			} else {
 				p *= 25.0 / divider;
-				i *= 250.0 / divider;
+				i *= 200.0 / divider;
 			}
 		}
+	} else if (target > 20) {
+		pid->m_maximumITerm = 0.150;
+		p = 2.5/1.5;
+		i = 0.25;
+		d = 0.25;
 	} else {
 		p = .75;
 		i = .0105;
 		d = .05;
 	}
 	pid->SetPID(p, i, d);
+#else
+	pid->m_maximumITerm = 0.150;
 #endif
 	if (initialError> 0) {
 		if (angle < 25) {

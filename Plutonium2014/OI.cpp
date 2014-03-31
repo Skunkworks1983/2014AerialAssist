@@ -70,7 +70,7 @@ void OI::registerButtonListeners() {
 
 	// Pterodactyl Angle
 	angleFloor->WhenPressed(new AngelChange(0));
-	angleLow->WhenPressed(new AngelChange(75));//75));
+	angleLow->WhenPressed(new AngelChange(30));//75));
 	angleMed->WhenPressed(new AngelChange(84));//90));
 	angleHigh->WhenPressed(new AngelChange(89.5));//100));
 

@@ -13,6 +13,8 @@ private:
 	float target;
 	int stability;
 	float tmpTarget;
+	
+	double brakeEngagedTime;
 public:
 	AngelChange(float target, float timeout = 10.0);
 	virtual void Initialize();
