@@ -61,6 +61,7 @@
 #endif
 
 #define SHOOTER_WENCH_ENCODER 8,9
+
 #define SHOOTER_WENCH_POT_BACK (0.0)
 #define SHOOTER_WENCH_POT_BACK_NEAR (0.08)
 

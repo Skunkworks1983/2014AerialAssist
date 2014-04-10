@@ -12,7 +12,7 @@
 
 class ReadyShot : public CommandGroup {
 public:
-	ReadyShot(float setTurns, float angle = -1);
+	ReadyShot(float setTurns, float angle = -1, float angleTimeout = -1);
 	virtual void Initialize();
 	virtual void End();
 	virtual void Interrupted();

@@ -46,7 +46,7 @@ OI::OI() {
 	angleLow = new DigitalIOButton(6);
 	angleMed = new DigitalIOButton(8);
 	angleHigh = new DigitalIOButton(13);
-	angleCarry = new DigitalIOButton(15);
+	startConfig = new DigitalIOButton(15);
 
 	fire = new DigitalIOButton(2);
 	revCollector = new DigitalIOButton(9);
@@ -56,7 +56,7 @@ OI::OI() {
 	manAngleOvr = new DigitalIOButton(16);
 	manPowerOvr = new DigitalIOButton(14);
 
-	power3 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+	shotNear = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
 	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
@@ -72,12 +72,11 @@ void OI::registerButtonListeners() {
 	angleFloor->WhenPressed(new AngelChange(0));
 	angleLow->WhenPressed(new AngelChange(30));//75));
 	angleMed->WhenPressed(new AngelChange(84));//90));
-	angleHigh->WhenPressed(new AngelChange(89.5));//100));
 
-	CommandGroup *startConfig = new CommandGroup();
-	startConfig->AddSequential(new AngelChange(111.5));
-	startConfig->AddParallel(new JawMove(Collector::kClosed));
-	angleCarry->WhenPressed(startConfig);
+	CommandGroup *startCfgCmd = new CommandGroup();
+	startCfgCmd->AddSequential(new AngelChange(111.5));
+	startCfgCmd->AddParallel(new JawMove(Collector::kClosed));
+	startConfig->WhenPressed(startCfgCmd);
 
 	// Collector rollers
 	revCollector->WhenPressed(new Gulp());
@@ -94,14 +93,15 @@ void OI::registerButtonListeners() {
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
+	angleHigh->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3));//100));
+	shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
+	
 #if COMPETITION_BOT
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
-	power3->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
 #else
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
 	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
-	power3->WhenPressed(new ReadyShot(0.95, 88));
 #endif
 
 	// Jaw Override

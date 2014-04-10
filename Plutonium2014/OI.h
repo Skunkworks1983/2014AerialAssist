@@ -26,7 +26,7 @@ private:
 	DigitalIOButton *angleLow;
 	DigitalIOButton *angleMed;
 	DigitalIOButton *angleHigh;
-	DigitalIOButton *angleCarry;
+	DigitalIOButton *startConfig;
 
 	DigitalIOButton *fire;
 	DigitalIOButton *revCollector;
@@ -38,7 +38,7 @@ private:
 
 	AnalogRangeIOButton *power1;
 	AnalogRangeIOButton *power2;
-	AnalogRangeIOButton *power3;
+	AnalogRangeIOButton *shotNear;
 
 	DigitalIOButton *preventShooterArming;
 public:
