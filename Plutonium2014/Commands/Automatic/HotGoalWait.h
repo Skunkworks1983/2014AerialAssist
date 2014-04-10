@@ -8,6 +8,7 @@
 class HotGoalWait : public CommandBase {
 private:
 	ITable *table;
+	int stability;
 public:
 	HotGoalWait();
 	virtual void Initialize();

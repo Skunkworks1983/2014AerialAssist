@@ -19,8 +19,8 @@ void TankDrive::Initialize() {
 }
 
 void TankDrive::Execute() {
-	double left = oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
-	double right = oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
+	double left = -oi->getJoystickLeft()->GetAxis(Joystick::kYAxis);
+	double right = -oi->getJoystickRight()->GetAxis(Joystick::kYAxis);
 	if (fabs(left) < OI_JOYSTICK_DRIVE_DEADBAND) {
 		left = 0;
 	}

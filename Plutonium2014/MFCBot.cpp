@@ -16,6 +16,7 @@
 #include "Commands/Autonomous/Autonomous.h"
 #include "Commands/Shooter/PrepareShooter.h"
 #include "Commands/Autonomous/AutoStupidDrive.h"
+#include "Commands/Automatic/AutoDriveDistance.h"
 
 MFCBot::MFCBot() {
 	lw = NULL;
@@ -31,7 +32,8 @@ MFCBot::~MFCBot() {
 
 void MFCBot::createAutonomi() {
 	chooser = new SendableChooser();
-	chooser->AddDefault("This (Stupid Auto)", Autonomous::createDerpy());
+	chooser->AddDefault("This (Smart Auto)", Autonomous::create1Ball(60));
+	chooser->AddObject("Stupid Auto", Autonomous::createDerpy());
 	chooser->AddObject("Blank", new Autonomous());
 	//	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
 	//	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
@@ -43,7 +45,7 @@ void MFCBot::createAutonomi() {
 	//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
 	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
-	chooser->AddObject("Stupid Drive", new AutoStupidDrive(3.0,-.25));
+	chooser->AddObject("Smart Drive", new AutoDriveDistance(60,2));
 	chooser->AddObject("Stupid Auto Two", Autonomous::createDerpyTwo());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }
@@ -140,6 +142,11 @@ void MFCBot::TeleopPeriodic() {
 			SmartDashboard::PutNumber("Winch position",
 					CommandBase::shooter->getTurns());
 
+			SmartDashboard::PutNumber("LeftWheels",
+					CommandBase::driveBase->getLeftEncoder()->GetDistance());
+			SmartDashboard::PutNumber("RightWheels",
+					CommandBase::driveBase->getRightEncoder()->GetDistance());
+
 			SmartDashboard::PutNumber("pteroangle",
 					CommandBase::pterodactyl->getAngle());
 		}
@@ -173,7 +180,7 @@ void MFCBot::DisabledInit() {
 	Scheduler::GetInstance()->RemoveAll();
 
 	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);
-	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Auburn-FridayMorn");
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Portland-ThursdayMorn");
 	DriverStationLCD::GetInstance()->UpdateLCD();
 }
 

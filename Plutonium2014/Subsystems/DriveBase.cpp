@@ -38,8 +38,8 @@ void DriveBase::InitDefaultCommand() {
 }
 
 void DriveBase::setSpeed(double speedLeft, double speedRight) {
-	motorLeft->Set(-speedLeft);
-	motorRight->Set(speedRight);
+	motorLeft->Set(speedLeft);
+	motorRight->Set(-speedRight);
 }
 
 float DriveBase::getMotorSpeed() {

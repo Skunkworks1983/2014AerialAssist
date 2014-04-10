@@ -78,11 +78,7 @@ bool Collector::isRollerStalled() {
 }
 
 double Collector::getRollerSpeed() {
-	return rollerClawEncoder->GetRate();
-}
-
-double Collector::getRollerDistance() {
-	return rollerClawEncoder->GetDistance();
+	return rollerClawEncoder->GetRate()*COLLECTOR_ROLLER_MAX_RPM;
 }
 
 bool Collector::isBallDetected() {

@@ -114,8 +114,8 @@
 // ===============
 // == Automatic ==
 // ===============
-#define AUTO_DRIVE_DIST_STABILITY (1)	/*all values are arbitrary, need actual values*/
-#define AUTO_DRIVE_DIST_THRESHOLD (1)
+#define AUTO_DRIVE_DIST_STABILITY (2)	/*all values are arbitrary, need actual values*/
+#define AUTO_DRIVE_DIST_THRESHOLD (.5)
 #define AUTO_DRIVE_DIST_SPEED_MIN (.1)
 #define AUTO_DRIVE_DIST_SPEED_MAX (.75)
 #define AUTO_DRIVE_DIST_SLOW_DOWN (.5)

@@ -47,8 +47,8 @@ void AutoDriveDistance::Initialize() {
 								- driveBase->getRightEncoder()->GetDistance()))
 						/ 2.0;
 	}
-	driveBase->getLeftEncoder()->Reset();
-	driveBase->getRightEncoder()->Reset();
+	driveBase->encoderReset();
+	driveBase->setDriveGear(DriveBase::kLow);
 	stability = 0;
 }
 
