@@ -34,7 +34,7 @@ Pterodactyl::Pterodactyl() :
 	pid->SetAbsoluteTolerance(
 	PTERODACTYL_ANGLE_THRESHOLD / (double) PTERODACTYL_MAX_ANGLE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "PID Controller", pid);
-	SmartDashboard::PutData("Pterodactylz PID", pid);
+//	SmartDashboard::PutData("Pterodactylz PID", pid);
 
 	brake = new Relay(PTERODACTYL_BRAKE_ACTIVE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);

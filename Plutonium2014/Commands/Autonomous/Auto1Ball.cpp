@@ -23,9 +23,9 @@ Autonomous *Autonomous::create1Ball(float distance) {
 	CommandGroup *drive = new CommandGroup("Drive");
 	CommandGroup *prepare = new CommandGroup("CHILD");
 
-	prepare->AddParallel(new PrepareShooter(NEAR_SHOT_POWER));
+	prepare->AddParallel(new PrepareShooter(AUTO_1_SHOT_POWER));
 	prepare->AddSequential(new AngelChange(0,1));
-	prepare->AddSequential(new AngelChange(NEAR_SHOT_ANGLE+1.5,5));
+	prepare->AddSequential(new AngelChange(AUTO_1_SHOT_ANGLE,5));
 
 	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 

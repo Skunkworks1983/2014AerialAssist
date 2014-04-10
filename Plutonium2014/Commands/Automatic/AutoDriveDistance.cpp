@@ -59,13 +59,10 @@ void AutoDriveDistance::Execute() {
 			/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
 	rSpeed *= fmax(fmin( (AUTO_DRIVE_DIST_CATCHUP - (leftDistanceRemaining - rightDistanceRemaining))
 			/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
-	printf("Left: %f\t%f\n", leftDistanceRemaining, lSpeed);
-	printf("Right: %f\t%f\n", rightDistanceRemaining, rSpeed);
 	driveBase->setSpeed(lSpeed, rSpeed);
 	if ((fabs(leftDistanceRemaining) <= threshold)
 			|| (fabs(rightDistanceRemaining) <= threshold)) {
 		stability++;
-		printf("Stable: %d\n", stability);
 	} else {
 		stability = 0;
 	}

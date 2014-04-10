@@ -84,7 +84,7 @@ void MFCBot::TeleopInit() {
 }
 
 void MFCBot::TeleopPeriodic() {
-	SmartDashboard::PutData(Scheduler::GetInstance());
+	//	SmartDashboard::PutData(Scheduler::GetInstance());
 	Scheduler::GetInstance()->Run();
 	WatchDog();
 	StallableMotor::updateControllers();
@@ -103,8 +103,8 @@ void MFCBot::TeleopPeriodic() {
 					CommandBase::beaglebone->gyro.pitch,
 					CommandBase::beaglebone->gyro.roll);
 		}
-		int verbosity= GET_INT(SMARTDASH_VERBOSITY);
-		if (GET_BOOL(ROBOT_VISUALIZATION)) {
+		int verbosity = SMARTDASH_VERBOSITY;
+		if (ROBOT_VISUALIZATION) {
 			robotState->PutBoolean("jawsClosed",
 					CommandBase::collector->getJawState());
 			robotState->PutNumber("pterodactylAngle",
@@ -180,7 +180,7 @@ void MFCBot::DisabledInit() {
 	Scheduler::GetInstance()->RemoveAll();
 
 	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);
-	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Portland-ThursdayMorn");
+	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line2, 1, "Portland-ThursLunchTune");
 	DriverStationLCD::GetInstance()->UpdateLCD();
 }
 

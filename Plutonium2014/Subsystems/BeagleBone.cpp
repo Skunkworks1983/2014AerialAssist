@@ -23,13 +23,12 @@ BeagleBone::BeagleBone() :
 
 	//	listen(listener, 1); // Listen for just one connection.
 
-	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
-			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-			== ERROR) {
-		Logger::log(Logger::kSevere, "BeagleBone",
-				"Failed to create listen thread.");
-	}
-
+//	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
+//			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+//			== ERROR) {
+//		Logger::log(Logger::kSevere, "BeagleBone",
+//				"Failed to create listen thread.");
+//	}
 }
 
 BeagleBone::~BeagleBone() {

@@ -7,7 +7,7 @@ HotGoalWait::HotGoalWait() {
 }
 void HotGoalWait::Initialize() {
 	table = NetworkTable::GetTable("DSVision");
-	table->PutBoolean("HotGoal", false);
+//	table->PutBoolean("HotGoal", false);
 	stability = 0;
 }
 void HotGoalWait::Execute() {

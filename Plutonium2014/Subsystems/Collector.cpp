@@ -26,7 +26,7 @@ Collector::Collector() :
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);
 	LiveWindow::GetInstance()->AddActuator("Collector", "PID Controller", rollerPIDController);
-	SmartDashboard::PutData("collectorPID", rollerPIDController);
+//	SmartDashboard::PutData("collectorPID", rollerPIDController);
 
 	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
 	LiveWindow::GetInstance()->AddSensor("Collector", "Ball Sensor", ballSensor);

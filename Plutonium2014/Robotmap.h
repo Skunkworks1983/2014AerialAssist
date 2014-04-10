@@ -12,7 +12,7 @@
 #define GET_BOOL(x) (Preferences::GetInstance()->GetBoolean(#x, x))
 #define GET_INT(x) (Preferences::GetInstance()->GetInt(#x, x))
 
-#define SMARTDASH_VERBOSITY 15
+#define SMARTDASH_VERBOSITY 0
 #define ROBOT_VISUALIZATION false
 
 // ================

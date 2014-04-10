@@ -3,8 +3,11 @@
 #include "Robotmap.h"
 
 #if COMPETITION_BOT
-#define NEAR_SHOT_POWER 0.905
-#define NEAR_SHOT_ANGLE 83.125
+#define AUTO_1_SHOT_POWER 0.914
+#define AUTO_1_SHOT_ANGLE 90.5
+
+#define NEAR_SHOT_POWER 0.947
+#define NEAR_SHOT_ANGLE 84.0
 
 #define TRUSS_SHOT_POWER 0.9
 #define TRUSS_SHOT_ANGLE 90.0
