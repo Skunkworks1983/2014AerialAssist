@@ -32,8 +32,8 @@ MFCBot::~MFCBot() {
 
 void MFCBot::createAutonomi() {
 	chooser = new SendableChooser();
-	chooser->AddDefault("This (Smart Auto)", Autonomous::create1Ball(60));
-	chooser->AddObject("Stupid Auto", Autonomous::createDerpy());
+	chooser->AddObject("This (Smart Auto)", Autonomous::create1Ball(96));
+	chooser->AddDefault("Stupid Auto", Autonomous::createDerpy());
 	chooser->AddObject("Blank", new Autonomous());
 	//	chooser->AddObject("One Ball", Autonomous::createAutoBall(1, 0));
 	//	chooser->AddObject("One Ball, Drive Back", Autonomous::createAutoBall(1,
@@ -45,7 +45,7 @@ void MFCBot::createAutonomi() {
 	//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
 	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
-	chooser->AddObject("Smart Drive", new AutoDriveDistance(60,2));
+	chooser->AddObject("Smart Drive", new AutoDriveDistance(96,2));
 	chooser->AddObject("Stupid Auto Two", Autonomous::createDerpyTwo());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }

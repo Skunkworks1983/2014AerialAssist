@@ -45,7 +45,7 @@ OI::OI() {
 	angleFloor = new DigitalIOButton(4);
 	angleLow = new DigitalIOButton(6);
 	angleMed = new DigitalIOButton(8);
-	angleHigh = new DigitalIOButton(13);
+	shotTruss = new DigitalIOButton(13);
 	startConfig = new DigitalIOButton(15);
 
 	fire = new DigitalIOButton(2);
@@ -93,7 +93,7 @@ void OI::registerButtonListeners() {
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
-	angleHigh->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3));//100));
+	shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3));//100));
 	shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
 	
 #if COMPETITION_BOT

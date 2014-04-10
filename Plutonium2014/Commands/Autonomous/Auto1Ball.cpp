@@ -25,12 +25,12 @@ Autonomous *Autonomous::create1Ball(float distance) {
 
 	prepare->AddParallel(new PrepareShooter(NEAR_SHOT_POWER));
 	prepare->AddSequential(new AngelChange(0,1));
-	prepare->AddSequential(new AngelChange(NEAR_SHOT_ANGLE,5));
+	prepare->AddSequential(new AngelChange(NEAR_SHOT_ANGLE+1.5,5));
 
 	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
-	drive->AddSequential(new AutoDriveDistance(distance,2)); //All of these magic number need to be less magic
+	drive->AddSequential(new AutoDriveDistance(distance,2,5)); //All of these magic number need to be less magic
 	cmd->AddSequential(drive);
 	cmd->AddSequential(new WaitCommand(0.5));
 

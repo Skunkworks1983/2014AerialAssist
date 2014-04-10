@@ -8,15 +8,15 @@
  *
  * @author David ;)
  */
-class AngelChange: public CommandBase {
+class AngelChange : public CommandBase {
 private:
 	float target;
 	int stability;
 	float tmpTarget;
-	
+
 	double brakeEngagedTime;
 public:
-	AngelChange(float target, float timeout = 10.0);
+	AngelChange(float target, float timeout =25.0);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

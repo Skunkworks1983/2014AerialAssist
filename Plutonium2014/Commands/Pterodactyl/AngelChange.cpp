@@ -7,7 +7,7 @@
 // Backend
 #include "../../Robotmap.h"
 
-#define ASYNC_BRAKE 1
+#define ASYNC_BRAKE 0
 
 AngelChange::AngelChange(float target, float timeout) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
@@ -15,7 +15,7 @@ AngelChange::AngelChange(float target, float timeout) :
 	this->target = target;
 	this->stability = 0;
 	this->tmpTarget = 0;
-	//SetTimeout(timeout);
+	SetTimeout(timeout);
 	SetInterruptible(true);
 }
 
@@ -62,7 +62,7 @@ bool AngelChange::IsFinished() {
 #if ASYNC_BRAKE
 	return brakeEngagedTime > 0 && brakeEngagedTime + 100 < getCurrentMillis();// || IsTimedOut();
 #else
-	return stability>13;
+	return stability>13 || IsTimedOut();
 #endif
 }
 

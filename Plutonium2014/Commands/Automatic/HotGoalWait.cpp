@@ -21,7 +21,7 @@ bool HotGoalWait::IsFinished() {
 	if (stability > 15) {
 		Logger::log(Logger::kFine, "Automatic", "Hot Goal Terminated");
 	}
-	return IsTimedOut() || DriverStation::GetInstance()->GetMatchTime() > 5.0 || stability > 15;
+	return IsTimedOut() || DriverStation::GetInstance()->GetMatchTime() > 7.0 || stability > 15;
 }
 void HotGoalWait::End() {
 }

@@ -26,7 +26,7 @@ Autonomous *Autonomous::createDerpy() {
 	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
 	drive->AddParallel(prepare);
-	drive->AddSequential(new AutoStupidDrive(2.5,-.375)); //All of these magic number need to be less magic
+	drive->AddSequential(new AutoStupidDrive(2.5,.375)); //All of these magic number need to be less magic
 	cmd->AddSequential(drive);
 	cmd->AddSequential(new WaitCommand(0.5));
 
@@ -34,6 +34,7 @@ Autonomous *Autonomous::createDerpy() {
 	cmd->AddSequential(new DiscBrake(Pterodactyl::kActive));
 	cmd->AddSequential(new WLatch(Shooter::kLatched));
 	cmd->AddSequential(new JawMove(Collector::kOpen, 0.5));
+	cmd->AddSequential(new HotGoalWait());
 	cmd->AddSequential(new SLatch(Shooter::kUnlatched));
 	cmd->AddSequential(new WaitCommand(1.5));
 

@@ -25,7 +25,7 @@ private:
 	DigitalIOButton *angleFloor;
 	DigitalIOButton *angleLow;
 	DigitalIOButton *angleMed;
-	DigitalIOButton *angleHigh;
+	DigitalIOButton *shotTruss;
 	DigitalIOButton *startConfig;
 
 	DigitalIOButton *fire;
