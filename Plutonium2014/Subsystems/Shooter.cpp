@@ -233,7 +233,7 @@ void Shooter::resetShooter() {
 	Logger::log(Logger::kInfo, "Shooter", "RESET ALL THE THINGS");
 	sLatchPatternBuffer.lastFallingEdge = -1;
 	sLatchPatternBuffer.lastRisingEdge = -1;
-	if (getRawProximity() && pullBackSwitchPatternBuffer.lastRisingEdge<0) {
+	if (getRawProximity() && pullBackSwitchPatternBuffer.lastRisingEdge < 0) {
 		pullBackSwitchPatternBuffer.lastRisingEdge = getCurrentMillis();
 	}
 }
