@@ -58,7 +58,7 @@ OI::OI() {
 
 	shotNear = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
-	power2 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+	shotSteep = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
 	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
@@ -95,13 +95,12 @@ void OI::registerButtonListeners() {
 	// Strap operations
 	shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3));//100));
 	shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
+	shotSteep->WhenPressed(new ReadyShot(STEEP_SHOT_POWER, STEEP_SHOT_ANGLE));
 	
 #if COMPETITION_BOT
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
-	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
 #else
 	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
-	power2->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_2, 95));
 #endif
 
 	// Jaw Override
@@ -109,11 +108,6 @@ void OI::registerButtonListeners() {
 	jawToggle->WhenReleased(new JawMove(Collector::kOpen));
 
 	resetShooter->WhenPressed(new ResetShooter());
-
-	SmartDashboard::PutNumber("targetangle", 10);
-	SmartDashboard::PutData("go target", new CommandStarter(OI::createAngle));
-	SmartDashboard::PutNumber("targetpower", 1);
-	SmartDashboard::PutData("go power target", new CommandStarter(OI::createPower));
 }
 
 Joystick *OI::getJoystickLeft() {

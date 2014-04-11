@@ -42,6 +42,7 @@ Pterodactyl::Pterodactyl() :
 	setBrakeState(Pterodactyl::kActive);
 	setAngleMotorSpeed(0);
 	pid->Disable();
+	angleThreshold = PTERODACTYL_ANGLE_THRESHOLD;
 }
 
 void Pterodactyl::InitDefaultCommand() {
@@ -177,6 +178,9 @@ double Pterodactyl::PIDGet() {
 
 bool Pterodactyl::isPIDFinished(bool ignorePIDState) {
 	return (!ignorePIDState && !pid->IsEnabled()) || fabs(getTarget()
-			-getAngle()) < PTERODACTYL_ANGLE_THRESHOLD;
+			-getAngle()) < angleThreshold;
 }
 
+void Pterodactyl::setTolerance(float tolerance) {
+	this->angleThreshold = tolerance;
+}

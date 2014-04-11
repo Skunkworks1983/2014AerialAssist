@@ -6,14 +6,12 @@ HotGoalWait::HotGoalWait() {
 	SetTimeout(5.0);
 }
 void HotGoalWait::Initialize() {
-	table = NetworkTable::GetTable("DSVision");
-//	table->PutBoolean("HotGoal", false);
 	stability = 0;
 }
 void HotGoalWait::Execute() {
 }
 bool HotGoalWait::IsFinished() {
-	if (table->GetBoolean("HotGoal", false)) {
+	if (beaglebone->isGyroActive() && beaglebone->gyro.roll == 1.0f) {
 		stability++;
 	} else {
 		stability = 0;

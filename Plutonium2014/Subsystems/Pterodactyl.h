@@ -21,6 +21,7 @@ public:
 private:
 	float initialError;
 	float target;
+	float angleThreshold;
 	DualLiveSpeed *angleMotors;
 	PID1983Controller *pid;
 	AnalogPot *pot;
@@ -31,7 +32,6 @@ public:
 
 	double getAngle();
 	double getRate();
-	void setAngle(float target);
 	void setAngleMotorSpeed(float speed);
 	float getAngleMotorSpeed();
 
@@ -45,6 +45,7 @@ public:
 	double getTarget();
 	void setOutputRange();
 	void stopPID();
+	void setTolerance(float tolerance = PTERODACTYL_ANGLE_THRESHOLD);
 	bool isPIDFinished(bool ignorePID = false);
 
 	float getPIDTarget();

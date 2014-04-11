@@ -17,7 +17,6 @@ void UpdateCompressor::Execute() {
 				&& !shooter->isReallyDrawnBack()) {
 			state = false;
 		}
-		SmartDashboard::PutBoolean("Compressor", state);
 //		if (!pterodactyl->isPIDFinished()) {
 //			state = false;
 //		}

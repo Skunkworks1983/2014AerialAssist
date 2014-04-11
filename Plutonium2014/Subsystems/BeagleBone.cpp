@@ -23,12 +23,12 @@ BeagleBone::BeagleBone() :
 
 	//	listen(listener, 1); // Listen for just one connection.
 
-//	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
-//			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-//			== ERROR) {
-//		Logger::log(Logger::kSevere, "BeagleBone",
-//				"Failed to create listen thread.");
-//	}
+	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
+			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+			== ERROR) {
+		Logger::log(Logger::kSevere, "BeagleBone",
+				"Failed to create listen thread.");
+	}
 }
 
 BeagleBone::~BeagleBone() {
@@ -84,7 +84,7 @@ void BeagleBone::ClientConnect() {
 		memset(&sin, 0, sizeof(sin));
 		sin.sin_family = AF_INET;
 		sin.sin_port = htons(PORT);
-		sin.sin_addr.s_addr = inet_addr("10.19.83.25");
+		sin.sin_addr.s_addr = inet_addr("10.19.83.5");
 
 		while (1) {
 			// bind can fail if socket is still out there listening.

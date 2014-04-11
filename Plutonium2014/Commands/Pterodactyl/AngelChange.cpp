@@ -15,8 +15,14 @@ AngelChange::AngelChange(float target, float timeout) :
 	this->target = target;
 	this->stability = 0;
 	this->tmpTarget = 0;
+	this->angleThreshold = PTERODACTYL_ANGLE_THRESHOLD;
 	SetTimeout(timeout);
 	SetInterruptible(true);
+}
+
+AngelChange *AngelChange::setTolerance(float tolerance) {
+	this->angleThreshold = tolerance;
+	return this;
 }
 
 void AngelChange::Initialize() {
@@ -27,6 +33,7 @@ void AngelChange::Initialize() {
 		tmpTarget = 45; //Safeties  Collector shouldn't go down in this case
 	}
 	pterodactyl->setTarget(tmpTarget+(tmpTarget>0?0.5:0));
+	pterodactyl->setTolerance(angleThreshold);
 	stability = 0;
 	//	} else {
 	//		stability = 50;

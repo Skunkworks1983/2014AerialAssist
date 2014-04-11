@@ -37,7 +37,7 @@ private:
 	DigitalIOButton *manPowerOvr;
 
 	AnalogRangeIOButton *power1;
-	AnalogRangeIOButton *power2;
+	AnalogRangeIOButton *shotSteep;
 	AnalogRangeIOButton *shotNear;
 
 	DigitalIOButton *preventShooterArming;
