@@ -37,7 +37,7 @@ Autonomous *Autonomous::create1Ball(float distance) {
 	// Fire Shooter Internal
 	cmd->AddSequential(new DiscBrake(Pterodactyl::kActive));
 	cmd->AddSequential(new WLatch(Shooter::kLatched));
-//	cmd->AddSequential(new HotGoalWait());
+	cmd->AddSequential(new HotGoalWait());
 	cmd->AddSequential(new JawMove(Collector::kOpen, 0.5));
 	cmd->AddSequential(new SLatch(Shooter::kUnlatched));
 	cmd->AddSequential(new WaitCommand(1.5));

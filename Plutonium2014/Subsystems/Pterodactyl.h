@@ -2,6 +2,7 @@
 #define __PTERODACTYL_H
 #include "Commands/Subsystem.h"
 #include "WPILib.h"
+#include "../Robotmap.h"
 
 /**
  *

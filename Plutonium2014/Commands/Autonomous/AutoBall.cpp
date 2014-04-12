@@ -14,12 +14,12 @@
 
 Autonomous *Autonomous::createAutoBall(int ballCount, float distance){
 	Autonomous *cmd = new Autonomous("Autonomous-AutoBall");
-	cmd->AddParallel(new ReadyShot(SHOOTER_POWER_TURNS_2));
+	cmd->AddParallel(new ReadyShot(1.0));
 	cmd->AddSequential(new AngelChange(AUTO_SHOT_ANGLE)); //All of these magic number need to be less magic
 	cmd->AddSequential(new FireShooter());
 	for(int i =1; i < ballCount; i++){
 		cmd->AddParallel(new AngelChange(0));
-		cmd->AddSequential(new ReadyShot(SHOOTER_POWER_TURNS_2));
+		cmd->AddSequential(new ReadyShot(1.0));
 		cmd->AddParallel(new AutoDriveDistance(5,10,0.5));
 		cmd->AddSequential(new Collect());
 		cmd->AddSequential(new AngelChange(AUTO_SHOT_ANGLE + ((i)*AUTO_SHOT_SCALAR))); //Only works with linear
