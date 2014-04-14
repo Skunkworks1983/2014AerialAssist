@@ -1,7 +1,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#define COMPETITION_BOT 0
+#define COMPETITION_BOT 1
 
 // ===============
 // = Preferences =
@@ -12,7 +12,7 @@
 #define GET_BOOL(x) (Preferences::GetInstance()->GetBoolean(#x, x))
 #define GET_INT(x) (Preferences::GetInstance()->GetInt(#x, x))
 
-#define SMARTDASH_VERBOSITY 15
+#define SMARTDASH_VERBOSITY 0
 #define ROBOT_VISUALIZATION false
 
 // ================
@@ -24,7 +24,7 @@
 // ================
 // == Pneumatics ==
 // ================
-#define COMPRESSOR_RELAY TOP_SIDECAR,3 /*S1*/
+#define COMPRESSOR_RELAY BOTTOM_SIDECAR,1 /*S1*/
 #define COMPRESSOR_PRESSURE_SENSOR BOTTOM_SIDECAR,2 /*BD1*/
 
 // ===============
@@ -49,7 +49,7 @@
 #define SHOOTER_PNEUMATIC_S_LATCH 5,6 /*L12 TBD*/
 #define SHOOTER_S_LATCH_SENSOR TOP_SIDECAR,2 /*T2*/
 #define SHOOTER_W_LATCH_SENSOR TOP_SIDECAR,1 /*T1*/
-#define SHOOTER_SLATCH_PATTERN_DELAY (100) /* Milliseconds to delay slatch reaction */
+#define SHOOTER_SLATCH_PATTERN_DELAY (0) /* Milliseconds to delay slatch reaction */
 #define SHOOTER_MOTOR_STALL_SPEED (0.05)
 #define SHOOTER_MOTOR_STALL_TIME (1500)
 
@@ -61,6 +61,7 @@
 #endif
 
 #define SHOOTER_WENCH_ENCODER 8,9
+
 #define SHOOTER_WENCH_POT_BACK (0.0)
 #define SHOOTER_WENCH_POT_BACK_NEAR (0.08)
 
@@ -78,7 +79,7 @@
 #if COMPETITION_BOT
 // .225 = FULL BACK (0)
 // 1.622 = FULL OUT (1.1)
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.100000
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #endif
@@ -86,7 +87,7 @@
 #define SHOOTER_PATTERN_KILLZONE 200 /*Need a killzone in ms during which any changes are discarded*/
 
 #define SHOOTER_SLATCH_WAIT 500
-#define SHOOTER_WLATCH_WAIT 500
+#define SHOOTER_WLATCH_WAIT 750
 
 #define SHOOTER_WLATCH_LOCK_DRIVE 200 /*RUN MOTOR TIME TO LOCK IN MS*/
 #define SHOOTER_WENCH_MOTOR_FORCE_LATCH (-1.0)
@@ -106,15 +107,15 @@
 #define COLLECTOR_JAW_SOLENOID_A (3) /*J1*/
 #define COLLECTOR_JAW_SOLENOID_B (4) /*J2*/
 #define COLLECTOR_ROLLER_TICKS_PER_ROTATION (256.0)
-#define COLLECTOR_ROLLER_MAX_RPM (1200.0)
-#define COLLECTOR_ROLLER_INTAKE_SET_POINT (1000)
+#define COLLECTOR_ROLLER_MAX_RPM (5000.0)
+#define COLLECTOR_ROLLER_INTAKE_SET_POINT (3000)
 #define COLLECTOR_ROLLER_STALL_SPEED (0.01)
 
 // ===============
 // == Automatic ==
 // ===============
-#define AUTO_DRIVE_DIST_STABILITY (1)	/*all values are arbitrary, need actual values*/
-#define AUTO_DRIVE_DIST_THRESHOLD (1)
+#define AUTO_DRIVE_DIST_STABILITY (2)	/*all values are arbitrary, need actual values*/
+#define AUTO_DRIVE_DIST_THRESHOLD (.5)
 #define AUTO_DRIVE_DIST_SPEED_MIN (.1)
 #define AUTO_DRIVE_DIST_SPEED_MAX (.75)
 #define AUTO_DRIVE_DIST_SLOW_DOWN (.5)
@@ -144,6 +145,7 @@
 #define PTERODACTYL_BRAKE_ACTIVE TOP_SIDECAR,2
 #define PTERODACTYL_MIN_ANGLE (0)
 #define PTERODACTYL_MAX_ANGLE (90.0)
+#define PTERODACTYL_ANGLE_THRESHOLD (2.0)
 
 #define PTERODACTYL_POT_VOLTAGE_TO_ANGLE_COEFF (0), (56.845/PTERODACTYL_MAX_ANGLE), (-60/PTERODACTYL_MAX_ANGLE)
 
@@ -156,9 +158,6 @@
 #define OI_JOYSTICK_RIGHT (2)
 #define OI_JOYSTICK_DRIVE_DEADBAND (0.1)
 #define OI_JOYSTICK_SQUIRRLY_POWER (2.0)
-#define OI_ANALOG_TRESHOLD (0.2)
+#define OI_ANALOG_TRESHOLD (0.1)
 #define OI_SHOOTER_POWER_PORT (2)
-#define SHOOTER_POWER_TURNS_1 (0.5)
-#define SHOOTER_POWER_TURNS_2 (0.75)
-#define SHOOTER_POWER_TURNS_3 (1.1)
 #endif

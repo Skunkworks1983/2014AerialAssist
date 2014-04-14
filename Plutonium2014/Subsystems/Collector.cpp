@@ -21,12 +21,12 @@ Collector::Collector() :
 			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED,500))->setEncoderSource(rollerClawEncoder);
 	rollerMotor->setName("Collector Motor");
 
-	rollerPIDController= new PIDController(1, .1, .01, rollerClawEncoder,
+	rollerPIDController= new PIDController(2, .2, .05, rollerClawEncoder,
 			rollerMotor, 0.05f);
 	rollerPIDController->SetInputRange(-2.0, 2.0);
 	rollerPIDController->SetOutputRange(-1.0, 1.0);
 	LiveWindow::GetInstance()->AddActuator("Collector", "PID Controller", rollerPIDController);
-	SmartDashboard::PutData("collectorPID", rollerPIDController);
+//	SmartDashboard::PutData("collectorPID", rollerPIDController);
 
 	ballSensor = new DigitalInput(COLLECTOR_BALL_SENSOR);
 	LiveWindow::GetInstance()->AddSensor("Collector", "Ball Sensor", ballSensor);
@@ -78,11 +78,7 @@ bool Collector::isRollerStalled() {
 }
 
 double Collector::getRollerSpeed() {
-	return rollerClawEncoder->GetRate();
-}
-
-double Collector::getRollerDistance() {
-	return rollerClawEncoder->GetDistance();
+	return rollerClawEncoder->GetRate()*COLLECTOR_ROLLER_MAX_RPM;
 }
 
 bool Collector::isBallDetected() {

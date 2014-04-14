@@ -8,14 +8,17 @@
 #include "PrepareShooter.h"
 #include "../Pterodactyl/AngelChange.h"
 
-ReadyShot::ReadyShot(float setTurns, float angle) :
+ReadyShot::ReadyShot(float setTurns, float angle, float angleThreshold) :
 	CommandGroup("ReadyShot") {
 	if (angle > 0) {
-		AddParallel(new AngelChange(angle));
+		if (angleThreshold > 0) {
+			AddParallel((new AngelChange(angle))->setTolerance(angleThreshold));
+		} else {
+			AddParallel(new AngelChange(angle));
+		}
 	}
 	AddSequential(new DrawShooter());
 	AddSequential(new PrepareShooter(setTurns));
-	SetInterruptible(false);
 }
 
 void ReadyShot::Initialize() {

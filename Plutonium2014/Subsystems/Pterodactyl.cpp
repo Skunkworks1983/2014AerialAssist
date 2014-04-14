@@ -9,7 +9,6 @@
 #define PTERODACTYL_P 2.5
 #define PTERODACTYL_I .5
 #define PTERODACTYL_D 0.5
-#define PTERODACTYL_ANGLE_THRESHOLD (2.0)
 
 #define PID_EQUATION_METHOD 1
 
@@ -26,18 +25,16 @@ Pterodactyl::Pterodactyl() :
 	LiveWindow::GetInstance()->AddSensor("Pterodactyl", "Potentiometer", pot);
 #if PID_EQUATION_METHOD
 	pid = new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f);
-	pid->m_maximumITerm = 0.5;
 #else
 	pid
 	= new PID1983Controller(PTERODACTYL_P, PTERODACTYL_I, PTERODACTYL_D,pot, this, 0.05f / 4.0f);
-	pid->m_maximumITerm = 0.150;
 #endif
 	pid->SetInputRange(-2.0, 2.0);
 	pid->SetOutputRange(-1.0, 1.0);
 	pid->SetAbsoluteTolerance(
 	PTERODACTYL_ANGLE_THRESHOLD / (double) PTERODACTYL_MAX_ANGLE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "PID Controller", pid);
-	SmartDashboard::PutData("Pterodactylz PID", pid);
+//	SmartDashboard::PutData("Pterodactylz PID", pid);
 
 	brake = new Relay(PTERODACTYL_BRAKE_ACTIVE);
 	LiveWindow::GetInstance()->AddActuator("Pterodactyl", "Brake", brake);
@@ -45,6 +42,7 @@ Pterodactyl::Pterodactyl() :
 	setBrakeState(Pterodactyl::kActive);
 	setAngleMotorSpeed(0);
 	pid->Disable();
+	angleThreshold = PTERODACTYL_ANGLE_THRESHOLD;
 }
 
 void Pterodactyl::InitDefaultCommand() {
@@ -71,32 +69,44 @@ void Pterodactyl::setAngleMotorSpeed(float speed) {
 void Pterodactyl::setOutputRange() {
 	float angle = getAngle();
 #if PID_EQUATION_METHOD
+	pid->m_maximumITerm = 0.5;
 	double p, i, d;
 	if (target>40) {
 		//		float volts = DriverStation::GetInstance()->GetBatteryVoltage(); TODO Can I make it adaptive?
+		float target = this->target;
+		if (target > 90) {
+			target = 90;
+		}
 		p = 1615.3*pow(target, -1.578);
-		i = 2.0*pow(2.71, -.055*target);
+		i = 2.0*pow(2.71, -.06*target);
 		d = 97.34*pow(target, -0.85);
 		d /= 2.0;
 		if (fabs(initialError) < 30) { // Extra corrections
 			float divider = fabs(initialError);
-			if (divider <7.5) {
-				divider = 7.5;
+			if (divider < 10.0) {
+				divider = 10.0;
 			}
 			if (initialError < 0) {
 				p *= 25.0 / divider;
 				i *= 125.0 / divider;
 			} else {
 				p *= 25.0 / divider;
-				i *= 250.0 / divider;
+				i *= 200.0 / divider;
 			}
 		}
+	} else if (target > 20) {
+		pid->m_maximumITerm = 0.150;
+		p = 2.5/1.5;
+		i = 0.25;
+		d = 0.25;
 	} else {
 		p = .75;
 		i = .0105;
 		d = .05;
 	}
 	pid->SetPID(p, i, d);
+#else
+	pid->m_maximumITerm = 0.150;
 #endif
 	if (initialError> 0) {
 		if (angle < 25) {
@@ -168,6 +178,9 @@ double Pterodactyl::PIDGet() {
 
 bool Pterodactyl::isPIDFinished(bool ignorePIDState) {
 	return (!ignorePIDState && !pid->IsEnabled()) || fabs(getTarget()
-			-getAngle()) < PTERODACTYL_ANGLE_THRESHOLD;
+			-getAngle()) < angleThreshold;
 }
 
+void Pterodactyl::setTolerance(float tolerance) {
+	this->angleThreshold = tolerance;
+}

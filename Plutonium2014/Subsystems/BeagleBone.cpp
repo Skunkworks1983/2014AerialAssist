@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 
 #include "../Utils/Time.h"
+#include "../Utils/Logger.h"
 
 BeagleBone *BeagleBone::bone= NULL;
 
@@ -19,15 +20,15 @@ BeagleBone::BeagleBone() :
 
 	lastGyroUpdate = -1;
 	lastVisionUpdate = -1;
-	
+
 	//	listen(listener, 1); // Listen for just one connection.
 
-	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
-			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-			== ERROR) {
-		cout<<"Task creation error do_often Task "<<errno<<endl;
-	}
-
+//	if ((tid = taskSpawn("SocketComm", 100, 0, 10000,
+//			(FUNCPTR) BeagleBone::runTask, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+//			== ERROR) {
+//		Logger::log(Logger::kSevere, "BeagleBone",
+//				"Failed to create listen thread.");
+//	}
 }
 
 BeagleBone::~BeagleBone() {
@@ -71,49 +72,51 @@ bool BeagleBone::Connected() {
 }
 
 void BeagleBone::ClientConnect() {
-	printf("Do comm begin\n");
-	if ((connsock = socket(AF_INET, SOCK_STREAM, 0)) == -1) { // Should never fail.
-		cout<<"Server listener create Error"<<endl;
-		return;
-	}
-
-	printf("Server listener do\n");
-	struct sockaddr_in sin;
-	memset((char *) &sin, 0, sizeof(sin));
-	memset(&sin, 0, sizeof(sin));
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(PORT);
-	sin.sin_addr.s_addr = inet_addr("10.19.83.25");
-
-	// bind can fail if socket is still out there listening.
-	// This scenario happens when loading new code without reboot.
-	if (connect(connsock, (struct sockaddr *) &sin, sizeof(sin)) == -1) {
-		cout<<"Bind failed must still be running from before."<<endl;
-		return;
-	}
-	
-	printf("Conn sock do\n");
-	
 	while (1) {
-		int ret = read(connsock, data, BUFLEN);
+		Logger::log(Logger::kFinest, "BeagleBone", "Beginning Read Thread");
+		if ((connsock = socket(AF_INET, SOCK_STREAM, 0)) == -1) { // Should never fail.
+			cout<<"Server listener create Error"<<endl;
+			return;
+		}
 
-		if (ret < 0)
-			connsock = -1;
+		struct sockaddr_in sin;
+		memset((char *) &sin, 0, sizeof(sin));
+		memset(&sin, 0, sizeof(sin));
+		sin.sin_family = AF_INET;
+		sin.sin_port = htons(PORT);
+		sin.sin_addr.s_addr = inet_addr("10.19.83.5");
 
-		else if (ret == 0) // Other end hung up.
-		{
-			close(connsock);
-			connsock = -1;
-		} else {
-			data[ret]=0;
-			numbytes = ret;
-			char * p = new char[numbytes];
-			if (GetData(p) > 0) {
-				parse(p);
+		while (1) {
+			// bind can fail if socket is still out there listening.
+			// This scenario happens when loading new code without reboot.
+			if (connect(connsock, (struct sockaddr *) &sin, sizeof(sin)) == -1) {
+				Wait(10.0);
+				continue;
+			} else {
+				break;
+			}
+		}
+		Logger::log(Logger::kInfo, "BeagleBone", "Connected!");
+
+		while (connsock != -1) {
+			int ret = read(connsock, data, BUFLEN);
+
+			if (ret < 0) {
+				connsock = -1;
+			} else if (ret == 0) // Other end hung up.
+			{
+				close(connsock);
+				connsock = -1;
+			} else {
+				data[ret]=0;
+				numbytes = ret;
+				char * p = new char[numbytes];
+				if (GetData(p) > 0) {
+					parse(p);
+				}
 			}
 		}
 	}
-	return; // Must have succeeded. Never get here.
 }
 
 void BeagleBone::parse(char *data) {

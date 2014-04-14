@@ -28,15 +28,15 @@ void FullTension::Execute() {
 bool FullTension::IsFinished() {
 	bool state = shooter->isReallyDrawnBack();
 	if (shooter->isLatchedByPattern()) {
-		Logger::log(Logger::kInfo, "Shooter-FullTension", "Pattern stop");
+		Logger::log(Logger::kFine, "Shooter-FullTension", "Pattern stop");
 	}
 #if SHOOTER_LIMITSWITCH
 	if (shooter->isLatchedByProximity()) {
-		Logger::log(Logger::kInfo, "Shooter-FullTension", "Proximity stop");
+		Logger::log(Logger::kFine, "Shooter-FullTension", "Proximity stop");
 	}
 #endif
 	if (shooter->getTurns() <= SHOOTER_WENCH_POT_BACK){
-		Logger::log(Logger::kInfo, "Shooter-FullTension", "Potentiometer stop");
+		Logger::log(Logger::kFine, "Shooter-FullTension", "Potentiometer stop");
 	}
 	return state;
 }

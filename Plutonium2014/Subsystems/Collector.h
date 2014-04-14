@@ -37,7 +37,6 @@ public:
 	double getDiff();
 
 	double getRollerSpeed();
-	double getRollerDistance();
 
 	bool isPIDEnabled();
 	bool isRollerStalled();

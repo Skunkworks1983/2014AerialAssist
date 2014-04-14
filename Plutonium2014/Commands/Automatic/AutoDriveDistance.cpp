@@ -11,9 +11,8 @@
 
 AutoDriveDistance::AutoDriveDistance(float targetDistance, float tStable,
 		float tThresh) :
-		CommandBase(
-				CommandBase::createNameFromFloat("AutoDriveDistance",
-						targetDistance)) {
+	CommandBase(CommandBase::createNameFromFloat("AutoDriveDistance",
+			targetDistance)) {
 	Requires(driveBase);
 	this->targetDistance = targetDistance;
 	this->tStable = tStable;
@@ -22,7 +21,7 @@ AutoDriveDistance::AutoDriveDistance(float targetDistance, float tStable,
 	this->minSpeed = AUTO_DRIVE_DIST_SPEED_MIN;
 	this->maxSpeed = AUTO_DRIVE_DIST_SPEED_MAX;
 
-//Reset things
+	//Reset things
 	this->stability = 0;
 	this->rightDistanceRemaining = 1e9;
 	this->leftDistanceRemaining = 1e9;
@@ -41,36 +40,25 @@ AutoDriveDistance *AutoDriveDistance::setOutputRange(float min, float max) {
 
 void AutoDriveDistance::Initialize() {
 	if (!reset) {
-		targetDistance =
-				((targetDistance - driveBase->getLeftEncoder()->GetDistance())
-						+ (targetDistance
-								- driveBase->getRightEncoder()->GetDistance()))
-						/ 2.0;
+		targetDistance = ((targetDistance - driveBase->getLeftEncoder()->GetDistance()) + (targetDistance
+				- driveBase->getRightEncoder()->GetDistance())) / 2.0;
 	}
-	driveBase->getLeftEncoder()->Reset();
-	driveBase->getRightEncoder()->Reset();
+	driveBase->encoderReset();
+	driveBase->setDriveGear(DriveBase::kHigh);
 	stability = 0;
 }
 
 void AutoDriveDistance::Execute() {
-	leftDistanceRemaining = targetDistance
-			- driveBase->getLeftEncoder()->GetDistance();
-	rightDistanceRemaining = targetDistance
-			- driveBase->getRightEncoder()->GetDistance();
+	leftDistanceRemaining = targetDistance - driveBase->getLeftEncoder()->GetDistance();
+	rightDistanceRemaining = targetDistance - driveBase->getRightEncoder()->GetDistance();
 	float lSpeed = getSpeedFor(leftDistanceRemaining,
 			driveBase->getLeftEncoder()->GetRate());
 	float rSpeed = getSpeedFor(rightDistanceRemaining,
 			driveBase->getRightEncoder()->GetRate());
-	lSpeed *= fmax(
-			fmin(
-					(AUTO_DRIVE_DIST_CATCHUP
-							- (rightDistanceRemaining - leftDistanceRemaining))
-							/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
-	rSpeed *= fmax(
-			fmin(
-					(AUTO_DRIVE_DIST_CATCHUP
-							- (leftDistanceRemaining - rightDistanceRemaining))
-							/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
+	lSpeed *= fmax(fmin( (AUTO_DRIVE_DIST_CATCHUP - (rightDistanceRemaining - leftDistanceRemaining))
+			/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
+	rSpeed *= fmax(fmin( (AUTO_DRIVE_DIST_CATCHUP - (leftDistanceRemaining - rightDistanceRemaining))
+			/ AUTO_DRIVE_DIST_CATCHUP, 1.0), 0.0);
 	driveBase->setSpeed(lSpeed, rSpeed);
 	if ((fabs(leftDistanceRemaining) <= threshold)
 			|| (fabs(rightDistanceRemaining) <= threshold)) {
@@ -85,7 +73,8 @@ float AutoDriveDistance::getSpeedFor(float distanceRemaining, float speed) {
 		return 0.0; //-speed / AUTO_DRIVE_DIST_SLOW_DOWN;
 	}
 
-	float speedScaleFactor = fabs(distanceRemaining) / AUTO_DRIVE_DIST_SLOW_DOWN;
+	float speedScaleFactor = fabs(distanceRemaining)
+			/ AUTO_DRIVE_DIST_SLOW_DOWN;
 	return fmin(maxSpeed, ((maxSpeed - minSpeed) * speedScaleFactor) + minSpeed)
 			* fsign(distanceRemaining);
 }

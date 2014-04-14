@@ -8,13 +8,18 @@
  *
  * @author David ;)
  */
-class AngelChange: public CommandBase {
+class AngelChange : public CommandBase {
 private:
 	float target;
 	int stability;
 	float tmpTarget;
+	
+	float angleThreshold;
+
+	double brakeEngagedTime;
 public:
-	AngelChange(float target, float timeout = 10.0);
+	AngelChange(float target, float timeout =25.0);
+	AngelChange *setTolerance(float tolerance);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();

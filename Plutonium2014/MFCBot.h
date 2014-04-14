@@ -9,6 +9,7 @@ class MFCBot: public IterativeRobot {
 private:
 	int dont;
 	int trueTicks;
+	int watchdogTicks;
 	void createAutonomi();
 	ITable *robotState;
 	Relay *thingy;

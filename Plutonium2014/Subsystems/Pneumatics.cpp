@@ -16,7 +16,7 @@ void Pneumatics::InitDefaultCommand() {
 }
 
 void Pneumatics::setState(bool state) {
-	relay->Set(state ? Relay::kForward : Relay::kOff);
+	relay->Set(state ? Relay::kReverse : Relay::kOff);
 }
 
 bool Pneumatics::isCompressorOn() {
