@@ -1,7 +1,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#define COMPETITION_BOT 1
+#define COMPETITION_BOT 0
 
 // ===============
 // = Preferences =
@@ -12,7 +12,7 @@
 #define GET_BOOL(x) (Preferences::GetInstance()->GetBoolean(#x, x))
 #define GET_INT(x) (Preferences::GetInstance()->GetInt(#x, x))
 
-#define SMARTDASH_VERBOSITY 0
+#define SMARTDASH_VERBOSITY 15
 #define ROBOT_VISUALIZATION false
 
 // ================
@@ -72,14 +72,12 @@
 #define SHOOTER_WENCH_MOTOR_FULL_BACK_NEAR (0.75)
 
 #define SHOOTER_WENCH_MOTOR_FULL_RELEASE (-1.00)
-#define SHOOTER_WENCH_MOTOR_FULL_RELEASE_NEAR (-0.5)
+#define SHOOTER_WENCH_MOTOR_FULL_RELEASE_NEAR (-0.35)
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE (0.01)
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE_NEAR (0.1)
 
 #if COMPETITION_BOT
-// .225 = FULL BACK (0)
-// 1.622 = FULL OUT (1.1)
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.075
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #endif
@@ -156,6 +154,7 @@
 // =================
 #define OI_JOYSTICK_LEFT (1)
 #define OI_JOYSTICK_RIGHT (2)
+#define PRACTICE_OI (1)
 #define OI_JOYSTICK_DRIVE_DEADBAND (0.1)
 #define OI_JOYSTICK_SQUIRRLY_POWER (2.0)
 #define OI_ANALOG_TRESHOLD (0.1)

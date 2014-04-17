@@ -40,7 +40,7 @@ Autonomous *Autonomous::create1Ball(float distance) {
 	cmd->AddSequential(new HotGoalWait());
 	cmd->AddSequential(new JawMove(Collector::kOpen, 0.5));
 	cmd->AddSequential(new SLatch(Shooter::kUnlatched));
-	cmd->AddSequential(new WaitCommand(1.5));
+	cmd->AddSequential(new WaitCommand(1.0));
 
 	cmd->AddParallel(new AngelChange(0));
 	cmd->AddParallel(new DrawShooter());

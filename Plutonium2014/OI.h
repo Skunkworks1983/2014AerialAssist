@@ -1,46 +1,42 @@
 #ifndef OI_H
 #define OI_H
 
-class Joystick;
-class JoystickButton;
-class DigitalIOButton;
-class CompositeButton;
 class Button;
-class AnalogRangeIOButton;
 class Command;
+class Joystick;
 
 class OI {
 private:
 	Joystick *joystickLeft;
 	Joystick *joystickRight;
 
-	CompositeButton *collectButton;
-	JoystickButton *shiftButton;
+	Button *collectButton;
+	Button *shiftButton;
 
-	DigitalIOButton *catch1;
-	DigitalIOButton *resetShooter;
-	DigitalIOButton *collect;
-	DigitalIOButton *pass;
+	Button *catch1;
+	Button *resetShooter;
+	Button *collect;
+	Button *pass;
 
-	DigitalIOButton *angleFloor;
-	DigitalIOButton *angleLow;
-	DigitalIOButton *angleMed;
-	DigitalIOButton *shotTruss;
-	DigitalIOButton *startConfig;
+	Button *angleFloor;
+	Button *angleLow;
+	Button *angleMed;
+	Button *shotTruss;
+	Button *startConfig;
 
-	DigitalIOButton *fire;
-	DigitalIOButton *revCollector;
+	Button *fire;
+	Button *revCollector;
 
 	Button *jawToggle;
 
-	DigitalIOButton *manAngleOvr;
-	DigitalIOButton *manPowerOvr;
+	Button *manAngleOvr;
+	Button *manPowerOvr;
 
-	AnalogRangeIOButton *power1;
-	AnalogRangeIOButton *shotSteep;
-	AnalogRangeIOButton *shotNear;
+	Button *power1;
+	Button *shotSteep;
+	Button *shotNear;
 
-	DigitalIOButton *preventShooterArming;
+	Button *preventShooterArming;
 public:
 	OI();
 	Joystick *getJoystickLeft();

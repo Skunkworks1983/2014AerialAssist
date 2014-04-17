@@ -15,6 +15,7 @@
 #include "Commands/Shooter/Latches/WLatch.h"
 #include "Commands/Autonomous/Autonomous.h"
 #include "Commands/Shooter/PrepareShooter.h"
+#include "Commands/Shooter/DrawShooter.h"
 #include "Commands/Autonomous/AutoStupidDrive.h"
 #include "Commands/Automatic/AutoDriveDistance.h"
 
@@ -45,7 +46,7 @@ void MFCBot::createAutonomi() {
 	//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
 	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
-	chooser->AddObject("Smart Drive", new AutoDriveDistance(40,2));
+	chooser->AddObject("Smart Drive", new AutoDriveDistance(40,2,5));
 	chooser->AddObject("Stupid Auto Two", Autonomous::createDerpyTwo());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }
@@ -68,6 +69,7 @@ void MFCBot::AutonomousInit() {
 		cmd->Start();
 		printf("Starting AUTO: %s\n", cmd->GetName().c_str());
 	}
+	SmartDashboard::PutBoolean("HotGoal",false);
 
 	Logger::log(Logger::kInfo, "Main", "Autonomous Init%s",
 			DriverStation::GetInstance()->IsFMSAttached() ? ":FMS" : "");
@@ -84,6 +86,10 @@ void MFCBot::TeleopInit() {
 	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
 	Logger::log(Logger::kInfo, "Main", "Teleop Init%s",
 			DriverStation::GetInstance()->IsFMSAttached() ? ":FMS" : "");
+	
+	if (CommandBase::shooter!=NULL && !CommandBase::shooter->isReallyDrawnBack()) {
+		(new DrawShooter())->Start();
+	}
 }
 
 void MFCBot::TeleopPeriodic() {

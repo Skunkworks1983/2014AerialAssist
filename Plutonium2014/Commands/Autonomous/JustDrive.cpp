@@ -7,6 +7,6 @@
 
 Autonomous *Autonomous::createJustDrive(float distance){
 	Autonomous *cmd = new Autonomous("Autonomous-JustDrive");
-	cmd->AddSequential(new AutoDriveDistance(20,10,2));
+	cmd->AddSequential(new AutoDriveDistance(20,2,5));
 	return cmd;
 }

@@ -29,8 +29,43 @@
 #include <math.h>
 
 #define START_STOP_COMMAND(btnA, cmd, sleep) {Command *command=cmd; btnA->WhenReleased(command); btnA->WhenPressed(new CommandCanceler(command, sleep));}
+#define SAFE_BUTTON(name, cmd) {if (name!=NULL){cmd;}}
 
 OI::OI() {
+#if PRACTICE_OI
+
+	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
+	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
+	shiftButton = new JoystickButton(joystickLeft, 1);
+	collectButton = new CompositeButton(new JoystickButton(joystickRight, 1),NULL,CompositeButton::kNOT);
+
+	catch1 = NULL;
+	resetShooter = new DigitalIOButton(8);
+	collect = new DigitalIOButton(5);
+	pass = new DigitalIOButton(1);
+
+	angleFloor = new DigitalIOButton(2);
+	angleLow = NULL;
+	angleMed = new DigitalIOButton(9);
+	shotTruss = new DigitalIOButton(4);
+	startConfig = new DigitalIOButton(7);
+
+	fire = new DigitalIOButton(10);
+	revCollector = new DigitalIOButton(3);
+	jawToggle = NULL;
+	manAngleOvr = NULL;
+	manPowerOvr = NULL;
+	power1 = NULL;
+	shotSteep = NULL;
+	shotNear = NULL;
+	preventShooterArming = NULL;
+	//	jawToggle = new OverridableButton(new DigitalIOButton(12),
+	//			new DigitalIOButton(11), false);
+	//	preventShooterArming = new DigitalIOButton(13);
+	//	manAngleOvr = new DigitalIOButton(16);
+	//	manPowerOvr = new DigitalIOButton(14);
+	shotNear = new DigitalIOButton(6);
+#else
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
 	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
 	// Process operator interface input here.
@@ -62,52 +97,49 @@ OI::OI() {
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
 	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
+#endif
 }
 void OI::registerButtonListeners() {
 	// Drivebase
-	shiftButton->WhenPressed(new Shift(Shift::kLow));
-	shiftButton->WhenReleased(new Shift(Shift::kHigh));
+	SAFE_BUTTON(shiftButton,shiftButton->WhenPressed(new Shift(Shift::kLow)));
+	SAFE_BUTTON(shiftButton,shiftButton->WhenReleased(new Shift(Shift::kHigh)));
 
 	// Pterodactyl Angle
-	angleFloor->WhenPressed(new AngelChange(0));
-	angleLow->WhenPressed(new AngelChange(30));//75));
-	angleMed->WhenPressed(new AngelChange(84));//90));
+	SAFE_BUTTON(angleFloor,angleFloor->WhenPressed(new AngelChange(0)));
+	SAFE_BUTTON(angleLow,angleLow->WhenPressed(new AngelChange(30)));
+	SAFE_BUTTON(angleMed,angleMed->WhenPressed(new AngelChange(84)));
 
 	CommandGroup *startCfgCmd = new CommandGroup();
 	startCfgCmd->AddSequential(new AngelChange(111.5));
 	startCfgCmd->AddParallel(new JawMove(Collector::kClosed));
-	startConfig->WhenPressed(startCfgCmd);
+	SAFE_BUTTON(startConfig,startConfig->WhenPressed(startCfgCmd));
 
 	// Collector rollers
-	revCollector->WhenPressed(new Gulp());
+	SAFE_BUTTON(revCollector,revCollector->WhenPressed(new Gulp()));
 	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
-	START_STOP_COMMAND(collect, new Collect(), 1);
-	START_STOP_COMMAND(collectButton, new Collect(), 1);
+	SAFE_BUTTON(collect,START_STOP_COMMAND(collect, new Collect(), 1));
+	SAFE_BUTTON(collectButton,START_STOP_COMMAND(collectButton, new Collect(), 1));
 
 	// Jaw Operations
-	pass->WhenPressed(new Pass());
-	catch1->WhenPressed(new Catch(90));
+	SAFE_BUTTON(pass, pass->WhenPressed(new Pass()));
+	SAFE_BUTTON(catch1, catch1->WhenPressed(new Catch(90)));
 
 	// Shooter operations
-	fire->WhenReleased(new FireShooter());
+	SAFE_BUTTON(fire,fire->WhenReleased(new FireShooter()));
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
-	shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3));//100));
-	shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE));
-	shotSteep->WhenPressed(new ReadyShot(STEEP_SHOT_POWER, STEEP_SHOT_ANGLE));
-	
-#if COMPETITION_BOT
-	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
-#else
-	power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1));
-#endif
+	SAFE_BUTTON(shotTruss,shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3)));
+	SAFE_BUTTON(shotNear,shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE)));
+	SAFE_BUTTON(shotSteep,shotSteep->WhenPressed(new ReadyShot(STEEP_SHOT_POWER, STEEP_SHOT_ANGLE)));
+
+	SAFE_BUTTON(power1, power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1)));
 
 	// Jaw Override
-	jawToggle->WhenPressed(new JawMove(Collector::kClosed));
-	jawToggle->WhenReleased(new JawMove(Collector::kOpen));
+	SAFE_BUTTON(jawToggle,jawToggle->WhenPressed(new JawMove(Collector::kClosed)));
+	SAFE_BUTTON(jawToggle,jawToggle->WhenReleased(new JawMove(Collector::kOpen)));
 
-	resetShooter->WhenPressed(new ResetShooter());
+	SAFE_BUTTON(resetShooter,resetShooter->WhenPressed(new ResetShooter()));
 }
 
 Joystick *OI::getJoystickLeft() {
@@ -119,16 +151,22 @@ Joystick *OI::getJoystickRight() {
 }
 
 bool OI::isShooterArmingPrevented() {
-	return !preventShooterArming->Get();
+	return preventShooterArming != NULL && !preventShooterArming->Get();
 }
 
 float OI::getAngleAdjustment() {
+	if (manAngleOvr==NULL) {
+		return 0;
+	}
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(3);
 	return !manAngleOvr->Get() ? 0.56 - (0.3923 * log(4.0 - volts) + 0.3979)
 			: 0.0;
 }
 
 float OI::getPowerAdjustment() {
+	if (manPowerOvr==NULL) {
+		return 0;
+	}
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(1);
 	return !manPowerOvr->Get() ? 0.56 - (0.3923 * log(4.0 - volts) + 0.3979)
 			: 0.0;

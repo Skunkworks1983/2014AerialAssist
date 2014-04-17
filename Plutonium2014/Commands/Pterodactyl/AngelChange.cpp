@@ -56,18 +56,22 @@ void AngelChange::Execute() {
 		pterodactyl->setTarget(tmpTarget+(tmpTarget>0 ? 0.5 : 0));
 	}
 #if ASYNC_BRAKE
-	if (stability > 13 && (tmpTarget != 45 || target>45)) {
-		brakeEngagedTime = getCurrentMillis();
-		if (target > 0) {
+	if ((stability> 13||IsTimedOut()) && (tmpTarget == target)) {
+		if (brakeEngagedTime <= 0) {
+			brakeEngagedTime = getCurrentMillis();
+		}
+		if (target> 0) {
 			pterodactyl->setBrakeState(Pterodactyl::kActive);
 		}
+	} else {
+		brakeEngagedTime = 0;
 	}
 #endif
 }
 
 bool AngelChange::IsFinished() {
 #if ASYNC_BRAKE
-	return brakeEngagedTime > 0 && brakeEngagedTime + 100 < getCurrentMillis();// || IsTimedOut();
+	return brakeEngagedTime> 0 && brakeEngagedTime + 100 < getCurrentMillis();
 #else
 	return stability>13 || IsTimedOut();
 #endif
