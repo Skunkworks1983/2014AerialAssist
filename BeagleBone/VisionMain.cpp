@@ -1,12 +1,12 @@
 #define SHAPE_FIT_HEURISTIC_SAMPLE_RATE 1
 #define SHAPE_FIT_HEURISTIC_MATCH_RATE 1
 
-#define HEADLESS 1
+#define HEADLESS 0
 #define ADAPTIVE 1
 #define DEBUG 0
 #define NETWORK 1
-#define SENSORS 1
-#define VISION 0
+#define SENSORS 0
+#define VISION 1
 #define NETWORK_BUFFER 512
 
 #if NETWORK
@@ -39,9 +39,9 @@
 const char windowName[] = "Rectangles";
 const char windowName2[] = "Rectanglez";
 
-static double matchAcceptanceLevel = 0.5;
-static double areaAcceptanceLevel = 0.074074074;
-static double rectangularAcceptanceLevel = 0.1;
+static double matchAcceptanceLevel = 1.25;
+static double areaAcceptanceLevel = 0.5;
+static double rectangularAcceptanceLevel = 0.125;
 
 typedef struct {
 	cv::Point2f centerOfMass;
@@ -63,13 +63,13 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 	src.copyTo(tmp);
 
 	// 147,232,182 = Search color
-	cv::subtract(src, cv::Scalar(147 - 127, 232 - 127, 182 - 127), src);
+	cv::subtract(src, cv::Scalar(88 - 127, 243 - 127, 186 - 127), src);
 	// 60,60,60 -> 200,200,200 = Search range
 	cv::Scalar meanMask = cv::mean(src);
 	double avgMask = (meanMask.val[0] + meanMask.val[1] + meanMask.val[2])
 			/ 3.0;
-	cv::inRange(src, cv::Scalar(avgMask - 50, avgMask - 50, avgMask - 50),
-			cv::Scalar(avgMask + 150, avgMask + 150, avgMask + 150), src);
+	cv::inRange(src, cv::Scalar(0, 0, 0),
+			cv::Scalar(avgMask * 2.2, avgMask * 2.2, avgMask * 2.2), src);
 
 	// Masked
 	tmp.copyTo(src, src);
@@ -77,7 +77,7 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 	cv::Scalar meanMasked = cv::mean(src);
 	double avgMasked = (meanMasked.val[0] + meanMasked.val[1]
 			+ meanMasked.val[2]) / 3.0;
-	cv::inRange(src, cv::Scalar(0, 175, 0), cv::Scalar(200, 255, 200), tmp);
+	cv::inRange(src, cv::Scalar(0, 0, 0), cv::Scalar(1, 1, 1), tmp);
 	tmp.copyTo(dst);
 
 	std::vector<std::vector<cv::Point> > contours;
@@ -89,10 +89,18 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 	for (size_t i = 0; i < contours.size(); i++) {
 		double arc = cv::arcLength(contours[i], true);
 		std::vector<cv::Point> newContour;
-		cv::approxPolyDP(contours[i], newContour, arc * 0.03, true);
+		cv::approxPolyDP(contours[i], newContour, arc * 0.01, true);
+
+		cv::Rect rect = cv::boundingRect(newContour);
+		if (rect.width < rect.height * 5.0) {
+			continue;
+		}
+
+		uchar cc = dst.at<uchar>((int) (rect.x + (rect.width / 2)),
+				(int) (rect.y + (rect.height / 2)));
 
 		double contourAreaRaw = cv::contourArea(contours[i]);
-		if (contourAreaRaw < 1000 || newContour.size() != 4
+		if (cc <= 0 || contourAreaRaw < 1000 || newContour.size() > 5
 				|| !cv::isContourConvex(newContour)) {
 			continue;
 		}
@@ -104,7 +112,6 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 		if (fabs(areaDiff) / newContourArea > areaAcceptanceLevel) {
 			continue;
 		}
-
 		double matchLevel = matchHeuristic(newContour, contours[i]);
 		if (matchLevel > matchAcceptanceLevel) {
 			continue;
@@ -115,6 +122,8 @@ void findRectangle(cv::Mat &src, std::vector<MatchedShape>& results) {
 		}
 		cleanContours.push_back(newContour);
 		MatchedShape m;
+		printf("%f\t%f\t%f\n", areaDiff / newContourArea, matchLevel,
+				rectangularLevel);
 		m.centerOfMass = centerOfMass(newContour);
 		m.centerOfMass.x -= src.cols / 2;
 		m.centerOfMass.y -= src.rows / 2;
@@ -202,14 +211,14 @@ int main(int argc, char** argv) {
 #else
 		while (1) {
 #endif
-#if NETWORK
-			imu->getYawPitchRoll(ypr);
-			bufferHead += sprintf(buffer + bufferHead,
-					"%d/%d\t%d\t%f\t%f\t%f\t%f\n", 1337, 1337, 0, 0.0, ypr[0],
-					ypr[1], ypr[2]);
-			buffer[bufferHead] = 0;
-			network->SendData(buffer);
-			bufferHead = 0;
+#if NETWORK && SENSORS
+		imu->getYawPitchRoll(ypr);
+		bufferHead += sprintf(buffer + bufferHead,
+				"%d/%d\t%d\t%f\t%f\t%f\t%f\n", 1337, 1337, 0, 0.0, ypr[0],
+				ypr[1], ypr[2]);
+		buffer[bufferHead] = 0;
+		network->SendData(buffer);
+		bufferHead = 0;
 #endif
 #if VISION
 		if (threadedCapture.hasCaptured()) {

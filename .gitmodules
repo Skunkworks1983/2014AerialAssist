@@ -1,3 +1,6 @@
 [submodule "Plutonium2014/Utils"]
 	path = Plutonium2014/Utils
 	url = https://github.com/Skunkworks1983/1983Util.git
+[submodule "Flower3DAnimation"]
+	path = Flower3DAnimation
+	url = git@github.com:Skunkworks1983/3DRobotAnimation.git
