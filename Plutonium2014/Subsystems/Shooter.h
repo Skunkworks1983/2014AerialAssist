@@ -48,6 +48,7 @@ private:
 
 public:
 	double lastReleasePosition;
+	double shootDelay;
 	
 	Shooter();
 	void InitDefaultCommand();

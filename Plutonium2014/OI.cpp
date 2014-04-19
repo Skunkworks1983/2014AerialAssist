@@ -42,7 +42,7 @@ OI::OI() {
 	catch1 = NULL;
 	resetShooter = new DigitalIOButton(8);
 	collect = NULL;
-	pass = new DigitalIOButton(13);
+	shotIRS = new DigitalIOButton(13);
 
 	angleFloor = new DigitalIOButton(1);
 	angleLow = NULL;
@@ -52,12 +52,13 @@ OI::OI() {
 
 	fire = new DigitalIOButton(5);
 	gulp = new DigitalIOButton(10);
-	jawToggle = NULL;
 	manAngleOvr = NULL;
 	manPowerOvr = NULL;
-	power1 = NULL;
+	pass = NULL;
 	shotSteep = NULL;
 	preventShooterArming = NULL;
+	
+	jawToggle =new DigitalIOButton(15);
 	//	jawToggle = new OverridableButton(new DigitalIOButton(12),
 	//			new DigitalIOButton(11), false);
 	//	preventShooterArming = new DigitalIOButton(13);
@@ -94,7 +95,7 @@ OI::OI() {
 			1.115 - OI_ANALOG_TRESHOLD, 1.115 + OI_ANALOG_TRESHOLD);
 	shotSteep = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
-	power1 = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
+	shotIRS = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
 #endif
 }
@@ -128,11 +129,11 @@ void OI::registerButtonListeners() {
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
-	SAFE_BUTTON(shotTruss,shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3)));
+	SAFE_BUTTON(shotTruss,shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3, TRUSS_SHOT_DELAY)));
 	SAFE_BUTTON(shotNear,shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE)));
 	SAFE_BUTTON(shotSteep,shotSteep->WhenPressed(new ReadyShot(STEEP_SHOT_POWER, STEEP_SHOT_ANGLE)));
 
-	SAFE_BUTTON(power1, power1->WhenPressed(new ReadyShot(SHOOTER_POWER_TURNS_1)));
+	SAFE_BUTTON(shotIRS, shotIRS->WhenPressed(new ReadyShot(IRS_SHOT_POWER, IRS_SHOT_ANGLE)));
 
 	// Jaw Override
 	SAFE_BUTTON(jawToggle,jawToggle->WhenPressed(new JawMove(Collector::kClosed)));

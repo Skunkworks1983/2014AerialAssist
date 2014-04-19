@@ -32,7 +32,7 @@ private:
 	Button *manAngleOvr;
 	Button *manPowerOvr;
 
-	Button *power1;
+	Button *shotIRS;
 	Button *shotSteep;
 	Button *shotNear;
 

@@ -7,7 +7,7 @@
 // Backend
 #include "../../Robotmap.h"
 
-#define ASYNC_BRAKE 1
+#define ASYNC_BRAKE 0
 
 AngelChange::AngelChange(float target, float timeout) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {

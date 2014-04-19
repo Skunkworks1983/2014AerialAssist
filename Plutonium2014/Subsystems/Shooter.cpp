@@ -60,6 +60,8 @@ Shooter::Shooter() :
 
 	setSLatch(Shooter::kLatched);
 	wenchMotor->Set(0);
+	
+	shootDelay = 0.4;
 }
 
 Command *Shooter::createCreateArmShooter() {

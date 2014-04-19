@@ -11,8 +11,10 @@
  */
 
 class ReadyShot : public CommandGroup {
+private:
+	float shotDelay;
 public:
-	ReadyShot(float setTurns, float angle = -1, float angleThreshold = -1);
+	ReadyShot(float setTurns, float angle = -1, float angleThreshold = -1, float shotDelay = -1);
 	virtual void Initialize();
 	virtual void End();
 	virtual void Interrupted();

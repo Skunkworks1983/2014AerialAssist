@@ -18,11 +18,8 @@ FireShooterInternal::FireShooterInternal(bool autoArm) :
 	CommandGroup("FireShooterInternal") {
 	AddSequential(new DiscBrake(Pterodactyl::kActive));
 	AddSequential(new WLatch(Shooter::kLatched));
-	Command *jawMove = new JawMove(Collector::kOpen, SmartDashboard::GetNumber("ShooterDelay"));
+	Command *jawMove = new JawMove(Collector::kOpen, CommandBase::shooter->shootDelay);
 	AddSequential(jawMove);
-	if (SmartDashboard::GetBoolean("RollerRoll")){
-		AddParallel(new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
-	}
 	AddSequential(new SLatch(Shooter::kUnlatched));
 	if (autoArm) {
 		AddSequential(new CommandStarter(Shooter::createCreateArmShooter));
