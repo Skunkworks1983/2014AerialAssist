@@ -60,6 +60,9 @@ void MFCBot::RobotInit() {
 	SmartDashboard::PutData("Log Level", Logger::createLogLevelChooser());
 
 	robotState = NetworkTable::GetTable("Robot");
+	
+	SmartDashboard::PutNumber("ShooterDelay",0.1);
+	SmartDashboard::PutBoolean("RollerRoll", true);
 }
 
 void MFCBot::AutonomousInit() {

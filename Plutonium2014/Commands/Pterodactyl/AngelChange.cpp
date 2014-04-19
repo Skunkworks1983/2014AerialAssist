@@ -7,7 +7,7 @@
 // Backend
 #include "../../Robotmap.h"
 
-#define ASYNC_BRAKE 0
+#define ASYNC_BRAKE 1
 
 AngelChange::AngelChange(float target, float timeout) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
@@ -63,8 +63,6 @@ void AngelChange::Execute() {
 		if (target> 0) {
 			pterodactyl->setBrakeState(Pterodactyl::kActive);
 		}
-	} else {
-		brakeEngagedTime = 0;
 	}
 #endif
 }

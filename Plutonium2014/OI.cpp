@@ -41,30 +41,29 @@ OI::OI() {
 
 	catch1 = NULL;
 	resetShooter = new DigitalIOButton(8);
-	collect = new DigitalIOButton(5);
-	pass = new DigitalIOButton(1);
+	collect = NULL;
+	pass = new DigitalIOButton(13);
 
-	angleFloor = new DigitalIOButton(2);
+	angleFloor = new DigitalIOButton(1);
 	angleLow = NULL;
-	angleMed = new DigitalIOButton(9);
-	shotTruss = new DigitalIOButton(4);
-	startConfig = new DigitalIOButton(7);
+	angleMed = NULL;
+	shotTruss = new DigitalIOButton(11);
+	startConfig = new DigitalIOButton(16);
 
-	fire = new DigitalIOButton(10);
-	revCollector = new DigitalIOButton(3);
+	fire = new DigitalIOButton(5);
+	gulp = new DigitalIOButton(10);
 	jawToggle = NULL;
 	manAngleOvr = NULL;
 	manPowerOvr = NULL;
 	power1 = NULL;
 	shotSteep = NULL;
-	shotNear = NULL;
 	preventShooterArming = NULL;
 	//	jawToggle = new OverridableButton(new DigitalIOButton(12),
 	//			new DigitalIOButton(11), false);
 	//	preventShooterArming = new DigitalIOButton(13);
 	//	manAngleOvr = new DigitalIOButton(16);
 	//	manPowerOvr = new DigitalIOButton(14);
-	shotNear = new DigitalIOButton(6);
+	shotNear = new DigitalIOButton(3);
 #else
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
 	joystickRight = new Joystick(OI_JOYSTICK_RIGHT);
@@ -84,7 +83,7 @@ OI::OI() {
 	startConfig = new DigitalIOButton(15);
 
 	fire = new DigitalIOButton(2);
-	revCollector = new DigitalIOButton(9);
+	gulp = new DigitalIOButton(9);
 	jawToggle = new OverridableButton(new DigitalIOButton(12),
 			new DigitalIOButton(11), false);
 	preventShooterArming = new DigitalIOButton(10);
@@ -115,7 +114,7 @@ void OI::registerButtonListeners() {
 	SAFE_BUTTON(startConfig,startConfig->WhenPressed(startCfgCmd));
 
 	// Collector rollers
-	SAFE_BUTTON(revCollector,revCollector->WhenPressed(new Gulp()));
+	SAFE_BUTTON(gulp,gulp->WhenPressed(new Gulp()));
 	//new RollerRoll(-COLLECTOR_ROLLER_INTAKE_SET_POINT));
 	SAFE_BUTTON(collect,START_STOP_COMMAND(collect, new Collect(), 1));
 	SAFE_BUTTON(collectButton,START_STOP_COMMAND(collectButton, new Collect(), 1));
@@ -140,6 +139,9 @@ void OI::registerButtonListeners() {
 	SAFE_BUTTON(jawToggle,jawToggle->WhenReleased(new JawMove(Collector::kOpen)));
 
 	SAFE_BUTTON(resetShooter,resetShooter->WhenPressed(new ResetShooter()));
+	
+	SmartDashboard::PutData("go power target", new CommandStarter(OI::createPower));
+	SmartDashboard::PutData("go target", new CommandStarter(OI::createAngle));
 }
 
 Joystick *OI::getJoystickLeft() {

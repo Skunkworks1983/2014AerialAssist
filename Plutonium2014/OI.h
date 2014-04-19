@@ -25,7 +25,7 @@ private:
 	Button *startConfig;
 
 	Button *fire;
-	Button *revCollector;
+	Button *gulp;
 
 	Button *jawToggle;
 

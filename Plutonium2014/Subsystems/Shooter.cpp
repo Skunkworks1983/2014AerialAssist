@@ -63,7 +63,10 @@ Shooter::Shooter() :
 }
 
 Command *Shooter::createCreateArmShooter() {
-	return new CommandStarter(Shooter::createArmShooter, true, 1000.0);
+	CommandGroup *createGroup = new CommandGroup("CreateShooter");
+	createGroup->AddSequential(new WaitCommand(0.25));
+	createGroup->AddSequential(new CommandStarter(Shooter::createArmShooter, false, 1000.0));
+	return createGroup;
 }
 
 Command *Shooter::createArmShooter() {
