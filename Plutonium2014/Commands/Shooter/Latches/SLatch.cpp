@@ -19,9 +19,9 @@ SLatch::SLatch(Shooter::LatchPosition isLocked) :
 void SLatch::Initialize() {
 	if (isLocked == Shooter::kUnlatched) {
 		Logger::log(Logger::kInfo, "Shooter",
-				"Unlatched [Angle: %f (%f),\tPower: %f(%f)]",
-				pterodactyl->getAngle(), pterodactyl->getTarget(),
-				shooter->getTurns(), shooter->lastReleasePosition);
+				"Unlatched [Angle: %f (%f +/- %f),\tPower: %f(%f),\tDelay: %f]",
+				pterodactyl->getAngle(), pterodactyl->getTarget(),pterodactyl->angleThreshold,
+				shooter->getTurns(), shooter->lastReleasePosition, shooter->shootDelay);
 	}
 	shooter->setSLatch(isLocked);
 	bTime = getCurrentMillis();

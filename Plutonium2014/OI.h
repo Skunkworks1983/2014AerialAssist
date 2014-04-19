@@ -20,8 +20,8 @@ private:
 
 	Button *angleFloor;
 	Button *angleLow;
-	Button *angleMed;
-	Button *shotTruss;
+	Button *shotNearTruss;
+	Button *shotFeederTruss;
 	Button *startConfig;
 
 	Button *fire;

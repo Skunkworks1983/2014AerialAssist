@@ -22,12 +22,12 @@ public:
 private:
 	float initialError;
 	float target;
-	float angleThreshold;
 	DualLiveSpeed *angleMotors;
 	PID1983Controller *pid;
 	AnalogPot *pot;
 	Relay *brake;
 public:
+	float angleThreshold;
 	Pterodactyl();
 	void InitDefaultCommand();
 

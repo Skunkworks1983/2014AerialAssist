@@ -42,12 +42,12 @@ OI::OI() {
 	catch1 = NULL;
 	resetShooter = new DigitalIOButton(8);
 	collect = NULL;
-	shotIRS = new DigitalIOButton(13);
+	shotIRS = NULL;//new DigitalIOButton(13);
 
 	angleFloor = new DigitalIOButton(1);
 	angleLow = NULL;
-	angleMed = NULL;
-	shotTruss = new DigitalIOButton(11);
+	shotNearTruss = new DigitalIOButton(13);
+	shotFeederTruss = new DigitalIOButton(11);
 	startConfig = new DigitalIOButton(16);
 
 	fire = new DigitalIOButton(5);
@@ -57,13 +57,8 @@ OI::OI() {
 	pass = NULL;
 	shotSteep = NULL;
 	preventShooterArming = NULL;
-	
-	jawToggle =new DigitalIOButton(15);
-	//	jawToggle = new OverridableButton(new DigitalIOButton(12),
-	//			new DigitalIOButton(11), false);
-	//	preventShooterArming = new DigitalIOButton(13);
-	//	manAngleOvr = new DigitalIOButton(16);
-	//	manPowerOvr = new DigitalIOButton(14);
+
+	jawToggle = new DigitalIOButton(15);
 	shotNear = new DigitalIOButton(3);
 #else
 	joystickLeft = new Joystick(OI_JOYSTICK_LEFT);
@@ -79,8 +74,8 @@ OI::OI() {
 
 	angleFloor = new DigitalIOButton(4);
 	angleLow = new DigitalIOButton(6);
-	angleMed = new DigitalIOButton(8);
-	shotTruss = new DigitalIOButton(13);
+	shotNearTruss = new DigitalIOButton(8);
+	shotFeederTruss = new DigitalIOButton(13);
 	startConfig = new DigitalIOButton(15);
 
 	fire = new DigitalIOButton(2);
@@ -107,7 +102,6 @@ void OI::registerButtonListeners() {
 	// Pterodactyl Angle
 	SAFE_BUTTON(angleFloor,angleFloor->WhenPressed(new AngelChange(0)));
 	SAFE_BUTTON(angleLow,angleLow->WhenPressed(new AngelChange(30)));
-	SAFE_BUTTON(angleMed,angleMed->WhenPressed(new AngelChange(84)));
 
 	CommandGroup *startCfgCmd = new CommandGroup();
 	startCfgCmd->AddSequential(new AngelChange(111.5));
@@ -129,18 +123,18 @@ void OI::registerButtonListeners() {
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations
-	SAFE_BUTTON(shotTruss,shotTruss->WhenPressed(new ReadyShot(TRUSS_SHOT_POWER,TRUSS_SHOT_ANGLE,3, TRUSS_SHOT_DELAY)));
+	SAFE_BUTTON(shotFeederTruss,shotFeederTruss->WhenPressed(new ReadyShot(FEEDER_TRUSS_SHOT_POWER, FEEDER_TRUSS_SHOT_ANGLE, FEEDER_TRUSS_SHOT_TOLERANCE, FEEDER_TRUSS_SHOT_DELAY)));
+	SAFE_BUTTON(shotNearTruss,shotNearTruss->WhenPressed(new ReadyShot(NEAR_TRUSS_SHOT_POWER, NEAR_TRUSS_SHOT_ANGLE, NEAR_TRUSS_SHOT_TOLERANCE, NEAR_TRUSS_SHOT_DELAY)));
 	SAFE_BUTTON(shotNear,shotNear->WhenPressed(new ReadyShot(NEAR_SHOT_POWER, NEAR_SHOT_ANGLE)));
 	SAFE_BUTTON(shotSteep,shotSteep->WhenPressed(new ReadyShot(STEEP_SHOT_POWER, STEEP_SHOT_ANGLE)));
-
-	SAFE_BUTTON(shotIRS, shotIRS->WhenPressed(new ReadyShot(IRS_SHOT_POWER, IRS_SHOT_ANGLE)));
+	SAFE_BUTTON(shotIRS, shotIRS->WhenPressed(new ReadyShot(IRS_SHOT_POWER, IRS_SHOT_ANGLE, IRS_SHOT_TOLERANCE)));
 
 	// Jaw Override
 	SAFE_BUTTON(jawToggle,jawToggle->WhenPressed(new JawMove(Collector::kClosed)));
 	SAFE_BUTTON(jawToggle,jawToggle->WhenReleased(new JawMove(Collector::kOpen)));
 
 	SAFE_BUTTON(resetShooter,resetShooter->WhenPressed(new ResetShooter()));
-	
+
 	SmartDashboard::PutData("go power target", new CommandStarter(OI::createPower));
 	SmartDashboard::PutData("go target", new CommandStarter(OI::createAngle));
 }

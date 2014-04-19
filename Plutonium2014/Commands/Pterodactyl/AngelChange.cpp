@@ -7,7 +7,7 @@
 // Backend
 #include "../../Robotmap.h"
 
-#define ASYNC_BRAKE 0
+#define ASYNC_BRAKE 1
 
 AngelChange::AngelChange(float target, float timeout) :
 	CommandBase(CommandBase::createNameFromFloat("AngleChange", target)) {
@@ -46,7 +46,7 @@ void AngelChange::Execute() {
 	// Let the PID run.
 
 	if (pterodactyl->isPIDFinished(true) || (target <= 0
-			&& pterodactyl->getAngle() <= 0)) {
+			&& pterodactyl->getAngle() <= 0.25)) {
 		stability++;
 	} else {
 		stability = 0;
@@ -56,7 +56,7 @@ void AngelChange::Execute() {
 		pterodactyl->setTarget(tmpTarget+(tmpTarget>0 ? 0.5 : 0));
 	}
 #if ASYNC_BRAKE
-	if ((stability> 13||IsTimedOut()) && (tmpTarget == target)) {
+	if ((stability> 13 && (tmpTarget != 45)) || IsTimedOut()) {
 		if (brakeEngagedTime <= 0) {
 			brakeEngagedTime = getCurrentMillis();
 		}
