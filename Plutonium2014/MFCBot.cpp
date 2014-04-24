@@ -46,7 +46,7 @@ void MFCBot::createAutonomi() {
 	//	chooser->AddObject("Just Drive", Autonomous::createJustDrive(0));
 	//	chooser->AddObject("Drive, Drive Back", Autonomous::createJustDrive(-10));
 
-	chooser->AddObject("Smart Drive", new AutoDriveDistance(40,2,5));
+	chooser->AddObject("Smart Drive", new AutoDriveDistance(60,2,5));
 	chooser->AddObject("Stupid Auto Two", Autonomous::createDerpyTwo());
 	SmartDashboard::PutData("Auto Modes", chooser);
 }
@@ -60,8 +60,8 @@ void MFCBot::RobotInit() {
 	SmartDashboard::PutData("Log Level", Logger::createLogLevelChooser());
 
 	robotState = NetworkTable::GetTable("Robot");
-	
-	SmartDashboard::PutNumber("ShooterDelay",0.1);
+
+	SmartDashboard::PutNumber("ShooterDelay", 0.1);
 	SmartDashboard::PutBoolean("RollerRoll", true);
 }
 
@@ -72,7 +72,7 @@ void MFCBot::AutonomousInit() {
 		cmd->Start();
 		printf("Starting AUTO: %s\n", cmd->GetName().c_str());
 	}
-	SmartDashboard::PutBoolean("HotGoal",false);
+	SmartDashboard::PutBoolean("HotGoal", false);
 
 	Logger::log(Logger::kInfo, "Main", "Autonomous Init%s",
 			DriverStation::GetInstance()->IsFMSAttached() ? ":FMS" : "");
@@ -89,8 +89,9 @@ void MFCBot::TeleopInit() {
 	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
 	Logger::log(Logger::kInfo, "Main", "Teleop Init%s",
 			DriverStation::GetInstance()->IsFMSAttached() ? ":FMS" : "");
-	
-	if (CommandBase::shooter!=NULL && !CommandBase::shooter->isReallyDrawnBack()) {
+
+	if (CommandBase::shooter!=NULL
+			&& !CommandBase::shooter->isReallyDrawnBack()) {
 		(new DrawShooter())->Start();
 	}
 }
@@ -229,7 +230,9 @@ void MFCBot::WatchDog() {
 						"Shooter motor released without pawl disengaged!");
 		}
 		if (CommandBase::shooter->getWenchMotorSpeed()> 0) {
-			if (CommandBase::shooter->getTurns() < 0) {
+			if (CommandBase::shooter->getTurns() < SHOOTER_WENCH_POT_BACK
+					&& (CommandBase::oi==NULL
+							||!CommandBase::oi->isShooterPotPullbackIgnored())) {
 				CommandBase::shooter->setWenchMotor(0.0);
 				watching = 1;
 				if (watchdogTicks==0)

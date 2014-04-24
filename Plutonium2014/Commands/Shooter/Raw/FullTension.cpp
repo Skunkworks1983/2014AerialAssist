@@ -35,8 +35,15 @@ bool FullTension::IsFinished() {
 		Logger::log(Logger::kFine, "Shooter-FullTension", "Proximity stop");
 	}
 #endif
-	if (shooter->getTurns() <= SHOOTER_WENCH_POT_BACK){
-		Logger::log(Logger::kFine, "Shooter-FullTension", "Potentiometer stop");
+	if (shooter->getTurns() <= SHOOTER_WENCH_POT_BACK) {
+		if (CommandBase::oi!=NULL
+				&& !CommandBase::oi->isShooterPotPullbackIgnored()) {
+			Logger::log(Logger::kFine, "Shooter-FullTension",
+					"Potentiometer stop");
+		} else {
+			Logger::log(Logger::kFine, "Shooter-FullTension",
+					"Potentiometer stop ignored");
+		}
 	}
 	return state;
 }
@@ -48,6 +55,7 @@ void FullTension::End() {
 }
 
 void FullTension::Interrupted() {
-	Logger::log(Logger::kFiner, "Shooter-FullTension", "Interrupted full tension");
+	Logger::log(Logger::kFiner, "Shooter-FullTension",
+			"Interrupted full tension");
 	shooter->setWenchMotor(0);
 }

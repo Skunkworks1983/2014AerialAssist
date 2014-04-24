@@ -52,7 +52,7 @@ OI::OI() {
 
 	fire = new DigitalIOButton(5);
 	gulp = new DigitalIOButton(10);
-	manAngleOvr = NULL;
+	ignorePotPullback = NULL;
 	manPowerOvr = NULL;
 	pass = NULL;
 	shotSteep = NULL;
@@ -81,7 +81,7 @@ OI::OI() {
 	jawToggle = new OverridableButton(new DigitalIOButton(12),
 			new DigitalIOButton(11), false);
 	preventShooterArming = new DigitalIOButton(10);
-	manAngleOvr = new DigitalIOButton(16);
+	ignorePotPullback = new DigitalIOButton(16);
 	manPowerOvr = new DigitalIOButton(14);
 
 	shotNear = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
@@ -90,7 +90,7 @@ OI::OI() {
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
 	shotIRS = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
-	
+
 	shotNearTruss = new DigitalIOButton(8);
 	shotFeederTruss = new DigitalIOButton(13);
 #endif
@@ -152,13 +152,17 @@ bool OI::isShooterArmingPrevented() {
 	return preventShooterArming != NULL && !preventShooterArming->Get();
 }
 
+bool OI::isShooterPotPullbackIgnored() {
+	return ignorePotPullback!=NULL && !ignorePotPullback->Get();
+}
+
 float OI::getAngleAdjustment() {
-	if (manAngleOvr==NULL) {
+	if (ignorePotPullback==NULL) {
 		return 0;
 	}
 	float volts = DriverStation::GetInstance()->GetEnhancedIO().GetAnalogIn(3);
-	return !manAngleOvr->Get() ? 0.56 - (0.3923 * log(4.0 - volts) + 0.3979)
-			: 0.0;
+	return !ignorePotPullback->Get() ? 0.56 - (0.3923 * log(4.0 - volts)
+			+ 0.3979) : 0.0;
 }
 
 float OI::getPowerAdjustment() {

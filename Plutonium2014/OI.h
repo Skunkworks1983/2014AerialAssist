@@ -29,7 +29,7 @@ private:
 
 	Button *jawToggle;
 
-	Button *manAngleOvr;
+	Button *ignorePotPullback;
 	Button *manPowerOvr;
 
 	Button *shotIRS;
@@ -42,6 +42,7 @@ public:
 	Joystick *getJoystickLeft();
 	Joystick *getJoystickRight();
 	bool isShooterArmingPrevented();
+	bool isShooterPotPullbackIgnored();
 	void registerButtonListeners();
 
 	float getAngleAdjustment();

@@ -60,7 +60,7 @@ Shooter::Shooter() :
 
 	setSLatch(Shooter::kLatched);
 	wenchMotor->Set(0);
-	
+
 	shootDelay = 0.4;
 }
 
@@ -219,8 +219,9 @@ Shooter::LatchPosition Shooter::getWLatch() {
 
 bool Shooter::isReallyDrawnBack() {
 #if SHOOTER_LIMITSWITCH
-	return (isLatchedByProximity() || (getTurns() <= SHOOTER_WENCH_POT_BACK)
-			|| isLatchedByPattern());
+	return (isLatchedByProximity() || ((CommandBase::oi==NULL
+			||!CommandBase::oi->isShooterPotPullbackIgnored()) && getTurns()
+			<= SHOOTER_WENCH_POT_BACK) || isLatchedByPattern());
 #else
 	return (getTurns() <= SHOOTER_WENCH_POT_BACK) || isLatchedByPattern();
 #endif
