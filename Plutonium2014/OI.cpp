@@ -74,8 +74,6 @@ OI::OI() {
 
 	angleFloor = new DigitalIOButton(4);
 	angleLow = new DigitalIOButton(6);
-	shotNearTruss = new DigitalIOButton(8);
-	shotFeederTruss = new DigitalIOButton(13);
 	startConfig = new DigitalIOButton(15);
 
 	fire = new DigitalIOButton(2);
@@ -92,6 +90,9 @@ OI::OI() {
 			1.677 - OI_ANALOG_TRESHOLD, 1.677 + OI_ANALOG_TRESHOLD);
 	shotIRS = new AnalogRangeIOButton(OI_SHOOTER_POWER_PORT,
 			3.342 - OI_ANALOG_TRESHOLD, 3.342 + OI_ANALOG_TRESHOLD);
+	
+	shotNearTruss = new DigitalIOButton(8);
+	shotFeederTruss = new DigitalIOButton(13);
 #endif
 }
 void OI::registerButtonListeners() {

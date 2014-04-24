@@ -1,7 +1,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#define COMPETITION_BOT 0
+#define COMPETITION_BOT 1
 
 // ===============
 // = Preferences =
@@ -77,7 +77,7 @@
 #define SHOOTER_WENCH_PAYOUT_TOLERANCE_NEAR (0.1)
 
 #if COMPETITION_BOT
-#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.075
+#define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #else
 #define SHOOTER_POT_TO_DRAW_COEFF 0, 0.787401, -.09
 #endif
@@ -154,7 +154,7 @@
 // =================
 #define OI_JOYSTICK_LEFT (1)
 #define OI_JOYSTICK_RIGHT (2)
-#define PRACTICE_OI (1)
+#define PRACTICE_OI (0)
 #define OI_JOYSTICK_DRIVE_DEADBAND (0.1)
 #define OI_JOYSTICK_SQUIRRLY_POWER (2.0)
 #define OI_ANALOG_TRESHOLD (0.1)
