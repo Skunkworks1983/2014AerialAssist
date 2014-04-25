@@ -77,8 +77,8 @@ void Pterodactyl::setOutputRange() {
 		if (target > 90) {
 			target = 90;
 		}
-		p = 1615.3*pow(target, -1.578);
-		i = 2.0*pow(2.71, -.06*target);
+		p = 1615.3*pow(target, -1.5);
+		i = 2.25*pow(2.71, -.065*target);
 		d = 97.34*pow(target, -0.85);
 		d /= 2.0;
 		if (fabs(initialError) < 30) { // Extra corrections

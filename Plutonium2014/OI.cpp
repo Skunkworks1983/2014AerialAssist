@@ -121,6 +121,7 @@ void OI::registerButtonListeners() {
 
 	// Shooter operations
 	SAFE_BUTTON(fire,fire->WhenReleased(new FireShooter()));
+	SmartDashboard::PutData("Shoot!!!!", new FireShooter());
 	//fire->WhenPressed(new CommandStarter(Shooter::createArmShooter, true));
 
 	// Strap operations

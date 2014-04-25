@@ -25,7 +25,7 @@ Autonomous *Autonomous::create1Ball(float distance) {
 
 	prepare->AddParallel(new PrepareShooter(AUTO_1_SHOT_POWER));
 	prepare->AddSequential(new AngelChange(0,1));
-	prepare->AddSequential((new AngelChange(AUTO_1_SHOT_ANGLE,5))->setTolerance(1.25));
+	prepare->AddSequential((new AngelChange(AUTO_1_SHOT_ANGLE,5)));
 
 	//	prepare->AddSequential(new JawMove(Collector::kOpen, 1));
 
