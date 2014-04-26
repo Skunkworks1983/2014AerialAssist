@@ -4,15 +4,15 @@
 
 HotGoalWait::HotGoalWait() {
 	SetTimeout(5.0);
-	table = NetworkTable::GetTable("SmartDashboard");
 }
 void HotGoalWait::Initialize() {
 	stability = 0;
+	CommandBase::hot = false;
 }
 void HotGoalWait::Execute() {
 }
 bool HotGoalWait::IsFinished() {
-	if (table->GetBoolean("HotGoal", false)) {
+	if (CommandBase::hot) {
 		Logger::log(Logger::kInfo, "Automatic", "Hot Goal Terminated");
 		return true;
 	}

@@ -60,12 +60,14 @@ void MFCBot::RobotInit() {
 	SmartDashboard::PutData("Log Level", Logger::createLogLevelChooser());
 
 	robotState = NetworkTable::GetTable("Robot");
+	visionControl = NetworkTable::GetTable("Vision");
 
 	SmartDashboard::PutNumber("ShooterDelay", 0.1);
 	SmartDashboard::PutBoolean("RollerRoll", true);
 }
 
 void MFCBot::AutonomousInit() {
+	visionControl->PutBoolean("disabled",false);
 	Scheduler::GetInstance()->RemoveAll();
 	Command *cmd = ((Command*) chooser->GetSelected());
 	if (cmd!=NULL) {
@@ -85,6 +87,7 @@ void MFCBot::AutonomousPeriodic() {
 }
 
 void MFCBot::TeleopInit() {
+	visionControl->PutBoolean("disabled", true);
 	Scheduler::GetInstance()->RemoveAll();
 	robotState->PutNumber("alliance", DriverStation::GetInstance()->GetAlliance());
 	Logger::log(Logger::kInfo, "Main", "Teleop Init%s",
@@ -107,9 +110,9 @@ void MFCBot::TeleopPeriodic() {
 	} else {
 		trueTicks = 0;
 	}
-	thingy->Set(trueTicks>20 ? Relay::kForward : Relay::kOff);
 
-	if (dont++> 10) {
+	if (dont++> 25) {
+		thingy->Set(trueTicks>20 ? Relay::kForward : Relay::kOff);
 		int verbosity= SMARTDASH_VERBOSITY;
 		if (ROBOT_VISUALIZATION) {
 			robotState->PutBoolean("jawsClosed",
@@ -149,15 +152,15 @@ void MFCBot::TeleopPeriodic() {
 			SmartDashboard::PutNumber("Winch position",
 					CommandBase::shooter->getTurns());
 
-			SmartDashboard::PutNumber("LeftWheels",
-					CommandBase::driveBase->getLeftEncoder()->GetDistance());
-			SmartDashboard::PutNumber("RightWheels",
-					CommandBase::driveBase->getRightEncoder()->GetDistance());
-
 			SmartDashboard::PutNumber("pteroangle",
 					CommandBase::pterodactyl->getAngle());
 		}
 		if (verbosity & 4) {
+			SmartDashboard::PutNumber("LeftWheels",
+					CommandBase::driveBase->getLeftEncoder()->GetDistance());
+			SmartDashboard::PutNumber("RightWheels",
+					CommandBase::driveBase->getRightEncoder()->GetDistance());
+			
 			SmartDashboard::PutNumber("Winch rate",
 					CommandBase::shooter->getTurnRate());
 			SmartDashboard::PutNumber("pterorate",
@@ -184,6 +187,7 @@ void MFCBot::TeleopPeriodic() {
 }
 
 void MFCBot::DisabledInit() {
+	visionControl->PutBoolean("disabled", false);
 	Scheduler::GetInstance()->RemoveAll();
 
 	DriverStationLCD::GetInstance()->Printf(DriverStationLCD::kUser_Line1, 1, "%s %s",__TIME__ , __DATE__);

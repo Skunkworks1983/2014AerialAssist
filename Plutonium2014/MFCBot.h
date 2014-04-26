@@ -13,6 +13,7 @@ private:
 	void createAutonomi();
 	ITable *robotState;
 	Relay *thingy;
+	ITable *visionControl;
 public:
 	MFCBot();
 	
