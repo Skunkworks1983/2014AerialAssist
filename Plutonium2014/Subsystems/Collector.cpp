@@ -4,6 +4,7 @@
 #include "WPILib.h"
 #include "../Utils/Actuators/StallableMotor.h"
 #include "../Utils/Actuators/DualLiveSpeed.h"
+#include <math.h>
 
 Collector::Collector() :
 	Subsystem("Collector") {
@@ -17,9 +18,9 @@ Collector::Collector() :
 	LiveWindow::GetInstance()->AddSensor("Collector", "Roller Encoder", rollerClawEncoder);
 
 	DualLiveSpeed *motors = new DualLiveSpeed(new Talon(COLLECTOR_ROLLER_MOTOR_LEFT), new Talon(COLLECTOR_ROLLER_MOTOR_RIGHT), true);
-	rollerMotor
-			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED,500))->setEncoderSource(rollerClawEncoder);
-	rollerMotor->setName("Collector Motor");
+	rollerMotor=motors;/*
+			= (new StallableMotor(motors,COLLECTOR_ROLLER_STALL_SPEED,500))->setEncoderSource(rollerClawEncoder);*/
+	//rollerMotor->setName("Collector Motor");
 
 	rollerPIDController= new PIDController(2, .2, .05, rollerClawEncoder,
 			rollerMotor, 0.05f);
@@ -53,7 +54,7 @@ Collector::JawState Collector::getJawState() {
 }
 
 void Collector::setRollerSpeed(float speed) {
-	rollerPIDController->SetSetpoint(speed / COLLECTOR_ROLLER_MAX_RPM);
+	/*rollerPIDController->SetSetpoint(speed / COLLECTOR_ROLLER_MAX_RPM);
 
 	if (speed != 0 && !rollerPIDController->IsEnabled()) {
 		rollerPIDController->Enable();
@@ -62,23 +63,30 @@ void Collector::setRollerSpeed(float speed) {
 			rollerPIDController->Disable();
 		}
 		rollerMotor->Set(0);
+	}*/
+	if (speed >0) {
+		rollerMotor->Set(1);
+	}else if (speed<0) {
+		rollerMotor->Set(-1);
+	}else{
+		rollerMotor->Set(0);
 	}
 }
 
 double Collector::getDiff() {
-	return rollerPIDController->GetSetpoint() - rollerClawEncoder->GetRate();
+	return 0;//rollerPIDController->GetSetpoint() - rollerClawEncoder->GetRate();
 }
 
 bool Collector::isPIDEnabled() {
-	return rollerPIDController->IsEnabled();
+	return fabs(rollerMotor->Get())>0;//rollerPIDController->IsEnabled();
 }
 
 bool Collector::isRollerStalled() {
-	return rollerMotor->isStalled();
+	return false;//rollerMotor->isStalled();
 }
 
 double Collector::getRollerSpeed() {
-	return rollerClawEncoder->GetRate()*COLLECTOR_ROLLER_MAX_RPM;
+	return COLLECTOR_ROLLER_MAX_RPM;//rollerClawEncoder->GetRate()*COLLECTOR_ROLLER_MAX_RPM;
 }
 
 bool Collector::isBallDetected() {

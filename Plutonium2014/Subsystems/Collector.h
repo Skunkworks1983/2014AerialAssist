@@ -24,7 +24,7 @@ private:
 	DigitalInput *ballSensor;
 	PIDController *rollerPIDController;
 	Encoder *rollerClawEncoder;
-	StallableMotor *rollerMotor;
+	SpeedController *rollerMotor;
 
 public:
 	Collector();
