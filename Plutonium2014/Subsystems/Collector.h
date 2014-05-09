@@ -11,7 +11,7 @@ class StallableMotor;
 
 /**
  *
- *
+ * 
  * @author Ross Bajocich
  */
 class Collector : public Subsystem { // TODO: Make the Jaw state enum make sense (but no)
